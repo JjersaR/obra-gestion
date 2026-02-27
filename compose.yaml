@@ -1,0 +1,60 @@
+services:
+  obra-gestion-api:
+    env_file:
+      - .env
+    image: obra-gestion-api
+    container_name: obra-gestion-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+        - "8080:8080"
+    restart: always
+    depends_on:
+      - postgres
+      - minio
+    networks:
+      - obra-gestion-network
+
+  postgres:
+    container_name: gestion-db
+    image: postgres:16-bookworm
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    ports:
+      - '5432:5432'
+    networks:
+      - obra-gestion-network
+    volumes:
+      - obra-gestion-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
+      interval: 10s
+      retries: 5
+
+  minio:
+    image: minio/minio@sha256:13582eff79c6605a2d315bdd0e70164142ea7e98fc8411e9e10d089502a6d883
+    container_name: minio-container
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+    networks:
+      - obra-gestion-network
+    volumes:
+      - storage-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      retries: 3
+
+networks:
+  obra-gestion-network:
+
+volumes:
+  obra-gestion-data:
+  storage-data:
