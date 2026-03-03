@@ -26,7 +26,8 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "archivos", indexes = {
-    @Index(name = "idx_archivos_movobra_categoria", columnList = "movobra_id, categoria")
+    @Index(name = "idx_archivo_owner_categoria", columnList = "tipoEntidad, movobra_id, categoria"),
+    @Index(name = "idx_archivo_actual", columnList = "tipoEntidad, movobra_id, categoria, actual")
 })
 @EntityListeners(AuditingEntityListener.class)
 public class Archivos {
@@ -42,7 +43,7 @@ public class Archivos {
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private ETipo tipoMovimiento;
+  private ETipo tipoEntidad;
 
   @Column(name = "movobra_id", nullable = false)
   private UUID movobraId;
@@ -51,10 +52,16 @@ public class Archivos {
   @Column(nullable = false)
   private ETipo categoria;
 
+  @Column(nullable = false)
+  private Integer version;
+
+  @Column(nullable = false)
+  private Boolean actual;
+
   @Column(name = "size_bytes", nullable = false)
   private Long sizeBytes;
 
-  @Column(length = 64, nullable = false, unique = true)
+  @Column(length = 64, nullable = false)
   private String checksum;
 
   @Column(nullable = false)

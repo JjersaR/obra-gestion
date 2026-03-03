@@ -75,24 +75,38 @@ public class UserDetailsImplService implements UserDetailsService {
     // Obtenemos el rol
     authorities.add(new SimpleGrantedAuthority("ROLE_" + usuario.getTipoUsuario().name()));
 
+    final String AGREGAR_ARCHIVOS = "AGREGAR_ARCHIVOS";
+    final String SUBIR_ARCHIVOS = "SUBIR_ARCHIVOS";
+    final String VER_ARCHIVOS = "VER_ARCHIVOS";
+    final String DESCARGAR_ARCHIVOS = "DESCARGAR_ARCHIVOS";
+
     // Agregamos permisos
     switch (usuario.getTipoUsuario()) {
       case RESIDENTE:
+        authorities.add(new SimpleGrantedAuthority(AGREGAR_ARCHIVOS));
+        authorities.add(new SimpleGrantedAuthority(SUBIR_ARCHIVOS));
+        authorities.add(new SimpleGrantedAuthority(VER_ARCHIVOS));
+        authorities.add(new SimpleGrantedAuthority(DESCARGAR_ARCHIVOS));
         break;
       case GERENTE:
-        authorities.add(new SimpleGrantedAuthority(""));
+        authorities.add(new SimpleGrantedAuthority("ACEPTAR_RECHAZAR"));
+        authorities.add(new SimpleGrantedAuthority(SUBIR_ARCHIVOS));
+        authorities.add(new SimpleGrantedAuthority(VER_ARCHIVOS));
+        authorities.add(new SimpleGrantedAuthority(DESCARGAR_ARCHIVOS));
         break;
-      case CONTADOR:
-        authorities.add(new SimpleGrantedAuthority(""));
+      case CONTADOR, COMPRAS:
+        authorities.add(new SimpleGrantedAuthority(SUBIR_ARCHIVOS));
+        authorities.add(new SimpleGrantedAuthority(VER_ARCHIVOS));
+        authorities.add(new SimpleGrantedAuthority(DESCARGAR_ARCHIVOS));
         break;
       case ADMINISTRACION:
-        authorities.add(new SimpleGrantedAuthority(""));
-        break;
-      case COMPRAS:
-        authorities.add(new SimpleGrantedAuthority(""));
+        authorities.add(new SimpleGrantedAuthority(VER_ARCHIVOS));
+        authorities.add(new SimpleGrantedAuthority(DESCARGAR_ARCHIVOS));
+        authorities.add(new SimpleGrantedAuthority("CAMPOS_ESPECIALES"));
         break;
       case PRESUPUESTOS:
-        authorities.add(new SimpleGrantedAuthority(""));
+        authorities.add(new SimpleGrantedAuthority("AGREGAR_OBRA"));
+        authorities.add(new SimpleGrantedAuthority(AGREGAR_ARCHIVOS));
         break;
     }
 

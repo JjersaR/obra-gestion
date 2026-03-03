@@ -26,7 +26,8 @@ public class SecurityConfig {
             .anyRequest().authenticated())
         .formLogin(form -> form
             .loginPage("/") // Página JSP para el formulario de login
-            .loginProcessingUrl("api/login") // URL donde se procesan las credenciales del formulario de login
+            .loginProcessingUrl("api/v1/usuarios/login") // URL donde se procesan las credenciales del formulario de
+                                                         // login
             .defaultSuccessUrl("/index", true) // Redirigir a /index tras login exitoso
             .permitAll() // Permitir acceso sin autenticación a la página de login
         )
