@@ -1,11 +1,16 @@
 # Holis
 ## Comando para ejecutar el proyecto
 
-Ahorita el proyecto no hace nada, pero pueden poner este comando
+Ahorita el proyecto solo guarda usuarios en la base de datos, pero pueden poner este comando
 para que vean que el proyecto se ejecuta correctamente.
 
 ``` bash
-mvn spring-boot:run
+docker compose up --build -d
+```
+
+Para detener el proyecto se usa:
+``` bash
+docker compose down -v
 ```
 
 ## Comandos de docker
