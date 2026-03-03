@@ -21,14 +21,14 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) {
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/img/**", "/css/**", "/js/**").permitAll()
-            .requestMatchers("").hasRole("")
+            .requestMatchers("/img/**", "/css/**", "/js/**", "/api/v1/usuarios").permitAll()
+            // .requestMatchers("").hasRole("")
             .anyRequest().authenticated())
         .formLogin(form -> form
-            .loginPage("/") // Página JSP para el formulario de login
-            .loginProcessingUrl("api/v1/usuarios/login") // URL donde se procesan las credenciales del formulario de
-                                                         // login
-            .defaultSuccessUrl("/index", true) // Redirigir a /index tras login exitoso
+            // .loginPage("/") // Página JSP para el formulario de login
+            .loginProcessingUrl("/api/v1/usuarios/login") // URL donde se procesan las credenciales del formulario de
+                                                          // login
+            // .defaultSuccessUrl("/index", true) // Redirigir a /index tras login exitoso
             .permitAll() // Permitir acceso sin autenticación a la página de login
         )
         .logout(logout -> logout
