@@ -1,3 +1,7 @@
+server:
+  address: ${SERVER_ADDRESS}
+  port: ${SERVER_PORT}
+
 spring:
   application:
     name: obra-gestion
@@ -10,6 +14,9 @@ spring:
     hibernate:
       ddl-auto: update
     database-platform: ${DATABASE_PLATFORM}
+  docker:
+    compose:
+      enabled: false
 
 external-server:
   minio:
