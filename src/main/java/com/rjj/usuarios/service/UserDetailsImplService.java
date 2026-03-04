@@ -9,7 +9,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -65,8 +64,9 @@ public class UserDetailsImplService implements UserDetailsService {
 
     log.debug("Usuario encontrado: {}", usuario.getNombre());
 
-    return new User(usuario.getNombre(), usuario.getPassword(), usuario.isEnabled(), usuario.isAccountNoExpired(),
-        usuario.isCredentialNoExpired(), usuario.isAccountNoLocked(), autoridades);
+    return new CustomUserDetails(usuario.getId(), usuario.getNombre(), usuario.getEmail(), usuario.getPassword(),
+        usuario.getTipoUsuario().name(), usuario.isEnabled(), usuario.isAccountNoLocked(),
+        usuario.isAccountNoExpired(), usuario.isCredentialNoExpired(), autoridades);
   }
 
   private List<GrantedAuthority> crearAutoridades(Usuarios usuario) {

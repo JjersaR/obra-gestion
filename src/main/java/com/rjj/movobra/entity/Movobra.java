@@ -46,7 +46,8 @@ public class Movobra {
   @Column(name = "archivo_id", nullable = false)
   private UUID archivoId;
 
-  private Boolean aceptado;
+  @Enumerated(EnumType.STRING)
+  private ETipo estado;
 
   private String observaciones;
 

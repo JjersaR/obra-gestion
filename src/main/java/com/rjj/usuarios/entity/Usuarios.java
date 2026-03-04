@@ -47,16 +47,16 @@ public class Usuarios {
   private Boolean cambioPassword;
 
   @Column(name = "is_enabled")
-  private boolean isEnabled;
+  private boolean isEnabled = true;
 
   @Column(name = "account_no_expired")
-  private boolean accountNoExpired;
+  private boolean accountNoExpired = true;
 
   @Column(name = "account_no_locked")
-  private boolean accountNoLocked;
+  private boolean accountNoLocked = true;
 
   @Column(name = "credential_no_expired")
-  private boolean credentialNoExpired;
+  private boolean credentialNoExpired = true;
 
   // Audit fields
   @CreatedDate

@@ -9,12 +9,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rjj.usuarios.controller.dto.RUsuarioCredencialesRequest;
+import com.rjj.usuarios.controller.dto.RUsuarioRegistrado;
 import com.rjj.usuarios.controller.dto.RUsuariosRequest;
 import com.rjj.usuarios.service.UsuariosService;
 
 import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/usuarios")
@@ -29,5 +33,12 @@ public class UsuariosController {
   public ResponseEntity<Boolean> guardar(@RequestBody RUsuariosRequest request) throws URISyntaxException {
     service.guardar(request);
     return ResponseEntity.created(new URI(API_V1_USUARIOS)).build();
+  }
+
+  @PostMapping("/login")
+  public ResponseEntity<RUsuarioRegistrado> login(@RequestBody RUsuarioCredencialesRequest request) {
+    log.info("nombre o correo recibido {}", request.nombre());
+    var login = service.iniciarSesion(request);
+    return (login.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(login.get());
   }
 }
