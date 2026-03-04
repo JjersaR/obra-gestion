@@ -37,7 +37,6 @@ public class UsuariosController {
 
   @PostMapping("/login")
   public ResponseEntity<RUsuarioRegistrado> login(@RequestBody RUsuarioCredencialesRequest request) {
-    log.info("nombre o correo recibido {}", request.nombre());
     var login = service.iniciarSesion(request);
     return (login.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(login.get());
   }

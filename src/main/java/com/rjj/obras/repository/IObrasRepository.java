@@ -10,4 +10,6 @@ import com.rjj.obras.entity.Obras;
 @Repository
 public interface IObrasRepository extends JpaRepository<Obras, UUID> {
 
+  boolean existsByNombre(String nombre);
+
 }

@@ -21,7 +21,7 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) {
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/img/**", "/css/**", "/js/**", "/api/v1/usuarios/**").permitAll()
+            .requestMatchers("/img/**", "/css/**", "/js/**", "/**").permitAll()
             // .requestMatchers("").hasRole("")
             .anyRequest().authenticated())
         // .formLogin(form -> form
