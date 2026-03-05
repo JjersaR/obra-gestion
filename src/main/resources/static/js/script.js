@@ -1,5 +1,5 @@
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
-    e.preventDefault(); 
+    e.preventDefault(); // Evitamos que la página se recargue al enviar el formulario
 
     const correo = document.getElementById('correo').value;
     const contrasena = document.getElementById('contrasena').value;
