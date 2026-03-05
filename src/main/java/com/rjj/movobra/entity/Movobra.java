@@ -1,5 +1,6 @@
 package com.rjj.movobra.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -60,8 +61,8 @@ public class Movobra {
   @Column(name = "pn_comprobante_pago_id")
   private UUID pnComprobantePagoId;
 
-  @Column(name = "r_pago_id")
-  private UUID rPagoId;
+  @Column(name = "r_pago")
+  private BigDecimal rPago;
 
   @Column(name = "r_ficha_id")
   private UUID rFichaId;
