@@ -75,6 +75,11 @@
       <artifactId>mapstruct</artifactId>
       <version>${org.mapstruct.version}</version>
     </dependency>
+	<!-- Para que funcione la carpeta de Templates-->
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-thymeleaf</artifactId>
+	</dependency>
     <!-- SECCION DE MINIO -->
     <dependency>
       <groupId>io.minio</groupId>
