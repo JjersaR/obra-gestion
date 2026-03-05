@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - OM Diseño y Construcción</title>
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+
+    <div class="login-image">
+        <h1>OM Diseño y Construcción</h1>
+        <p>Sistema Integral de Gestión y Monitoreo de Obras</p>
+    </div>
+
+    <div class="login-form-container">
+        <div class="form-wrapper">
+            <h2>Bienvenido</h2>
+            <p>Ingresa tus credenciales para continuar.</p>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="correo">Correo Electrónico</label>
+                    <input type="email" id="correo" placeholder="ejemplo@constructora.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="contrasena">Contraseña</label>
+                    <input type="password" id="contrasena" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-login">Iniciar Sesión</button>
+            </form>
+            <div id="mensaje"></div>
+        </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+
+</body>
+</html>
