@@ -32,6 +32,8 @@ docker ps -a
 ``` docker
 docker images
 ```
+### para borrar imagenes
+docker rmi obra-gestion-api:latest
 
 ### 3.- Para detener los contenedores del proyecto
 

@@ -24,13 +24,13 @@ body {
     text-align: center;
 }
 .login-image h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin-bottom: 1rem;
-    font-weight: 600;
+    font-weight: 700;
 }
 .login-image p {
     font-size: 1.1rem;
-    font-weight: 300;
+    font-weight: 800;
     max-width: 80%;
 }
 
@@ -44,34 +44,37 @@ body {
 }
 .form-wrapper {
     width: 100%;
-    max-width: 400px;
-    padding: 2rem;
+    max-width: 550px;
+    padding: 2.5rem;
 }
 .form-wrapper h2 {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 0.5rem;
+    font-size: 4rem;
+    font-weight: 700;
+    color: #1f2933;
+    margin-bottom: 0.9rem;
+    line-height: 1.1;
 }
 .form-wrapper p {
-    color: #666;
-    margin-bottom: 2rem;
+    color: #6b7280;
+    margin-bottom: 2.5rem;
+    font-size: 1.5rem;
 }
 .input-group {
     margin-bottom: 1.5rem;
 }
 .input-group label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
     color: #444;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 1.3rem;
 }
 .input-group input {
     width: 100%;
-    padding: 0.8rem 1rem;
+    padding: 1.2rem 1.5rem;
     border: 1px solid #ccc;
     border-radius: 8px;
-    font-size: 1rem;
+    font-size: 1.1rem;
     transition: border-color 0.3s;
 }
 .input-group input:focus {
@@ -81,13 +84,13 @@ body {
 }
 .btn-login {
     width: 100%;
-    padding: 0.8rem;
+    padding: 1rem;
     background-color: #203A43;
     color: white;
     border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 700;
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -97,10 +100,11 @@ body {
 
 /* Mensaje de error/éxito */
 #mensaje {
-    margin-top: 1rem;
+    margin-top: 1.2rem;
     text-align: center;
-    font-size: 0.9rem;
-    min-height: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    min-height: 24px;
 }
 .error { color: #d9534f; }
 .success { color: #5cb85c; }
@@ -110,4 +114,26 @@ body {
     body { flex-direction: column; }
     .login-image { flex: 0.4; }
     .login-form-container { flex: 0.6; }
+}
+
+/*iconos*/
+.input-icon {
+    position: relative;
+}
+
+.input-icon i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    font-size: 1rem;
+}
+
+.input-icon input {
+    width: 100%;
+    padding: 0.9rem 0.9rem 0.9rem 2.5rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
 }

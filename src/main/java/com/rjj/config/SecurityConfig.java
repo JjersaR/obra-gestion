@@ -18,30 +18,35 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/img/**", "/css/**", "/js/**", "/**").permitAll()
+            // Permitimos solo los recursos visuales y la pantalla de login HTML
+            .requestMatchers("/", "/img/**", "/css/**", "/js/**").permitAll()
+            // Permitimos explícitamente que cualquiera intente hacer login a traves de la API
+            .requestMatchers("/api/v1/usuarios/login").permitAll()
             // .requestMatchers("").hasRole("")
-            .anyRequest().authenticated())
-        // .formLogin(form -> form
-        // .loginPage("/") // Página JSP para el formulario de login
-        // .loginProcessingUrl("/api/v1/usuarios/login") // URL donde se procesan las
-        // credenciales del formulario de
-        // login
-        // .defaultSuccessUrl("/index", true) // Redirigir a /index tras login exitoso
-        // .permitAll() // Permitir acceso sin autenticación a la página de login
-        // )
-        .logout(logout -> logout
-            .deleteCookies("JSESSIONID"))
-        .sessionManagement(session -> session
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+            //Todo lo demás (incluyendo tus vistas de /obras) requiere estar autenticado
+            .anyRequest().authenticated()
+          );
+            //.formLogin(form -> form
+            //.loginPage("/") // Página JSP para el formulario de login
+            //.loginProcessingUrl("/api/v1/usuarios/login") // URL donde se procesan las
+            //credenciales del formulario de
+            //login
+            //.defaultSuccessUrl("/obras", true) // Redirigir a /index tras login exitoso
+            //.permitAll() // Permitir acceso sin autenticación a la página de login
+            //)
+        //.logout(logout -> logout
+            //.deleteCookies("JSESSIONID"))
+        //.sessionManagement(session -> session
+            //.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
     return http.build();
   }
 
   @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
     return config.getAuthenticationManager();
   }
 
