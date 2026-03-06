@@ -47,7 +47,7 @@ public class UsuariosController {
 
   @PostMapping("/login")
   public ResponseEntity<RUsuarioRegistrado> login(@RequestBody RUsuarioCredencialesRequest request,
-    HttpServletRequest httpRequest, HttpServletResponse httpResponse) { // Pedimos acceso a la petició
+    HttpServletRequest httpRequest, HttpServletResponse httpResponse) { // Pedimos acceso a la petición
 
     var login = service.iniciarSesion(request);
 

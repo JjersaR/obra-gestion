@@ -12,16 +12,13 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             headers: {
                 'Content-Type': 'application/json'
             },
-            // IMPORTANTE: Asegúrate de que las palabras 'correo' y 'contrasena' 
-            // sean exactamente iguales a las variables de tu clase RUsuarioCredencialesRequest
             body: JSON.stringify({ 
                 nombre: correo, 
                 password: contrasena
             })
         });
 
-        // 2. Evaluamos los códigos exactos que devuelve tu UsuariosController
-// 2. Evaluamos los códigos exactos
+        // Evaluamos los códigos exactos que devuelve tu UsuariosController
         if (response.status === 200) {
             
             // Primero leemos la respuesta como texto crudo para evitar que explote
@@ -32,7 +29,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
                 const datosUsuario = JSON.parse(textoRespuesta);
                 console.log("Usuario logueado:", datosUsuario);
             } catch (e) {
-                // Si falla, significa que Java nos mandó un HTML. Lo imprimimos para ver qué es.
+                // Si falla, significa que Java nos mandó un HTML
                 console.error("El servidor no devolvió JSON. Devolvió esto:", textoRespuesta);
             }
 
