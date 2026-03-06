@@ -1,5 +1,6 @@
 package com.rjj.archivos.service.impl;
 
+import java.io.InputStream;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import com.rjj.archivos.controller.utils.NameBuilder;
 import com.rjj.archivos.service.IStorageService;
 import com.rjj.movobra.entity.ETipo;
 
+import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import lombok.AllArgsConstructor;
@@ -62,6 +64,19 @@ public class MinioStorageServiceImpl implements IStorageService {
         return "financieros";
       default:
         return "documentos";
+    }
+  }
+
+  @Override
+  public InputStream download(String bucket, String objectKey) {
+    try {
+      return minioClient.getObject(
+          GetObjectArgs.builder()
+              .bucket(bucket)
+              .object(objectKey)
+              .build());
+    } catch (Exception e) {
+      throw new RuntimeException("Error descargando archivo", e);
     }
   }
 

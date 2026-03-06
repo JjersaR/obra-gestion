@@ -23,7 +23,7 @@ public class ArchivosService {
   private final IStorageService storageService;
 
   @Transactional
-  public void subirArchivo(
+  public UUID subirArchivo(
       ETipo tipoEntidad,
       UUID movobraId,
       ETipo categoria,
@@ -53,8 +53,9 @@ public class ArchivosService {
     archivo.setMimeType(file.getContentType());
     archivo.setInmutable(esFinanciero(categoria));
 
-    repository.save(archivo);
+    var guardado = repository.save(archivo);
 
+    return guardado.getId();
   }
 
   private Boolean esFinanciero(ETipo categoria) {
