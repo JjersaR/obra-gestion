@@ -11,8 +11,6 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.context.SecurityContextRepository;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,7 +52,6 @@ public class UsuariosController {
     var login = service.iniciarSesion(request);
 
     if (login.isPresent()) {
-        // ¡LA MAGIA OCURRE AQUÍ! 
         // Obligamos a Spring a guardar la sesión en la memoria del navegador
         securityContextRepository.saveContext(SecurityContextHolder.getContext(), httpRequest, httpResponse);
         
