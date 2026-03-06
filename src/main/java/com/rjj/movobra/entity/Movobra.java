@@ -48,7 +48,7 @@ public class Movobra {
   private UUID archivoId;
 
   @Enumerated(EnumType.STRING)
-  private ETipo estado;
+  private ETipo estado = ETipo.SUBIDO;
 
   private String observaciones;
 

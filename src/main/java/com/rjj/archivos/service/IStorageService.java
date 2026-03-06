@@ -1,5 +1,6 @@
 package com.rjj.archivos.service;
 
+import java.io.InputStream;
 import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -13,4 +14,6 @@ public interface IStorageService {
       ETipo categoria,
       int version,
       MultipartFile file);
+
+  InputStream download(String bucket, String objectKey);
 }
