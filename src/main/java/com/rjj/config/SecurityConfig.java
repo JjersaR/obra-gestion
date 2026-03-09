@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,25 +22,24 @@ public class SecurityConfig {
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
             // Permitimos solo los recursos visuales y la pantalla de login HTML
-            .requestMatchers("/", "/img/**", "/css/**", "/js/**").permitAll()
-            // Permitimos explícitamente que cualquiera intente hacer login a traves de la API
+            .requestMatchers("/**", "/img/**", "/css/**", "/js/**").permitAll()
+            // Permitimos explícitamente que cualquiera intente hacer login a traves de la
+            // API
             .requestMatchers("/api/v1/usuarios/login").permitAll()
             // .requestMatchers("").hasRole("")
-            //Todo lo demás (incluyendo tus vistas de /obras) requiere estar autenticado
-            .anyRequest().authenticated()
-          );
-            //.formLogin(form -> form
-            //.loginPage("/") // Página JSP para el formulario de login
-            //.loginProcessingUrl("/api/v1/usuarios/login") // URL donde se procesan las
-            //credenciales del formulario de
-            //login
-            //.defaultSuccessUrl("/obras", true) // Redirigir a /index tras login exitoso
-            //.permitAll() // Permitir acceso sin autenticación a la página de login
-            //)
-        //.logout(logout -> logout
-            //.deleteCookies("JSESSIONID"))
-        //.sessionManagement(session -> session
-            //.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+            .anyRequest().authenticated())
+        .formLogin(form -> form
+            .loginPage("/") // Página JSP para el formulario de login
+            .loginProcessingUrl("/api/v1/usuarios/login") // URL donde se procesan las
+            // credenciales del formulario de
+            // login
+            .defaultSuccessUrl("/obras", true) // Redirigir a /index tras login exitoso
+            .permitAll() // Permitir acceso sin autenticación a la página de login
+        )
+        .logout(logout -> logout
+            .deleteCookies("JSESSIONID"))
+        .sessionManagement(session -> session
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
     return http.build();
   }
