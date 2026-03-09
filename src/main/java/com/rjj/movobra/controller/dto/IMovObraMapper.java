@@ -8,7 +8,6 @@ import com.rjj.movobra.entity.Movobra;
 
 @Mapper(componentModel = "spring")
 public interface IMovObraMapper {
-  IMovObraMapper INSTANCE = Mappers.getMapper(IMovObraMapper.class);
 
   // para que el RESIDENTE suba el archivo
   @Mapping(target = "id", ignore = true)
