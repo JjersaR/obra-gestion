@@ -1,5 +1,6 @@
 package com.rjj.archivos.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -41,4 +42,8 @@ public interface IArchivosRepository extends JpaRepository<Archivos, UUID> {
       UUID movobraId,
       ETipo categoria);
 
+  List<Archivos> findByBucketAndTipoEntidadAndMovobraIdAndCategoriaOrderByVersionDesc(String bucket,
+      ETipo tipoEntidad,
+      UUID movobraId,
+      ETipo categoria);
 }
