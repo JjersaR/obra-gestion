@@ -23,6 +23,9 @@ external-server:
     endpoint: ${MINIO_ENDPOINT}
     accessKey: ${MINIO_ACCESS_KEY}
     secretKey: ${MINIO_SECRET_KEY}
+    buckets:
+      especial: ${MINIO_BUCKET_FINANCIEROS}
+      comun: ${MINIO_BUCKET_DOCUMENTOS}
 
 logging:
   pattern:
