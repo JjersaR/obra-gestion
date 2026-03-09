@@ -1,30 +1,31 @@
 package com.rjj.descargas.service;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rjj.descargas.controller.dto.RVisualizacion;
 import com.rjj.descargas.entity.ObraVisualizacion;
 import com.rjj.descargas.repository.ObraVisualizacionRepository;
 
 @Service
 public class ObraVisualizacionService {
 
-    @Autowired
-    private ObraVisualizacionRepository repository;
+  @Autowired
+  private ObraVisualizacionRepository repository;
 
-    public void registrarVisualizacion(UUID obraId, String rol){
+  public void registrarVisualizacion(RVisualizacion registrar) {
 
-        if(!repository.existsByObraIdAndRol(obraId, rol)){
+    if (!repository.existsByObraIdAndRolAndUsuarioId(registrar.obraId(), registrar.rol(), registrar.usuarioId())) {
 
-            ObraVisualizacion v = new ObraVisualizacion();
-            v.setObraId(obraId);
-            v.setRol(rol);
-            v.setFecha(LocalDateTime.now());
+      ObraVisualizacion v = new ObraVisualizacion();
+      v.setObraId(registrar.obraId());
+      v.setRol(registrar.rol());
+      v.setUsuarioId(registrar.usuarioId());
+      v.setFecha(LocalDateTime.now());
 
-            repository.save(v);
-        }
+      repository.save(v);
     }
+  }
 }

@@ -1,13 +1,13 @@
 package com.rjj.descargas.repository;
 
-import java.util.UUID;
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.rjj.descargas.entity.ObraVisualizacion;
 
-public interface ObraVisualizacionRepository 
-        extends JpaRepository<ObraVisualizacion, Long> {
+@Repository
+public interface ObraVisualizacionRepository
+    extends JpaRepository<ObraVisualizacion, Long> {
 
-    boolean existsByObraIdAndRol(UUID obraId, String rol);
+  boolean existsByObraIdAndRolAndUsuarioId(String obraId, String rol, String usuarioId);
 }
