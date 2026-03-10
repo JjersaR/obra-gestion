@@ -26,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@PermitAll
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/usuarios")
@@ -38,7 +39,6 @@ public class UsuariosController {
   // Instanciamos el repositorio oficial de Spring para guardar sesiones
   private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
 
-  @PermitAll
   @PostMapping
   public ResponseEntity<Boolean> guardar(@RequestBody RUsuariosRequest request) throws URISyntaxException {
     service.guardar(request);
@@ -47,18 +47,17 @@ public class UsuariosController {
 
   @PostMapping("/login")
   public ResponseEntity<RUsuarioRegistrado> login(@RequestBody RUsuarioCredencialesRequest request,
-    HttpServletRequest httpRequest, HttpServletResponse httpResponse) { // Pedimos acceso a la petición
+      HttpServletRequest httpRequest, HttpServletResponse httpResponse) { // Pedimos acceso a la petición
 
     var login = service.iniciarSesion(request);
 
     if (login.isPresent()) {
-        // Obligamos a Spring a guardar la sesión en la memoria del navegador
-        securityContextRepository.saveContext(SecurityContextHolder.getContext(), httpRequest, httpResponse);
-        
-        return ResponseEntity.ok(login.get());
+      // Obligamos a Spring a guardar la sesión en la memoria del navegador
+      securityContextRepository.saveContext(SecurityContextHolder.getContext(), httpRequest, httpResponse);
+
+      return ResponseEntity.ok(login.get());
     } else {
-        return ResponseEntity.noContent().build();
+      return ResponseEntity.noContent().build();
     }
-    //return (login.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(login.get());
   }
 }

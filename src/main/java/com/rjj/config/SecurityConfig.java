@@ -22,11 +22,9 @@ public class SecurityConfig {
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
             // Permitimos solo los recursos visuales y la pantalla de login HTML
-            .requestMatchers("/**", "/img/**", "/css/**", "/js/**").permitAll()
+            .requestMatchers("/img/**", "/css/**", "/js/**").permitAll()
             // Permitimos explícitamente que cualquiera intente hacer login a traves de la
             // API
-            .requestMatchers("/api/v1/usuarios/login").permitAll()
-            // .requestMatchers("").hasRole("")
             .anyRequest().authenticated())
         .formLogin(form -> form
             .loginPage("/") // Página JSP para el formulario de login
