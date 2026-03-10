@@ -1,130 +1,123 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<meta charset="UTF-8">
-<title>Pantalla 02 - Obra Nueva</title>
-<link rel="stylesheet" href="/css/nuevaObra.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carga de Obra Nueva - OM Diseño y Construcción</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap">
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
-    <body>
+<body>
+    
+    <header class="topbar">
+        <div class="topbar-left">
+            <h1 class="topbar-title">OM Diseño y Construcción</h1>
+        </div>
+        <div class="topbar-right">
+            <span class="user-welcome">Capturista: <strong sec:authentication="name">Usuario</strong></span>
+            <a href="/obras" class="btn-logout" style="text-decoration: none; border-color: white; color: white;">Regresar</a>
+        </div>
+    </header>
 
-    <div class="container">
+    <main class="main-content">
+        <div class="main-header">
+            <div class="main-header-info">
+                <h2>Carga de Datos Obra Nueva</h2>
+            </div>
+            <div class="main-header-actions">
+                <button type="submit" form="formNuevaObra" class="btn-action">
+                    <span class="btn-icon">💾</span> GUARDAR OBRA
+                </button>
+            </div>
+        </div>
 
-        <h3>PANTALLA 02</h3>
-        <h2>CARGA DE DATOS OBRA NUEVA</h2>
+        <form id="formNuevaObra" action="/api/v1/obras" method="post" enctype="multipart/form-data" class="form-grid">
+            
+            <div class="obra-card form-section">
+                <h3 class="form-section-title">Datos Generales</h3>
+                <div class="input-group">
+                    <label for="nombreObra">Nombre de la Obra</label>
+                    <input type="text" id="nombreObra" name="nombreObra" required>
+                </div>
+                <div class="input-group">
+                    <label for="cliente">Cliente</label>
+                    <input type="text" id="cliente" name="cliente" required>
+                </div>
+                <div class="input-group">
+                    <label for="monto">Monto Antes de IVA ($)</label>
+                    <input type="number" id="monto" name="monto" step="0.01" required>
+                </div>
+            </div>
 
-    <form>
+            <div class="obra-card form-section">
+                <h3 class="form-section-title">Programa de Obra</h3>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="fechaInicio">Fecha Inicio</label>
+                        <input type="date" id="fechaInicio" name="fechaInicio" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="fechaTerminacion">Fecha Terminación</label>
+                        <input type="date" id="fechaTerminacion" name="fechaTerminacion" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="numeroSemanas">Número de Semanas</label>
+                    <input type="number" id="numeroSemanas" name="numeroSemanas" required>
+                </div>
+            </div>
 
-    <div class="grid">
+            <div class="obra-card form-section">
+                <h3 class="form-section-title">Responsables</h3>
+                <div class="input-group">
+                    <label for="gerente">Gerente de Proyecto</label>
+                    <input type="text" id="gerente" name="gerente" required>
+                </div>
+                <div class="input-group">
+                    <label for="residente">Residente de Obra</label>
+                    <input type="text" id="residente" name="residente" required>
+                </div>
+            </div>
 
-    <div class="panel">
-        <label>NOMBRE OBRA</label>
-        <input type="text">
-    </div>
+            <div class="obra-card form-section file-section">
+                <h3 class="form-section-title">Carga de Archivos de Obra</h3>
+                <p class="file-help">Sube los documentos en formato PDF, Excel o Word.</p>
+                
+                <div class="input-group">
+                    <label for="ordenCompra">Orden de Compra</label>
+                    <input type="file" id="ordenCompra" name="ordenCompra">
+                </div>
+                <div class="input-group">
+                    <label for="presupuesto">Presupuesto</label>
+                    <input type="file" id="presupuesto" name="presupuesto">
+                </div>
+                <div class="input-group">
+                    <label for="explosionInsumos">Explosión de Insumos</label>
+                    <input type="file" id="explosionInsumos" name="explosionInsumos">
+                </div>
+                <div class="input-group">
+                    <label for="proyectoDoc">Proyecto</label>
+                    <input type="file" id="proyectoDoc" name="proyectoDoc">
+                </div>
+                <div class="input-group">
+                    <label for="programaDoc">Programa</label>
+                    <input type="file" id="programaDoc" name="programaDoc">
+                </div>
+                <div class="input-group">
+                    <label for="memorias">Memorias</label>
+                    <input type="file" id="memorias" name="memorias">
+                </div>
+            </div>
 
-    <div class="panel">
-        <label>PROGRAMA</label>
+            <div class="obra-card form-section full-width">
+                <h3 class="form-section-title">Observaciones y Comentarios Adicionales</h3>
+                <div class="input-group">
+                    <textarea id="observaciones" name="observaciones" rows="4" placeholder="Escribe aquí cualquier detalle adicional de la obra..."></textarea>
+                </div>
+            </div>
 
-    <div class="campo">
-        <span>FECHA INICIO</span>
-        <input type="date">
-    </div>
-
-    <div class="campo">
-        <span>FECHA TERMINACIÓN</span>
-        <input type="date">
-    </div>
-
-    <div class="campo">
-        <span>NÚMERO DE SEMANAS</span>
-        <input type="number">
-    </div>
-
-    </div>
-
-    <div class="panel editar">
-        <label>EDITAR</label>
-        <p>FECHA</p>
-        <p>HORA</p>
-        <p>RESPONSABLE DE MODIF</p>
-    </div>
-
-    <div class="panel">
-        <label>MONTO ANTES DE IVA</label>
-        <input type="number">
-    </div>
-
-    <div class="panel">
-        <label>RESPONSABLE</label>
-
-        <div class="campo">
-        <span>GERENTE</span>
-        <input type="text">
-    </div>
-
-    <div class="campo">
-        <span>RESIDENTE</span>
-        <input type="text">
-    </div>
-
-    </div>
-
-    <div class="panel">
-        <label>OBSERVACIONES</label>
-        <textarea rows="5"></textarea>
-    </div>
-
-    </div>
-
-
-    <div class="grid2">
-
-    <div class="panel archivos">
-
-    <label>CARGA DE ARCHIVOS DE OBRA</label>
-
-    <ul>
-        <li>ORDEN DE COMPRA <input type="file"></li>
-        <li>PRESUPUESTO <input type="file"></li>
-        <li>EXPLOSIÓN DE INSUMOS <input type="file"></li>
-        <li>PROYECTO <input type="file"></li>
-        <li>PROGRAMA <input type="file"></li>
-        <li>MEMORIAS <input type="file"></li>
-        <li>COMENTARIOS ADICIONALES <input type="file"></li>
-    </ul>
-
-    </div>
-
-    <div class="panel indicador">
-
-    <label>INDICADOR: QUIÉN BAJÓ INFORMACIÓN</label>
-
-    <ul class="indicador-lista">
-        <li>CONSTRUCCIÓN ✔</li>
-        <li>COMPRAS ✔</li>
-        <li>ESTIMACIONES ✔</li>
-        <li>ADMINISTRACIÓN ✔</li>
-    </ul>
-
-    </div>
-
-    <div class="panel observaciones">
-        <label>OBSERVACIONES</label>
-        <textarea rows="4"></textarea>
-    </div>
-
-    <div class="panel relacion">
-        <label>RELACIÓN DE OBRAS ANTERIORES, POR FECHAS</label>
-    </div>
-
-    </div>
-
-        <button class="btn">GUARDAR OBRA</button>
-
-    </form>
-
-    </div>
+        </form>
+    </main>
 
 </body>
 </html>

@@ -28,10 +28,10 @@
                 <h2>Relación de Obras en Proceso</h2>
             </div>
             <!--Boton de Nueva Obra-->
-            <div class="main-header-actions" sec:authorize="hasAnyRole('ADMIN', 'PRESUPUESTOS')">
-                <a href="nuevaObra.html" class="btn-action"></a>
-                <!--<a href="/obras/nueva" class="btn-action"> -->
-                    <span class="btn-icon">+</span> NUEVA OBRA (CARGA INFORMACIÓN) COSTOS
+            <!--De acuerdo al rol <div class="main-header-actions" sec:authorize="hasAnyRole('ADMINISTRACION', 'PRESUPUESTOS')"> -->
+            <div class="main-header-actions"> 
+                <a th:href="@{/obras/nueva}" class="btn-action">
+                    <span class="btn-icon">+</span> NUEVA OBRA
                 </a>
             </div>
         </div>
@@ -62,7 +62,7 @@
                     </p>
                     <p class="obra-detail-pair">
                         <strong>GERENTE:</strong>
-                        <span>Ing. Rodrigo Rodríguez/span>
+                        <span>Ing. Rodrigo Rodríguez </span>
                     </p>
                     <p class="obra-detail-pair">
                         <strong>RESIDENTE:</strong>

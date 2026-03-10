@@ -16,5 +16,11 @@ public class WebController {
     public String mostrarObras() {
         return "index";
     }
+
+    //Muestra la pantalla de nueva obra  
+    @GetMapping("/obras/nueva")
+    public String nuevaObraForm(){
+        return "nuevaObra";
+    }
       
 }
