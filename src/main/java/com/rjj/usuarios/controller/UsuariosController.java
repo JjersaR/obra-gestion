@@ -21,12 +21,10 @@ import com.rjj.usuarios.controller.dto.RUsuarioRegistrado;
 import com.rjj.usuarios.controller.dto.RUsuariosRequest;
 import com.rjj.usuarios.service.UsuariosService;
 
-import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@PermitAll
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/usuarios")
