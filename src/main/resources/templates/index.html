@@ -1,11 +1,110 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Panel de Obras</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Obras - OM Diseño y Construcción S.A. de C.V.</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap">
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
-    <h1>Bienvenido al sistema de obras</h1>
-    <p>¡Si estás viendo esto, el login funcionó y la redirección también!</p>
+    
+    <header class="topbar">
+        <div class="topbar-left">
+            <img src="/img/logo_small.png" alt="Logo OM" class="topbar-logo">
+            <h1 class="topbar-title">OM Diseño y Construcción</h1>
+        </div>
+        <div class="topbar-right">
+            <span class="user-welcome">Bienvenido, <strong sec:authentication="name">Usuario</strong></span>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn-logout">Cerrar Sesión</button>
+            </form>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="main-header">
+            <div class="main-header-info">
+                <h2>Relación de Obras en Proceso</h2>
+            </div>
+            <!--Boton de Nueva Obra-->
+            <div class="main-header-actions" sec:authorize="hasAnyRole('ADMIN', 'PRESUPUESTOS')">
+                <a href="/obras/nueva" class="btn-action">
+                    <span class="btn-icon">+</span> NUEVA OBRA (CARGA INFORMACIÓN) COSTOS
+                </a>
+            </div>
+        </div>
+
+        <div class="obras-grid">
+            
+            <div class="obra-card status-execution">
+                <div class="obra-card-header">
+                    <span class="obra-id">OBRA 01</span>
+                    <span class="obra-status">en proceso de ejecución</span>
+                </div>
+                <div class="obra-card-body">
+                    <p class="obra-detail-pair">
+                        <strong>NOMBRE O NÚMERO:</strong>
+                        <span>Baches</span>
+                    </p>
+                    <p class="obra-detail-pair">
+                        <strong>MONTO ANTES DE IVA:</strong>
+                        <span>$5.00</span>
+                    </p>
+                    <p class="obra-detail-pair">
+                        <strong>FECHA INICIO:</strong>
+                        <span>10/02/2026</span>
+                    </p>
+                    <p class="obra-detail-pair">
+                        <strong>FECHA TERMINACIÓN:</strong>
+                        <span>15/11/2026</span>
+                    </p>
+                    <p class="obra-detail-pair">
+                        <strong>GERENTE:</strong>
+                        <span>Ing. Rich</span>
+                    </p>
+                    <p class="obra-detail-pair">
+                        <strong>RESIDENTE:</strong>
+                        <span>Arq. Joss</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="obra-card status-closing">
+                <div class="obra-card-header">
+                    <span class="obra-id">OBRA 02</span>
+                    <span class="obra-status">en cierre adm</span>
+                </div>
+                <div class="obra-card-body">
+                    <p class="obra-detail-pair">
+                        <strong>NOMBRE O NÚMERO:</strong>
+                        <span>Oficinas </span>
+                    </p>
+                    <p class="obra-detail-pair">
+                        <strong>MONTO ANTES DE IVA:</strong>
+                        <span>$800.00</span>
+                    </p>
+                    <p class="obra-detail-pair">
+                        <strong>FECHA INICIO:</strong>
+                        <span>01/03/2026</span>
+                    </p>
+                    <p class="obra-detail-pair">
+                        <strong>FECHA TERMINACIÓN:</strong>
+                        <span>20/12/2026</span>
+                    </p>
+                    <p class="obra-detail-pair">
+                        <strong>GERENTE:</strong>
+                        <span>Ing. Feid</span>
+                    </p>
+                    <p class="obra-detail-pair">
+                        <strong>RESIDENTE:</strong>
+                        <span>Arq. Bad Bunny</span>
+                    </p>
+                </div>
+            </div>
+
+            </div>
+    </main>
+
 </body>
 </html>

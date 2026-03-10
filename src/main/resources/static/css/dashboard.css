@@ -1,0 +1,209 @@
+/* Paleta de Colores: Sophisticated Construction & Design */
+:root {
+    --color-bg-body: #f7fafc;
+    --color-bg-panel: #ffffff;
+    --color-text-primary: #1a202c;
+    --color-text-secondary: #718096;
+    --color-accent: #2c3e50; /* Azul Marino Sophisticado */
+    --color-status-execution: #2ecc71; /* Ejecucion */
+    --color-status-closing: #f39c12; /* En Cierre */
+    --color-border: #e2e8f0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--color-bg-body);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+}
+
+/* Barra Superior - Elevada */
+.topbar {
+    background-color: var(--color-accent);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.topbar-logo {
+    height: 40px;
+}
+
+.topbar-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.user-welcome {
+    font-size: 0.95rem;
+}
+
+.btn-logout {
+    background: transparent;
+    color: #ffcccc;
+    border: 1px solid #ffcccc;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: #ffcccc;
+    color: var(--color-accent);
+}
+
+/* Contenido Principal - Estructurado */
+.main-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2.5rem;
+}
+
+.main-header-info h1 {
+    font-size: 1.5rem;
+    color: var(--color-text-secondary);
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+}
+
+.main-header-info h2 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--color-accent);
+}
+
+/* Botón de Acción Principal - Destacado */
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, var(--color-accent), #455a64);
+    color: white;
+    padding: 1rem 1.75rem;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.btn-icon {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* Cuadrícula de Obras */
+.obras-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 2rem;
+}
+
+/* Tarjetas de Obras  */
+.obra-card {
+    background-color: var(--color-bg-panel);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.obra-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.obra-card-header {
+    padding: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border);
+    background-color: #fafbfc;
+}
+
+.obra-id {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--color-accent);
+}
+
+.obra-status {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+}
+
+/* Códigos de Color de Estatus */
+.status-execution .obra-status {
+    color: var(--color-status-execution);
+    background-color: #e6fffa;
+}
+
+.status-closing .obra-status {
+    color: var(--color-status-closing);
+    background-color: #fffaf0;
+}
+
+.obra-card-body {
+    padding: 1.75rem;
+}
+
+.obra-detail-pair {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.obra-detail-pair strong {
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.obra-detail-pair span {
+    color: var(--color-text-primary);
+    font-weight: 400;
+}

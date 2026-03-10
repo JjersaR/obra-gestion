@@ -80,6 +80,12 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-thymeleaf</artifactId>
 	</dependency>
+	<!--Para que HTML pueda leer el rol q tiene el usuario al iniciar sesion-->
+	<dependency>
+		<groupId>org.thymeleaf.extras</groupId>
+		<artifactId>thymeleaf-extras-springsecurity6</artifactId>
+	</dependency>
+	
     <!-- SECCION DE MINIO -->
     <dependency>
       <groupId>io.minio</groupId>
