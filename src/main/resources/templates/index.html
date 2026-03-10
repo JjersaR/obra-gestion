@@ -11,13 +11,13 @@
     
     <header class="topbar">
         <div class="topbar-left">
-            <img src="/img/logo_small.png" alt="Logo OM" class="topbar-logo">
+            <img src="/img/logo.jpeg" alt="Logo OM" class="topbar-logo">
             <h1 class="topbar-title">OM Diseño y Construcción</h1>
         </div>
         <div class="topbar-right">
             <span class="user-welcome">Bienvenido, <strong sec:authentication="name">Usuario</strong></span>
-            <form th:action="@{/logout}" method="post">
-                <button type="submit" class="btn-logout">Cerrar Sesión</button>
+            <form th:action="@{/logout}" method="post" id="formLogout">
+                <button type="submit" class="btn-logout" id="btnLogout">Cerrar Sesión</button>
             </form>
         </div>
     </header>
@@ -105,6 +105,8 @@
 
             </div>
     </main>
+
+    <script src="/js/datosUsuario.js"></script>
 
 </body>
 </html>

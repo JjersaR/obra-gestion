@@ -43,6 +43,12 @@ public class Obras {
   @Column(name = "fecha_fin", nullable = false)
   private LocalDate fechaFin;
 
+  @Column(name = "gerente", nullable = false)
+  private String gerente;
+
+  @Column(name = "residente", nullable = false)
+  private String residente;
+
   @Enumerated(EnumType.STRING)
   private EStatus status;
 
