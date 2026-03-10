@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Pantalla 02 - Obra Nueva</title>
+<link rel="stylesheet" href="/css/nuevaObra.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+    <body>
+
+    <div class="container">
+
+        <h3>PANTALLA 02</h3>
+        <h2>CARGA DE DATOS OBRA NUEVA</h2>
+
+    <form>
+
+    <div class="grid">
+
+    <div class="panel">
+        <label>NOMBRE OBRA</label>
+        <input type="text">
+    </div>
+
+    <div class="panel">
+        <label>PROGRAMA</label>
+
+    <div class="campo">
+        <span>FECHA INICIO</span>
+        <input type="date">
+    </div>
+
+    <div class="campo">
+        <span>FECHA TERMINACIÓN</span>
+        <input type="date">
+    </div>
+
+    <div class="campo">
+        <span>NÚMERO DE SEMANAS</span>
+        <input type="number">
+    </div>
+
+    </div>
+
+    <div class="panel editar">
+        <label>EDITAR</label>
+        <p>FECHA</p>
+        <p>HORA</p>
+        <p>RESPONSABLE DE MODIF</p>
+    </div>
+
+    <div class="panel">
+        <label>MONTO ANTES DE IVA</label>
+        <input type="number">
+    </div>
+
+    <div class="panel">
+        <label>RESPONSABLE</label>
+
+        <div class="campo">
+        <span>GERENTE</span>
+        <input type="text">
+    </div>
+
+    <div class="campo">
+        <span>RESIDENTE</span>
+        <input type="text">
+    </div>
+
+    </div>
+
+    <div class="panel">
+        <label>OBSERVACIONES</label>
+        <textarea rows="5"></textarea>
+    </div>
+
+    </div>
+
+
+    <div class="grid2">
+
+    <div class="panel archivos">
+
+    <label>CARGA DE ARCHIVOS DE OBRA</label>
+
+    <ul>
+        <li>ORDEN DE COMPRA <input type="file"></li>
+        <li>PRESUPUESTO <input type="file"></li>
+        <li>EXPLOSIÓN DE INSUMOS <input type="file"></li>
+        <li>PROYECTO <input type="file"></li>
+        <li>PROGRAMA <input type="file"></li>
+        <li>MEMORIAS <input type="file"></li>
+        <li>COMENTARIOS ADICIONALES <input type="file"></li>
+    </ul>
+
+    </div>
+
+    <div class="panel indicador">
+
+    <label>INDICADOR: QUIÉN BAJÓ INFORMACIÓN</label>
+
+    <ul class="indicador-lista">
+        <li>CONSTRUCCIÓN ✔</li>
+        <li>COMPRAS ✔</li>
+        <li>ESTIMACIONES ✔</li>
+        <li>ADMINISTRACIÓN ✔</li>
+    </ul>
+
+    </div>
+
+    <div class="panel observaciones">
+        <label>OBSERVACIONES</label>
+        <textarea rows="4"></textarea>
+    </div>
+
+    <div class="panel relacion">
+        <label>RELACIÓN DE OBRAS ANTERIORES, POR FECHAS</label>
+    </div>
+
+    </div>
+
+        <button class="btn">GUARDAR OBRA</button>
+
+    </form>
+
+    </div>
+
+</body>
+</html>

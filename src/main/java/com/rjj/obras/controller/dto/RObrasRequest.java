@@ -10,6 +10,8 @@ public record RObrasRequest(
     BigDecimal montoAntesIva,
     @JsonFormat(pattern = "yyyy-MM-dd") LocalDate fechaInicio,
     @JsonFormat(pattern = "yyyy-MM-dd") LocalDate fechaFin,
+    String gerente,
+    String residente,
     String status) {
 
 }

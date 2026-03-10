@@ -18,6 +18,9 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         if (response.status === 200) {
             //leemos el JSON directamente
             const datosUsuario = await response.json();
+
+            // Convertimos el objeto a texto y lo guardamos en la memoria del navegador
+            localStorage.setItem('usuarioLogueado', JSON.stringify(datosUsuario));
             
             mensajeDiv.textContent = '¡Acceso concedido! Redirigiendo...';
             mensajeDiv.className = 'success';
