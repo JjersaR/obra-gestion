@@ -6,10 +6,11 @@ import java.net.URISyntaxException;
 //login
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,13 +39,13 @@ public class UsuariosController {
   private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
 
   @PostMapping
-  public ResponseEntity<Boolean> guardar(@RequestBody RUsuariosRequest request) throws URISyntaxException {
+  public ResponseEntity<Boolean> guardar(@RequestBody @Valid RUsuariosRequest request) throws URISyntaxException {
     service.guardar(request);
     return ResponseEntity.created(new URI(API_V1_USUARIOS)).build();
   }
 
   @PostMapping("/login")
-  public ResponseEntity<RUsuarioRegistrado> login(@RequestBody RUsuarioCredencialesRequest request,
+  public ResponseEntity<RUsuarioRegistrado> login(@RequestBody @Valid RUsuarioCredencialesRequest request,
       HttpServletRequest httpRequest, HttpServletResponse httpResponse) { // Pedimos acceso a la petición
 
     var login = service.iniciarSesion(request);
