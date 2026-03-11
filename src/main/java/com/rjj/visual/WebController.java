@@ -22,5 +22,15 @@ public class WebController {
     public String nuevaObraForm(){
         return "nuevaObra";
     }
+    // Dentro de tu WebController.java
+
+    @GetMapping("/obras/detalles")
+    public String mostrarDetalles() {
+    return "generales"; // Esto busca templates/generales.html
+}
+@GetMapping("/obras/detalles/requerimientos")
+public String verRequerimientos() {
+    return "requerimientos";
+}
       
 }

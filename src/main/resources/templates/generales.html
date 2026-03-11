@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Obra - OM Diseño y Construcción</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap">
+    <link rel="stylesheet" th:href="@{/css/generalesObra.css}">
+</head>
+<body>
+
+   <header class="topbar">
+    <div class="topbar-left">
+        <div class="logo-container">
+            <img src="/img/logo.jpeg" alt="Logo OM" class="topbar-logo">
+        </div>
+        <div class="brand-info">
+            <h1 class="topbar-title">OM Diseño y Construcción</h1>
+            <span class="view-subtitle">Gestión de Proyectos</span>
+        </div>
+    </div>
+    <div class="topbar-right">
+        <a th:href="@{/obras}" class="btn-back">
+            <span class="icon">←</span> Volver al Panel
+        </a>
+    </div>
+</header>
+
+    <main class="main-content">
+        <div class="page-subheader">
+                    <div class="title-container">
+                        <h2>PANTALLA 03: <span class="obra-highlight">OBRA UNO</span></h2>
+                    </div>
+        </div>
+
+        <section class="info-section">
+            <table class="tabla-generales">
+                <tr>
+                    <td class="etiqueta">PROGRAMA</td>
+                    <td class="valor-azul">INICIO, TERMINACION, NUMERO DE SEMANAS</td>
+                    <td class="etiqueta">MONTO</td>
+                    <td class="valor-azul">SIN IVA</td>
+                </tr>
+                <tr>
+                    <td class="etiqueta">CLIENTE</td>
+                    <td class="valor-texto">CLIENTE EJEMPLO S.A.</td>
+                    <td class="etiqueta">FECHA Y HORA</td>
+                    <td class="valor-azul small">AUTOMÁTICO AL ABRIR LA PÁGINA</td>
+                </tr>
+            </table>
+        </section>
+
+        <div class="dashboard-grid">
+            
+            <div class="grid-column">
+                <a th:href="@{/obras/detalles/requerimientos}" class="bloque-boton">
+                    REQUERIMIENTOS CONSTRUCCION: (MATERIAL, HERRAMIENTA, EQUIPO, SEGURIDAD)
+                </a>
+                <!--<div class="bloque-estatico">
+                    COMPARATIVA PRECIOS Y ORDEN DE COMPRA: (MATERIAL, HERRAMIENTA, EQUIPO, SEGURIDAD)
+                </div>
+                <div class="bloque-estatico">
+                    PAGO Y FACTURA DE ORDEN DE COMPRA: (MATERIAL, HERRAMIENTA, EQUIPO, SEGURIDAD)
+                </div>-->
+                <div class="bloque-alerta">
+                    INDICADOR FUERA DE PROGRAMA
+                </div>
+            </div>
+
+            <div class="grid-column">
+                <button class="bloque-boton">
+                    REQUERIMIENTO MANO DE OBRA: RELACION DE PERSONAL CON IMSS, Y ESPECIALIDADES
+                </button>
+               <!---- <div class="bloque-estatico">
+                    RELACION DE ALTAS IMSS CON PAGOS, FIANZAS
+                </div>
+                <div class="bloque-estatico">
+                    PAGO DE NOMINA Y PROVEEDORES MANO DE OBRA
+                </div>-->
+                <div class="bloque-alerta">
+                    INDICADOR FUERA DE COSTO DIRECTO
+                </div>
+            </div>
+
+            <div class="grid-column">
+                <button class="bloque-boton">
+                    REPORTE SEMANAL
+                </button>
+                <!--<div class="bloque-estatico">ESTATUS DE PROGRAMA</div>
+                <div class="bloque-estatico">GENERADORES (PUEDA SUBIR ARCHIVOS)</div>
+                <div class="bloque-estatico">PRESUPUESTO REAL (FINIQUITO, COMPARATIVA)</div>-->
+                <div class="bloque-gastos">Gastos totales 10,095</div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>

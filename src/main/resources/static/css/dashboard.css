@@ -236,3 +236,29 @@ body {
     color: var(--color-text-primary);
     font-weight: 400;
 }
+
+/* Botón Detalles de Obra */
+.obra-actions{
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-detalle{
+    background-color: var(--color-accent);
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-detalle:hover{
+    background-color: #1a252f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
