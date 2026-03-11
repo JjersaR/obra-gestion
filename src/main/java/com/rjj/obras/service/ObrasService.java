@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.rjj.obras.controller.dto.IObrasMapper;
 import com.rjj.obras.controller.dto.RObrasRequest;
-import com.rjj.obras.controller.dto.RObrasUpdateRequest;
 import com.rjj.obras.repository.IObrasRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -25,12 +24,4 @@ public class ObrasService {
     return guardado.getId();
   }
 
-  public Boolean actualizar(RObrasUpdateRequest request) {
-    if (repository.existsByNombre(request.nombre())) {
-      var obra = mapper.toEntity(request);
-      repository.save(obra);
-      return true;
-    }
-    return false;
-  }
 }

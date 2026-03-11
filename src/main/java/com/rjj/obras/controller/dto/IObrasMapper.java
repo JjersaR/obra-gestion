@@ -15,9 +15,4 @@ public interface IObrasMapper {
   @Mapping(target = "creadoEn", ignore = true)
   @Mapping(target = "modificadoEn", ignore = true)
   Obras toEntity(RObrasRequest request);
-
-  // Para actualizar obra
-  @Mapping(target = "creadoEn", ignore = true)
-  @Mapping(target = "modificadoEn", ignore = true)
-  Obras toEntity(RObrasUpdateRequest request);
 }

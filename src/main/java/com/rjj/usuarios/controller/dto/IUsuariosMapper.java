@@ -14,5 +14,6 @@ public interface IUsuariosMapper {
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "creadoEn", ignore = true)
   @Mapping(target = "modificadoEn", ignore = true)
+  @Mapping(target = "enabled", source = "isEnabled")
   Usuarios toEntity(RUsuariosRequest request);
 }

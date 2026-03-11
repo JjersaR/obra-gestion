@@ -54,6 +54,7 @@ public class UsuariosService {
       // se recupera los detalles del usuario
       CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
 
+      log.info("Usuario autenticado");
       // se retorna el usuario
       return Optional.of(
           new RUsuarioRegistrado(
