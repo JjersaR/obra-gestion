@@ -92,7 +92,7 @@ body {
     justify-content: center; /* CORREGIDO: Centra el contenido en lugar de separarlo a los extremos */
     align-items: center;
     gap: 30px; /* CORREGIDO: Define el espacio exacto entre el título y el botón */
-    width: 100%; 
+    width: 100%;
     padding-bottom: 20px;
     border-bottom: 2px solid #e2e8f0; /* Ajustado al color de borde de tu paleta */
 }
@@ -117,18 +117,18 @@ body {
 
 /* Botón de Acción Principal - CORREGIDO */
 .btn-action {
-    display: inline-flex;       
-    align-items: center;        
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
-    background-color: #2c3e50; 
-    color: #ffffff !important; 
-    padding: 12px 24px;         
-    border-radius: 6px;         
-    text-decoration: none;      
+    background-color: #2c3e50;
+    color: #ffffff !important;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
     font-weight: 600;
     font-size: 14px;
     transition: all 0.3s ease;
-    white-space: nowrap;        
+    white-space: nowrap;
 }
 
 .btn-action:hover {
@@ -139,7 +139,7 @@ body {
 }
 
 .btn-icon {
-    margin-right: 10px;         
+    margin-right: 10px;
     font-size: 1.2rem;
     font-weight: bold;
     line-height: 1;
@@ -162,7 +162,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* Ajustado un poco para que quepan mejor en monitores estándar */
     gap: 2rem;
-    width: 100%; 
+    width: 100%;
 }
 
 /* Tarjetas de Obras  */
@@ -261,4 +261,8 @@ body {
     background-color: #1a252f;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.oculto {
+  display: none;
 }

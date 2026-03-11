@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
-    
+
     <header class="topbar">
         <div class="topbar-left">
             <img src="/img/logo.jpeg" alt="Logo OM" class="topbar-logo">
@@ -28,8 +28,7 @@
                 <h2>Relación de Obras en Proceso</h2>
             </div>
             <!--Boton de Nueva Obra-->
-            <!--De acuerdo al rol <div class="main-header-actions" sec:authorize="hasAnyRole('ADMINISTRACION', 'PRESUPUESTOS')"> -->
-            <div class="main-header-actions"> 
+            <div class="main-header-actions oculto">
                 <a th:href="@{/obras/nueva}" class="btn-action">
                     <span class="btn-icon">+</span> NUEVA OBRA
                 </a>
@@ -37,12 +36,12 @@
         </div>
 
         <div class="obras-grid">
-            <div th:each="obra, iter : ${obras}" 
+            <div th:each="obra, iter : ${obras}"
                 th:class="${'obra-card ' + (obra.status.name() == 'EJECUCION' ? 'status-execution' : 'status-closing')}">
-                
+
                 <div class="obra-card-header">
                     <span class="obra-id" th:text="${'OBRA ' + #numbers.formatInteger(iter.count, 2)}">OBRA 01</span>
-                    
+
                     <span class="obra-status" th:text="${obra.status.name() == 'EJECUCION' ? 'en proceso de ejecución' : 'en cierre'}">
                         status
                     </span>
