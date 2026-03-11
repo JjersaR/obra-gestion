@@ -37,78 +37,46 @@
         </div>
 
         <div class="obras-grid">
-            
-            <div class="obra-card status-execution">
+            <div th:each="obra, iter : ${obras}" 
+                th:class="${'obra-card ' + (obra.status.name() == 'EJECUCION' ? 'status-execution' : 'status-closing')}">
+                
                 <div class="obra-card-header">
-                    <span class="obra-id">OBRA 01</span>
-                    <span class="obra-status">en proceso de ejecución</span>
+                    <span class="obra-id" th:text="${'OBRA ' + #numbers.formatInteger(iter.count, 2)}">OBRA 01</span>
+                    
+                    <span class="obra-status" th:text="${obra.status.name() == 'EJECUCION' ? 'en proceso de ejecución' : 'en cierre'}">
+                        status
+                    </span>
                 </div>
-                <div class="obra-card-body">
-                    <p class="obra-detail-pair">
-                        <strong>NOMBRE O NÚMERO:</strong>
-                        <span>Remodelación de Oficinas Coppel</span>
-                    </p>
-                    <p class="obra-detail-pair">
-                        <strong>MONTO ANTES DE IVA:</strong>
-                        <span>$5,452,000.00</span>
-                    </p>
-                    <p class="obra-detail-pair">
-                        <strong>FECHA INICIO:</strong>
-                        <span>10/02/2026</span>
-                    </p>
-                    <p class="obra-detail-pair">
-                        <strong>FECHA TERMINACIÓN:</strong>
-                        <span>15/11/2026</span>
-                    </p>
-                    <p class="obra-detail-pair">
-                        <strong>GERENTE:</strong>
-                        <span>Ing. Rodrigo Rodríguez </span>
-                    </p>
-                    <p class="obra-detail-pair">
-                        <strong>RESIDENTE:</strong>
-                        <span>Arq. Manuel Martínez</span>
-                    </p>
-                    <div class="obra-actions">
-                        <a th:href="@{/obras/detalles}" class="btn-detalle" style="text-decoration: none; text-align: center;">
-                        DETALLES DE OBRA
-                        </a>
-                    </div>
-                </div>
-            </div>
 
-            <div class="obra-card status-closing">
-                <div class="obra-card-header">
-                    <span class="obra-id">OBRA 02</span>
-                    <span class="obra-status">en cierre</span>
-                </div>
                 <div class="obra-card-body">
                     <p class="obra-detail-pair">
                         <strong>NOMBRE O NÚMERO:</strong>
-                        <span>Construcción de oficina DHL</span>
+                        <span th:text="${obra.nombre}">Nombre de la Obra</span>
                     </p>
                     <p class="obra-detail-pair">
                         <strong>MONTO ANTES DE IVA:</strong>
-                        <span>$8,000,000.00</span>
+                        <span th:text="${'$' + #numbers.formatDecimal(obra.montoAntesIva, 1, 'COMMA', 2, 'POINT')}">$0.00</span>
                     </p>
                     <p class="obra-detail-pair">
                         <strong>FECHA INICIO:</strong>
-                        <span>01/03/2026</span>
+                        <span th:text="${#temporals.format(obra.fechaInicio, 'dd/MM/yyyy')}">01/01/2026</span>
                     </p>
                     <p class="obra-detail-pair">
                         <strong>FECHA TERMINACIÓN:</strong>
-                        <span>20/12/2026</span>
+                        <span th:text="${#temporals.format(obra.fechaFin, 'dd/MM/yyyy')}">31/12/2026</span>
                     </p>
                     <p class="obra-detail-pair">
                         <strong>GERENTE:</strong>
-                        <span>Ing. Salomon Olmos</span>
+                        <span th:text="${obra.gerente}">Ingeniero</span>
                     </p>
                     <p class="obra-detail-pair">
                         <strong>RESIDENTE:</strong>
-                        <span>Arq. Harry Ortiz</span>
+                        <span th:text="${obra.residente}">Arquitecto</span>
                     </p>
+
                     <div class="obra-actions">
-                        <a th:href="@{/obras/detalles}" class="btn-detalle" style="text-decoration: none; text-align: center;">
-                        DETALLES DE OBRA
+                        <a th:href="@{/obras/detalles/{id}(id=${obra.id})}" class="btn-detalle">
+                            DETALLES DE OBRA
                         </a>
                     </div>
                 </div>

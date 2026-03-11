@@ -1,7 +1,19 @@
 package com.rjj.visual;
 
+
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import com.rjj.obras.entity.Obras;
+import com.rjj.obras.repository.IObrasRepository;
+
+
 
 @Controller
 public class WebController {
@@ -11,9 +23,17 @@ public class WebController {
         return "login";
     }
 
-    //Muestra la pantalla principal 
+  @Autowired
+    private IObrasRepository obrasRepository; // El tipo debe ser IObrasRepository
+
+    // Muestra la pantalla principal
     @GetMapping("/obras")
-    public String mostrarObras() {
+    public String mostrarObras(Model model) {
+        // Ahora sí, llamamos al método findAll() para buscar las obras
+        List<Obras> listaObras = obrasRepository.findAll();
+        
+        model.addAttribute("obras", listaObras);
+        
         return "index";
     }
 
@@ -22,12 +42,24 @@ public class WebController {
     public String nuevaObraForm(){
         return "nuevaObra";
     }
-    // Dentro de tu WebController.java
+    
 
-    @GetMapping("/obras/detalles")
-    public String mostrarDetalles() {
-    return "generales"; // Esto busca templates/generales.html
+    @GetMapping("/obras/detalles/{id}")
+public String mostrarDetalles(@PathVariable UUID id, Model model) {
+    // Buscamos la obra por su ID. Si no la encuentra, lanza un error.
+    Obras obra = obrasRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("ID de obra no válido: " + id));
+    
+    // Pasamos el objeto "obra" al HTML
+    model.addAttribute("obra", obra);
+    
+    // Para la fecha y hora actual en la tabla
+    model.addAttribute("fechaActual", java.time.LocalDateTime.now());
+    
+    return "generales"; // regresa generales.html
 }
+
+
 @GetMapping("/obras/detalles/requerimientos")
 public String verRequerimientos() {
     return "requerimientos";

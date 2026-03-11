@@ -3,97 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles de Obra - OM Diseño y Construcción</title>
+    <title th:text="'Detalles - ' + ${obra.nombre}">Detalles de Obra</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap">
     <link rel="stylesheet" th:href="@{/css/generalesObra.css}">
 </head>
 <body>
 
-   <header class="topbar">
-    <div class="topbar-left">
-        <div class="logo-container">
-            <img src="/img/logo.jpeg" alt="Logo OM" class="topbar-logo">
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="logo-container">
+                <img th:src="@{/img/logo.jpeg}" alt="Logo OM" class="topbar-logo">
+            </div>
+            <div class="brand-info">
+                <h1 class="topbar-title">OM Diseño y Construcción</h1>
+                <span class="view-subtitle">Gestión de Proyectos</span>
+            </div>
         </div>
-        <div class="brand-info">
-            <h1 class="topbar-title">OM Diseño y Construcción</h1>
-            <span class="view-subtitle">Gestión de Proyectos</span>
+        <div class="topbar-right">
+            <a th:href="@{/obras}" class="btn-back">
+                <span class="icon">←</span> Volver al Panel
+            </a>
         </div>
-    </div>
-    <div class="topbar-right">
-        <a th:href="@{/obras}" class="btn-back">
-            <span class="icon">←</span> Volver al Panel
-        </a>
-    </div>
-</header>
+    </header>
 
     <main class="main-content">
         <div class="page-subheader">
-                    <div class="title-container">
-                        <h2>PANTALLA 03: <span class="obra-highlight">OBRA UNO</span></h2>
-                    </div>
+            <div class="title-container">
+                <h2>DETALLE DE PROYECTO: <span class="obra-highlight" th:text="${obra.nombre.toUpperCase()}">NOMBRE DE LA OBRA</span></h2>
+            </div>
         </div>
 
         <section class="info-section">
             <table class="tabla-generales">
                 <tr>
                     <td class="etiqueta">PROGRAMA</td>
-                    <td class="valor-azul">INICIO, TERMINACION, NUMERO DE SEMANAS</td>
-                    <td class="etiqueta">MONTO</td>
-                    <td class="valor-azul">SIN IVA</td>
+                    <td class="valor-azul">
+                        <span th:text="${#temporals.format(obra.fechaInicio, 'dd/MM/yyyy')}">Inicio</span> al 
+                        <span th:text="${#temporals.format(obra.fechaFin, 'dd/MM/yyyy')}">Fin</span>
+                    </td>
+                    <td class="etiqueta">MONTO ACORDADO</td>
+                    <td class="valor-azul">
+                        <span th:text="${'$' + #numbers.formatDecimal(obra.montoAntesIva, 1, 'COMMA', 2, 'POINT')}">$0.00</span>
+                    </td>
                 </tr>
                 <tr>
-                    <td class="etiqueta">CLIENTE</td>
-                    <td class="valor-texto">CLIENTE EJEMPLO S.A.</td>
-                    <td class="etiqueta">FECHA Y HORA</td>
-                    <td class="valor-azul small">AUTOMÁTICO AL ABRIR LA PÁGINA</td>
+                    <td class="etiqueta">RESPONSABLES</td>
+                    <td class="valor-texto">
+                        G: <span th:text="${obra.gerente}">GERENTE</span> | R: <span th:text="${obra.residente}">RESIDENTE</span>
+                    </td>
+                    <td class="etiqueta">ESTADO ACTUAL</td>
+                    <td class="valor-azul small">
+                        <span th:text="${obra.status}">ESTATUS</span> | <span th:text="${#temporals.format(fechaActual, 'dd/MM/yyyy HH:mm')}">FECHA</span>
+                    </td>
                 </tr>
             </table>
         </section>
 
+        <div class="documentos-base-container">
+            <h3 class="section-title">Documentación de Obra</h3>
+            <div class="documentos-grid">
+                <div class="doc-item" th:each="doc : ${ {'Orden de Compra', 'Presupuesto', 'Explosión de Insumos', 'Proyecto', 'Programa', 'Memorias'} }">
+                    <span class="doc-icon">📄</span>
+                    <div class="doc-info">
+                        <span class="doc-name" th:text="${doc}">Nombre Doc</span>
+                        <a href="#" class="btn-download">Descargar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="dashboard-grid">
-            
             <div class="grid-column">
                 <a th:href="@{/obras/detalles/requerimientos}" class="bloque-boton">
-                    REQUERIMIENTOS CONSTRUCCION: (MATERIAL, HERRAMIENTA, EQUIPO, SEGURIDAD)
+                    REQUERIMIENTOS CONSTRUCCIÓN: (MATERIAL, HERRAMIENTA, EQUIPO, SEGURIDAD)
                 </a>
-                <!--<div class="bloque-estatico">
-                    COMPARATIVA PRECIOS Y ORDEN DE COMPRA: (MATERIAL, HERRAMIENTA, EQUIPO, SEGURIDAD)
-                </div>
-                <div class="bloque-estatico">
-                    PAGO Y FACTURA DE ORDEN DE COMPRA: (MATERIAL, HERRAMIENTA, EQUIPO, SEGURIDAD)
-                </div>-->
-                <div class="bloque-alerta">
-                    INDICADOR FUERA DE PROGRAMA
-                </div>
+                <div class="bloque-alerta">INDICADOR FUERA DE PROGRAMA</div>
             </div>
 
             <div class="grid-column">
                 <button class="bloque-boton">
-                    REQUERIMIENTO MANO DE OBRA: RELACION DE PERSONAL CON IMSS, Y ESPECIALIDADES
+                    REQUERIMIENTO MANO DE OBRA: RELACIÓN DE PERSONAL E IMSS
                 </button>
-               <!---- <div class="bloque-estatico">
-                    RELACION DE ALTAS IMSS CON PAGOS, FIANZAS
-                </div>
-                <div class="bloque-estatico">
-                    PAGO DE NOMINA Y PROVEEDORES MANO DE OBRA
-                </div>-->
-                <div class="bloque-alerta">
-                    INDICADOR FUERA DE COSTO DIRECTO
-                </div>
+                <div class="bloque-alerta">INDICADOR FUERA DE COSTO DIRECTO</div>
             </div>
 
             <div class="grid-column">
-                <button class="bloque-boton">
-                    REPORTE SEMANAL
-                </button>
-                <!--<div class="bloque-estatico">ESTATUS DE PROGRAMA</div>
-                <div class="bloque-estatico">GENERADORES (PUEDA SUBIR ARCHIVOS)</div>
-                <div class="bloque-estatico">PRESUPUESTO REAL (FINIQUITO, COMPARATIVA)</div>-->
-                <div class="bloque-gastos">Gastos totales 10,095</div>
+                <button class="bloque-boton">REPORTE SEMANAL</button>
+                <div class="bloque-gastos">
+                    Gastos totales: $10,095
+                </div>
             </div>
-
         </div>
     </main>
-
 </body>
 </html>
