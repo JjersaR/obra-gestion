@@ -3,11 +3,14 @@ package com.rjj.archivos.service;
 import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.rjj.archivos.controller.dto.IArchivoMapper;
+import com.rjj.archivos.controller.dto.RArchivoResponse;
 import com.rjj.archivos.entity.Archivos;
 import com.rjj.archivos.repository.IArchivosRepository;
 import com.rjj.movobra.entity.ETipo;
@@ -20,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class ArchivosService {
 
   private final IArchivosRepository repository;
+  private final IArchivoMapper mapper;
   private final IStorageService storageService;
 
   @Transactional
@@ -43,6 +47,7 @@ public class ArchivosService {
     Archivos archivo = new Archivos();
     archivo.setBucket(determinarBucket(categoria));
     archivo.setUrl(objectKey);
+    archivo.setNombre(file.getOriginalFilename());
     archivo.setTipoEntidad(tipoEntidad);
     archivo.setMovobraId(movobraId);
     archivo.setCategoria(categoria);
@@ -135,5 +140,21 @@ public class ArchivosService {
       sb.append(String.format("%02x", b));
     }
     return sb.toString();
+  }
+
+  public List<RArchivoResponse> listarArchivos(String bucket, String tipoEntidad, String movobraId, String categoria) {
+    var archivos = repository.findByBucketAndTipoEntidadAndMovobraIdAndCategoriaOrderByVersionDesc(bucket,
+        determinarCampo(tipoEntidad),
+        movobraId, determinarCampo(categoria));
+
+    return mapper.toDtoList(archivos);
+  }
+
+  private ETipo determinarCampo(String dato) {
+    try {
+      return ETipo.valueOf(dato.toUpperCase());
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Tipo no válido: " + dato);
+    }
   }
 }

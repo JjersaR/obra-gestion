@@ -41,6 +41,9 @@ public class Archivos {
   @Column(nullable = false)
   private String url;
 
+  @Column(nullable = false)
+  private String nombre;
+
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private ETipo tipoEntidad;
