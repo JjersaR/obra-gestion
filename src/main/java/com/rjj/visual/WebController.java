@@ -3,6 +3,7 @@ package com.rjj.visual;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class WebController {
@@ -24,8 +25,8 @@ public class WebController {
     return "nuevaObra";
   }
 
-  @GetMapping("/obras/detalles")
-  public String mostrarDetalles() {
+  @GetMapping("/obras/detalles/{id}")
+  public String mostrarDetalles(@PathVariable String id) {
     return "generales"; // regresa generales.html
   }
 

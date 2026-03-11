@@ -1,5 +1,7 @@
 package com.rjj.obras.controller.dto;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -15,4 +17,8 @@ public interface IObrasMapper {
   @Mapping(target = "creadoEn", ignore = true)
   @Mapping(target = "modificadoEn", ignore = true)
   Obras toEntity(RObrasRequest request);
+
+  RObrasResponse toResponse(Obras obra);
+
+  List<RObrasResponse> toResponse(List<Obras> obras);
 }

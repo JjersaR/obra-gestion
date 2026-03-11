@@ -35,55 +35,12 @@
             </div>
         </div>
 
-        <div class="obras-grid">
-            <div th:each="obra, iter : ${obras}"
-                th:class="${'obra-card ' + (obra.status.name() == 'EJECUCION' ? 'status-execution' : 'status-closing')}">
-
-                <div class="obra-card-header">
-                    <span class="obra-id" th:text="${'OBRA ' + #numbers.formatInteger(iter.count, 2)}">OBRA 01</span>
-
-                    <span class="obra-status" th:text="${obra.status.name() == 'EJECUCION' ? 'en proceso de ejecución' : 'en cierre'}">
-                        status
-                    </span>
-                </div>
-
-                <div class="obra-card-body">
-                    <p class="obra-detail-pair">
-                        <strong>NOMBRE O NÚMERO:</strong>
-                        <span th:text="${obra.nombre}">Nombre de la Obra</span>
-                    </p>
-                    <p class="obra-detail-pair">
-                        <strong>MONTO ANTES DE IVA:</strong>
-                        <span th:text="${'$' + #numbers.formatDecimal(obra.montoAntesIva, 1, 'COMMA', 2, 'POINT')}">$0.00</span>
-                    </p>
-                    <p class="obra-detail-pair">
-                        <strong>FECHA INICIO:</strong>
-                        <span th:text="${#temporals.format(obra.fechaInicio, 'dd/MM/yyyy')}">01/01/2026</span>
-                    </p>
-                    <p class="obra-detail-pair">
-                        <strong>FECHA TERMINACIÓN:</strong>
-                        <span th:text="${#temporals.format(obra.fechaFin, 'dd/MM/yyyy')}">31/12/2026</span>
-                    </p>
-                    <p class="obra-detail-pair">
-                        <strong>GERENTE:</strong>
-                        <span th:text="${obra.gerente}">Ingeniero</span>
-                    </p>
-                    <p class="obra-detail-pair">
-                        <strong>RESIDENTE:</strong>
-                        <span th:text="${obra.residente}">Arquitecto</span>
-                    </p>
-
-                    <div class="obra-actions">
-                        <a th:href="@{/obras/detalles/{id}(id=${obra.id})}" class="btn-detalle">
-                            DETALLES DE OBRA
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <div class="obras-grid" id="obrasGrid">
         </div>
     </main>
 
     <script src="/js/datosUsuario.js"></script>
+    <script src="/js/listarObras.js"></script>
 
 </body>
 </html>
