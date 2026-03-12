@@ -13,6 +13,7 @@ public record RObrasResponse(
     int noSemanas,
     String gerente,
     String residente,
+    String observaciones,
     String status) {
 
 }

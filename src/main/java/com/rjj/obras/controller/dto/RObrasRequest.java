@@ -14,6 +14,7 @@ public record RObrasRequest(
     int noSemanas,
     String gerente,
     String residente,
+    String observaciones,
     String status) {
 
 }

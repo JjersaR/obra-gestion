@@ -2,6 +2,7 @@ package com.rjj.obras.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +28,11 @@ public class ObrasController {
   @PostMapping
   @PreAuthorize("hasAnyRole('ADMINISTRACION', 'PRESUPUESTOS')")
   public ResponseEntity<String> crear(@RequestBody RObrasRequest request) {
-    var guardado = service.guardar(request);
-    return ResponseEntity.ok(guardado.toString());
+    //guardar en la BD
+    service.guardar(request);
+    System.out.println("¡Obra recibida y guardada exitosamente!: " + request.nombre());
+    //Devolvemos un 201 Created para que el JS muestre el alert
+    return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
   @GetMapping
@@ -42,5 +46,6 @@ public class ObrasController {
     var obra = service.getById(id);
     return (obra.isEmpty()) ? ResponseEntity.notFound().build() : ResponseEntity.ok(obra.get());
   }
+
 
 }

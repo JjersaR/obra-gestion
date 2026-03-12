@@ -55,6 +55,9 @@ public class Obras {
   @Column(name = "residente", nullable = false)
   private String residente;
 
+  @Column(name = "observaciones", nullable = false)
+  private String observaciones;
+
   @Enumerated(EnumType.STRING)
   private EStatus status;
 
