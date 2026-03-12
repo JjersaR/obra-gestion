@@ -34,6 +34,9 @@ public class Obras {
   @Column(unique = true, nullable = false)
   private String nombre;
 
+  @Column(name = "cliente", nullable = false)
+  private String cliente;
+
   @Column(name = "monto_antes_iva", nullable = false)
   private BigDecimal montoAntesIva;
 
@@ -42,6 +45,9 @@ public class Obras {
 
   @Column(name = "fecha_fin", nullable = false)
   private LocalDate fechaFin;
+
+  @Column(name = "no_semanas", nullable = false)
+  private int noSemanas;
 
   @Column(name = "gerente", nullable = false)
   private String gerente;

@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carga de Obra Nueva - OM Diseño y Construcción</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap">
-    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/nuevaObra.css">
 </head>
 <body>
     
@@ -15,7 +17,7 @@
         </div>
         <div class="topbar-right">
             <span class="user-welcome">Capturista: <strong sec:authentication="name">Usuario</strong></span>
-            <a href="/obras" class="btn-logout" style="text-decoration: none; border-color: white; color: white;">Regresar</a>
+            <a href="/obras" class="btn-logout">Regresar</a>
         </div>
     </header>
 
@@ -26,97 +28,96 @@
             </div>
             <div class="main-header-actions">
                 <button type="submit" form="formNuevaObra" class="btn-action">
-                    <span class="btn-icon">💾</span> GUARDAR OBRA
+                     GUARDAR OBRA
                 </button>
             </div>
         </div>
 
-        <form id="formNuevaObra" action="/api/v1/obras" method="post" enctype="multipart/form-data" class="form-grid">
+        <form id="formNuevaObra" action="/api/v1/obras" method="post" enctype="multipart/form-data" class="form-unificado">
             
-            <div class="obra-card form-section">
-                <h3 class="form-section-title">Datos Generales</h3>
-                <div class="input-group">
-                    <label for="nombreObra">Nombre de la Obra</label>
-                    <input type="text" id="nombreObra" name="nombreObra" required>
+            <div class="columna-izquierda">
+                
+                <div class="seccion-interna">
+                    <h3>Datos Generales</h3>
+                    <div class="campo-en-linea">
+                        <label for="nombreObra">Nombre de la Obra : </label>
+                        <input type="text" id="nombreObra" name="nombreObra" required>
+                    </div>
+                    <div class="campo-en-linea">
+                        <label for="cliente">Cliente : </label>
+                        <input type="text" id="cliente" name="cliente" required>
+                    </div>
+                    <div class="campo-en-linea">
+                        <label for="monto">Monto Antes de IVA : $</label>
+                        <input type="number" id="monto" name="monto" step="0.01" required>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="cliente">Cliente</label>
-                    <input type="text" id="cliente" name="cliente" required>
-                </div>
-                <div class="input-group">
-                    <label for="monto">Monto Antes de IVA ($)</label>
-                    <input type="number" id="monto" name="monto" step="0.01" required>
-                </div>
-            </div>
 
-            <div class="obra-card form-section">
-                <h3 class="form-section-title">Programa de Obra</h3>
-                <div class="input-row">
-                    <div class="input-group">
-                        <label for="fechaInicio">Fecha Inicio</label>
+                <div class="seccion-interna">
+                    <h3>Programa de Obra</h3>
+                    <div class="campo-en-linea">
+                        <label for="fechaInicio">Fecha Inicio : </label>
                         <input type="date" id="fechaInicio" name="fechaInicio" required>
                     </div>
-                    <div class="input-group">
-                        <label for="fechaTerminacion">Fecha Terminación</label>
+                    <div class="campo-en-linea">
+                        <label for="fechaTerminacion">Fecha Terminación : </label>
                         <input type="date" id="fechaTerminacion" name="fechaTerminacion" required>
                     </div>
+                    <div class="campo-en-linea">
+                        <label for="numeroSemanas">Número de Semanas :</label>
+                        <input type="number" id="numeroSemanas" name="numeroSemanas" required>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="numeroSemanas">Número de Semanas</label>
-                    <input type="number" id="numeroSemanas" name="numeroSemanas" required>
-                </div>
-            </div>
 
-            <div class="obra-card form-section">
-                <h3 class="form-section-title">Responsables</h3>
-                <div class="input-group">
-                    <label for="gerente">Gerente de Proyecto</label>
-                    <input type="text" id="gerente" name="gerente" required>
-                </div>
-                <div class="input-group">
-                    <label for="residente">Residente de Obra</label>
-                    <input type="text" id="residente" name="residente" required>
-                </div>
-            </div>
-
-            <div class="obra-card form-section file-section">
-                <h3 class="form-section-title">Carga de Archivos de Obra</h3>
-                <p class="file-help">Sube los documentos en formato PDF, Excel o Word.</p>
+                <div class="seccion-interna">
+                    <h3>Responsables</h3>
+                    <div class="campo-en-linea">
+                        <label for="gerente">Gerente de Proyecto : </label>
+                        <input type="text" id="gerente" name="gerente" required>
+                    </div>
+                    <div class="campo-en-linea">
+                        <label for="residente">Residente de Obra : </label>
+                        <input type="text" id="residente" name="residente" required>
+                    </div>
+                </div>            
                 
-                <div class="input-group">
-                    <label for="ordenCompra">Orden de Compra</label>
+            
+            </div> <div class="columna-derecha">
+
+                <h3 class="titulo-archivos">Carga de Archivos de Obra</h3>
+                <p class="nota-archivos">Sube los documentos en formato PDF, Excel o Word.</p>
+                    
+                <div class="campo-archivo">
+                    <label for="ordenCompra">Orden de Compra : </label>
                     <input type="file" id="ordenCompra" name="ordenCompra">
                 </div>
-                <div class="input-group">
-                    <label for="presupuesto">Presupuesto</label>
+                <div class="campo-archivo">
+                    <label for="presupuesto">Presupuesto : </label>
                     <input type="file" id="presupuesto" name="presupuesto">
                 </div>
-                <div class="input-group">
-                    <label for="explosionInsumos">Explosión de Insumos</label>
+                <div class="campo-archivo">
+                    <label for="explosionInsumos">Explosión de Insumos : </label>
                     <input type="file" id="explosionInsumos" name="explosionInsumos">
                 </div>
-                <div class="input-group">
-                    <label for="proyectoDoc">Proyecto</label>
+                <div class="campo-archivo">
+                    <label for="proyectoDoc">Proyecto :</label>
                     <input type="file" id="proyectoDoc" name="proyectoDoc">
                 </div>
-                <div class="input-group">
-                    <label for="programaDoc">Programa</label>
+                <div class="campo-archivo">
+                    <label for="programaDoc">Programa :</label>
                     <input type="file" id="programaDoc" name="programaDoc">
                 </div>
-                <div class="input-group">
-                    <label for="memorias">Memorias</label>
+                <div class="campo-archivo">
+                    <label for="memorias">Memorias : </label>
                     <input type="file" id="memorias" name="memorias">
                 </div>
-            </div>
 
-            <div class="obra-card form-section full-width">
-                <h3 class="form-section-title">Observaciones y Comentarios Adicionales</h3>
-                <div class="input-group">
-                    <textarea id="observaciones" name="observaciones" rows="4" placeholder="Escribe aquí cualquier detalle adicional de la obra..."></textarea>
+                <div class="campo-observaciones">
+                    <h3>Observaciones y Comentarios Adicionales :</h3>
+                    <textarea id="observaciones" name="observaciones" placeholder="Escribe aquí cualquier detalle adicional de la obra..."></textarea>
                 </div>
-            </div>
-
-        </form>
+                
+            </div> </form>
     </main>
 
 </body>

@@ -63,6 +63,11 @@ function generarTarjetas(obras) {
           </p>
 
           <p class="obra-detail-pair">
+            <strong>CLIENTE:</strong>
+            <span>${obra.cliente}</span>
+          </p>
+
+          <p class="obra-detail-pair">
             <strong>MONTO ANTES DE IVA:</strong>
             <span>$${Number(obra.montoAntesIva).toLocaleString("es-MX", { minimumFractionDigits: 2 })}</span>
           </p>
@@ -75,6 +80,11 @@ function generarTarjetas(obras) {
           <p class="obra-detail-pair">
             <strong>FECHA TERMINACIÓN:</strong>
             <span>${formatearFecha(obra.fechaFin)}</span>
+          </p>
+
+          <p class="obra-detail-pair">
+            <strong>NÚMERO DE SEMANAS:</strong>
+            <span>${obra.noSemanas}</span>
           </p>
 
           <p class="obra-detail-pair">

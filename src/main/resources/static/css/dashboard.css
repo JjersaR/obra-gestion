@@ -1,12 +1,12 @@
-/* Paleta de Colores: Sophisticated Construction & Design */
+/* Paleta de Colores */
 :root {
     --color-bg-body: #f7fafc;
     --color-bg-panel: #ffffff;
     --color-text-primary: #1a202c;
     --color-text-secondary: #718096;
-    --color-accent: #2c3e50; /* Azul Marino Sophisticado */
-    --color-status-execution: #2ecc71; /* Ejecucion */
-    --color-status-closing: #f39c12; /* En Cierre */
+    --color-accent: #2c3e50; 
+    --color-status-execution: #2ecc71; 
+    --color-status-closing: #f39c12; 
     --color-border: #e2e8f0;
 }
 
@@ -23,7 +23,7 @@ body {
     line-height: 1.6;
 }
 
-/* Barra Superior - Elevada */
+/* Barra Superior*/
 .topbar {
     background-color: var(--color-accent);
     color: white;
@@ -77,21 +77,21 @@ body {
     color: var(--color-accent);
 }
 
-/* Contenido Principal - Estructurado */
+/* Contenido Principal */
 .main-content {
     max-width: 1400px;
     margin: 0 auto;
     padding: 2rem;
     display: flex;
     flex-direction: column; /* Esto obliga a que el header vaya arriba y las tarjetas abajo */
-    gap: 40px; /* Aumenté un poco el gap para que respire mejor la separación hacia las tarjetas */
+    gap: 40px; /* separación hacia las tarjetas */
 }
 
 .main-header {
     display: flex;
-    justify-content: center; /* CORREGIDO: Centra el contenido en lugar de separarlo a los extremos */
+    justify-content: center; /* Centra el contenido en lugar de separarlo a los extremos */
     align-items: center;
-    gap: 30px; /* CORREGIDO: Define el espacio exacto entre el título y el botón */
+    gap: 30px; /* Define el espacio exacto entre el título y el botón */
     width: 100%;
     padding-bottom: 20px;
     border-bottom: 2px solid #e2e8f0; /* Ajustado al color de borde de tu paleta */
@@ -115,7 +115,7 @@ body {
     color: #2d3436;
 }
 
-/* Botón de Acción Principal - CORREGIDO */
+/* Botón de Acción Principal */
 .btn-action {
     display: inline-flex;
     align-items: center;

@@ -25,6 +25,13 @@ public class SecurityConfig {
             .requestMatchers("/", "/img/**", "/css/**", "/js/**", "/api/v1/usuarios/**")
             .permitAll()
             .anyRequest().authenticated())
+            //cierre de sesión
+            .logout(logout -> logout
+              .logoutUrl("/logout")
+              .logoutSuccessUrl("/login?logout")
+              .invalidateHttpSession(true)
+              .deleteCookies("JSESSIONID")
+            ) 
         .formLogin(form -> form.disable());
 
     return http.build();
