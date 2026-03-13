@@ -13,14 +13,6 @@ function permisoBoton() {
     // Lo volvemos a convertir en un objeto de JavaScript
     const usuario = JSON.parse(usuarioString);
 
-    console.log("El ID es: " + usuario.id);
-
-    console.log("El nombre es: " + usuario.nombre);
-
-    console.log("El rol es: " + usuario.tipoUsuario);
-
-    console.log("El email es: " + usuario.email);
-
     //Ocultar algo dependiendo del rol
     if (usuario.tipoUsuario === 'ADMINISTRACION' || usuario.tipoUsuario === 'PRESUPUESTOS') {
       document.querySelector(".main-header-actions").style.display = "block";

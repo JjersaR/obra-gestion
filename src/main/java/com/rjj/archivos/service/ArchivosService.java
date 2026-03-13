@@ -17,7 +17,9 @@ import com.rjj.movobra.entity.ETipo;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ArchivosService {
@@ -99,8 +101,7 @@ public class ArchivosService {
 
   private String determinarBucket(ETipo categoria) {
     switch (categoria) {
-      case REQUERIMIENTOS,
-          R_FACTURA,
+      case R_FACTURA,
           PAGO_PROVEEDOR,
           PP_COMPROBANTE,
           PAGO_NOMINA,

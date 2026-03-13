@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  let idObra = "";
   //Prohibicion de caracteres
   // Seleccionamos todos los campos de texto y el textarea
   const camposTexto = document.querySelectorAll('input[type="text"], textarea');
@@ -50,6 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (response.status === 201) {
+        // guardamos la obra
+        idObra = await response.text();
+
+        // subir archivos
+        await subirArchivosObra(idObra);
+
         Swal.fire({
           title: '¡Obra Guardada!',
           text: 'Los datos se registraron correctamente en el sistema',
@@ -85,6 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
   });
+
+  // aqui se empiezan a guardar los archivos
 });
 
 function calcularSemanas() {
@@ -113,4 +122,48 @@ function calcularSemanas() {
   }
 
   document.getElementById("numeroSemanas").value = semanas;
+}
+
+async function subirArchivo(tipoEntidad, movobraId, categoria, file) {
+
+  const formData = new FormData();
+
+  formData.append("tipoEntidad", tipoEntidad);
+  formData.append("movobraId", movobraId);
+  formData.append("categoria", categoria);
+  formData.append("file", file);
+
+  const response = await fetch("/api/v1/archivos", {
+    method: "POST",
+    body: formData
+  });
+
+  if (!response.ok) {
+    throw new Error("Error subiendo archivo");
+  }
+
+}
+
+const archivosConfig = [
+  { id: "ordenCompra", categoria: "ORDEN_COMPRA" },
+  { id: "presupuesto", categoria: "PRESUPUESTO" },
+  { id: "explosionInsumos", categoria: "EXPLOSION_INSUMOS" },
+  { id: "proyectoDoc", categoria: "PROYECTO" },
+  { id: "programaDoc", categoria: "PROGRAMA" },
+  { id: "memorias", categoria: "MEMORIAS" }
+];
+
+async function subirArchivosObra(idObra) {
+  const promesas = [];
+
+  for (const config of archivosConfig) {
+    const input = document.getElementById(config.id);
+    if (input.files.length > 0) {
+      const file = input.files[0];
+      promesas.push(
+        subirArchivo("REQUERIMIENTOS", idObra, config.categoria, file)
+      );
+    }
+  }
+  await Promise.all(promesas);
 }

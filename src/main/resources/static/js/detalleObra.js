@@ -2,16 +2,19 @@ document.addEventListener("DOMContentLoaded", function () {
   cargarObra();
 });
 
+let id = "";
+
 function obtenerId() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("id");
+  const partes = window.location.pathname.split("/");
+  return partes[partes.length - 1];
 }
 
 async function cargarObra() {
 
-  const id = obtenerId();
+  id = obtenerId();
+  console.log("El id de la url es: " + id);
 
-  const response = await fetch(`/api/v1/obras/detalles?id=${id}`);
+  const response = await fetch(`/api/v1/obras/detalles/${id}`);
 
   if (!response.ok) {
     throw new Error("No se pudo obtener la obra");
