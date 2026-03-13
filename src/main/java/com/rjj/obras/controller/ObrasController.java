@@ -17,7 +17,9 @@ import com.rjj.obras.controller.dto.RObrasResponse;
 import com.rjj.obras.service.ObrasService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/obras")
@@ -28,10 +30,10 @@ public class ObrasController {
   @PostMapping
   @PreAuthorize("hasAnyRole('ADMINISTRACION', 'PRESUPUESTOS')")
   public ResponseEntity<String> crear(@RequestBody RObrasRequest request) {
-    //guardar en la BD
+    // guardar en la BD
     service.guardar(request);
-    System.out.println("¡Obra recibida y guardada exitosamente!: " + request.nombre());
-    //Devolvemos un 201 Created para que el JS muestre el alert
+    log.info("¡Obra recibida y guardada exitosamente!");
+    // Devolvemos un 201 Created para que el JS muestre el alert
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
@@ -46,6 +48,5 @@ public class ObrasController {
     var obra = service.getById(id);
     return (obra.isEmpty()) ? ResponseEntity.notFound().build() : ResponseEntity.ok(obra.get());
   }
-
 
 }
