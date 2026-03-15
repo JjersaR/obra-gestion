@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.rjj.archivos.controller.dto.IArchivoMapper;
+import com.rjj.archivos.controller.dto.IRequerimientosActivos;
 import com.rjj.archivos.controller.dto.RArchivoResponse;
 import com.rjj.archivos.entity.Archivos;
 import com.rjj.archivos.repository.IArchivosRepository;
@@ -157,5 +158,9 @@ public class ArchivosService {
     } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException("Tipo no válido: " + dato);
     }
+  }
+
+  public List<IRequerimientosActivos> findByRequerimientosActivos(UUID movobraId) {
+    return repository.findByRequerimientosActivos(movobraId);
   }
 }

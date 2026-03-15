@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.rjj.archivos.controller.dto.IRequerimientosActivos;
 import com.rjj.archivos.entity.Archivos;
 import com.rjj.movobra.entity.ETipo;
 
@@ -46,4 +47,9 @@ public interface IArchivosRepository extends JpaRepository<Archivos, UUID> {
       ETipo tipoEntidad,
       String movobraId,
       ETipo categoria);
+
+  @Query(value = """
+      select a.id, a.categoria, a.movobra_id, a.nombre, a.url from archivos a where a.movobra_id = :movobraId and a.tipo_entidad = 'REQUERIMIENTOS' and a.version = 1
+          """, nativeQuery = true)
+  List<IRequerimientosActivos> findByRequerimientosActivos(UUID movobraId);
 }

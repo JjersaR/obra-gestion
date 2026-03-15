@@ -26,75 +26,55 @@
         </div>
     </header>
 
-    <!-- <main class="main-content">
-        <div class="page-subheader">
-            <div class="title-container">
-                <h2>DETALLE DE PROYECTO: <span class="obra-highlight" th:text="${obra.nombre.toUpperCase()}">NOMBRE DE LA OBRA</span></h2>
-            </div>
-        </div>
+  <main class="main-content">
 
-        <section class="info-section">
-            <table class="tabla-generales">
-                <tr>
-                    <td class="etiqueta">PROGRAMA</td>
-                    <td class="valor-azul">
-                        <span th:text="${#temporals.format(obra.fechaInicio, 'dd/MM/yyyy')}">Inicio</span> al
-                        <span th:text="${#temporals.format(obra.fechaFin, 'dd/MM/yyyy')}">Fin</span>
-                    </td>
-                    <td class="etiqueta">MONTO ACORDADO</td>
-                    <td class="valor-azul">
-                        <span th:text="${'$' + #numbers.formatDecimal(obra.montoAntesIva, 1, 'COMMA', 2, 'POINT')}">$0.00</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="etiqueta">RESPONSABLES</td>
-                    <td class="valor-texto">
-                        G: <span th:text="${obra.gerente}">GERENTE</span> | R: <span th:text="${obra.residente}">RESIDENTE</span>
-                    </td>
-                    <td class="etiqueta">ESTADO ACTUAL</td>
-                    <td class="valor-azul small">
-                        <span th:text="${obra.status}">ESTATUS</span> | <span th:text="${#temporals.format(fechaActual, 'dd/MM/yyyy HH:mm')}">FECHA</span>
-                    </td>
-                </tr>
-            </table>
-        </section>
+    <div class="page-subheader">
+      <div class="title-container">
+        <h2>
+          DETALLE DE PROYECTO:
+          <span id="nombreObra" class="obra-highlight"></span>
+        </h2>
+      </div>
+    </div>
 
-        <div class="documentos-base-container">
-            <h3 class="section-title">Documentación de Obra</h3>
-            <div class="documentos-grid">
-                <div class="doc-item" th:each="doc : ${ {'Orden de Compra', 'Presupuesto', 'Explosión de Insumos', 'Proyecto', 'Programa', 'Memorias'} }">
-                    <span class="doc-icon">📄</span>
-                    <div class="doc-info">
-                        <span class="doc-name" th:text="${doc}">Nombre Doc</span>
-                        <a href="#" class="btn-download">Descargar</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <section class="info-section">
+      <table class="tabla-generales">
+        <tr>
+          <td class="etiqueta">PROGRAMA</td>
+          <td class="valor-azul">
+            <span id="fechaInicio"></span> al
+            <span id="fechaFin"></span>
+          </td>
 
-        <div class="dashboard-grid">
-            <div class="grid-column">
-                <a th:href="@{/obras/detalles/requerimientos}" class="bloque-boton">
-                    REQUERIMIENTOS CONSTRUCCIÓN: (MATERIAL, HERRAMIENTA, EQUIPO, SEGURIDAD)
-                </a>
-                <div class="bloque-alerta">INDICADOR FUERA DE PROGRAMA</div>
-            </div>
+          <td class="etiqueta">MONTO ACORDADO</td>
+          <td class="valor-azul">
+            <span id="monto"></span>
+          </td>
+        </tr>
 
-            <div class="grid-column">
-                <button class="bloque-boton">
-                    REQUERIMIENTO MANO DE OBRA: RELACIÓN DE PERSONAL E IMSS
-                </button>
-                <div class="bloque-alerta">INDICADOR FUERA DE COSTO DIRECTO</div>
-            </div>
+        <tr>
+          <td class="etiqueta">RESPONSABLES</td>
+          <td class="valor-texto">
+            G: <span id="gerente"></span> |
+            R: <span id="residente"></span>
+          </td>
 
-            <div class="grid-column">
-                <button class="bloque-boton">REPORTE SEMANAL</button>
-                <div class="bloque-gastos">
-                    Gastos totales: $10,095
-                </div>
-            </div>
-        </div>
-    </main> -->
+          <td class="etiqueta">ESTADO ACTUAL</td>
+          <td class="valor-azul small">
+            <span id="status"></span>
+          </td>
+        </tr>
+      </table>
+    </section>
+
+    <div class="documentos-base-container">
+      <h3 class="section-title">Documentación de Obra</h3>
+
+      <div id="documentosGrid" class="documentos-grid"></div>
+
+    </div>
+
+  </main>
         <script src="/js/detalleObra.js"></script>
 </body>
 </html>

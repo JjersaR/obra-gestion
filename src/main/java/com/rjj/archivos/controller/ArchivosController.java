@@ -9,14 +9,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rjj.archivos.controller.dto.IRequerimientosActivos;
 import com.rjj.archivos.controller.dto.RArchivoRequest;
-import com.rjj.archivos.controller.dto.RArchivoResponse;
-import com.rjj.archivos.controller.dto.RListaArchivoRequest;
 import com.rjj.archivos.service.ArchivosService;
 import com.rjj.movobra.entity.ETipo;
 
@@ -38,11 +37,10 @@ public class ArchivosController {
     return ResponseEntity.created(new URI(API_V1_ARCHIVOS)).body(archivo.toString());
   }
 
-  @GetMapping
-  public ResponseEntity<List<RArchivoResponse>> listarArchivos(@RequestBody RListaArchivoRequest request) {
-    var archivos = service.listarArchivos(request.bucket(), request.tipoEntidad(), request.movobraId(),
-        request.categoria());
-    return (archivos.isEmpty()) ? ResponseEntity.notFound().build() : ResponseEntity.ok(archivos);
+  @GetMapping("/{movobraId}")
+  public ResponseEntity<List<IRequerimientosActivos>> listarRequerimientosActivos(@PathVariable String movobraId) {
+    var archivos = service.findByRequerimientosActivos(UUID.fromString(movobraId));
+    return (archivos.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(archivos);
   }
 
 }
