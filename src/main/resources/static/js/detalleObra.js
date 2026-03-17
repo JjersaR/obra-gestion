@@ -46,6 +46,21 @@ function pintarObra(obra) {
   document.getElementById("gerente").textContent = obra.gerente;
   document.getElementById("residente").textContent = obra.residente;
   document.getElementById("status").textContent = obra.status;
+
+  // --- LÓGICA DEL SEMÁFORO (Indicador de Programa) ---
+  const alertaPrograma = document.getElementById("indicadorPrograma");
+  
+  if (alertaPrograma) {
+    // 1. Limpiamos clases previas
+    alertaPrograma.classList.remove("det-status-rojo", "det-status-amarillo", "det-status-verde");
+    
+    // 2. Aplicamos la nueva clase de color
+    alertaPrograma.classList.add(`det-status-${obra.semaforo.toLowerCase()}`);
+    
+    // 3. Cambiamos el texto por el mensaje que viene de Java
+    let emoji = obra.semaforo === "ROJO" ? "🚨 " : (obra.semaforo === "AMARILLO" ? "⚠️ " : "✅ ");
+    alertaPrograma.innerHTML = `<span>${emoji} ${obra.mensajeTiempo}</span>`;
+  }
 }
 
 

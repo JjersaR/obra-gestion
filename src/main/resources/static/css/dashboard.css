@@ -266,3 +266,48 @@ body {
 .oculto {
   display: none;
 }
+
+/* --- ESTILOS PARA EL SEMÁFORO DE TIEMPO (15% MARGEN) --- */
+
+/* Clase base para el mensaje de tiempo en la tarjeta */
+.obra-tiempo-msg {
+    margin-top: 10px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+/* Estado: PLAZO VENCIDO */
+.status-rojo {
+    border-left: 5px solid #e74c3c; /* Rojo intenso */
+    background-color: #fdf2f2;
+}
+.status-rojo .obra-tiempo-msg {
+    color: #c0392b;
+    background-color: #f9ebeb;
+    border: 1px solid #f5b7b1;
+}
+
+/* Estado: ALERTA 15% (Próximo a vencer) */
+.status-amarillo {
+    border-left: 5px solid #f1c40f; /* Amarillo/Dorado */
+    background-color: #fffdf0;
+}
+.status-amarillo .obra-tiempo-msg {
+    color: #9a7d0a;
+    background-color: #fef9e7;
+    border: 1px solid #f9e79f;
+}
+
+/* Estado: EN TIEMPO */
+.status-verde {
+    border-left: 5px solid #2ecc71; /* Tu color de ejecución */
+    background-color: #f4fdf8;
+}
+.status-verde .obra-tiempo-msg {
+    color: #27ae60;
+    background-color: #eafaf1;
+    border: 1px solid #abebc6;
+}

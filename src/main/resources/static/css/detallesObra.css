@@ -237,8 +237,9 @@ body {
 /**********************Botones y Reporte *************************************/
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 35px; /* Separación de los botones */
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Se ajusta solo según el espacio */
+    gap: 25px; 
+    margin-top: 30px;
 }
 /* Estilo común para los bloques inferiores */
 .bloque-boton, .bloque-boton-claro, .bloque-estatico-gris, .bloque-alerta, .bloque-gastos {
@@ -310,5 +311,52 @@ body {
     }
 }
 
+/* --- ESTILOS PARA EL SEMÁFORO EN DETALLES (BANNER) --- */
 
+.semaforo-banner {
+    padding: 15px 25px;
+    border-radius: 8px;
+    margin: 0 auto 25px auto;
+    max-width: 1500px;
+    width: 96%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid transparent;
+}
+
+/* Icono del reloj en el banner */
+.semaforo-icon {
+    font-size: 1.5rem;
+}
+
+/* Estas clases sobreescriben el color de .bloque-alerta según el tiempo */
+
+.det-status-rojo {
+    background: #ffffff !important;
+    border: 2px solid #e74c3c !important; /* Rojo alerta */
+    color: #e74c3c !important;
+}
+
+.det-status-amarillo {
+    background: #ffffff !important;
+    border: 2px solid #f1c40f !important; /* Amarillo alerta */
+    color: #9a7d0a !important;
+}
+
+.det-status-verde {
+    background: #ffffff !important;
+    border: 2px solid #2ecc71 !important; /* Verde éxito */
+    color: #27ae60 !important;
+}
+
+/* Estilo para resaltar la fecha en la tabla */
+.fecha-critica {
+    background-color: #fff9c4; /* Un resaltado amarillo suave */
+    padding: 2px 5px;
+    border-radius: 4px;
+}
 
