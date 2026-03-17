@@ -27,7 +27,7 @@ public class WebController {
 
   @GetMapping("/obras/detalles/{id}")
   public String mostrarDetalles(@PathVariable String id) {
-    return "generales"; // regresa generales.html
+    return "detallesObra"; // regresa generales.html
   }
 
   @GetMapping("/obras/detalles/requerimientos")

@@ -1,0 +1,314 @@
+/* Variables de color para mantener consistencia */
+:root {
+    --azul-om: #3498db;
+    --gris-fondo: #f4f7f6;
+    --borde-gris: #d1d8dd;
+    --texto-oscuro: #2c3e50;
+    --rojo-alerta: #e74c3c;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--gris-fondo);
+}
+
+
+/************************ Barra Superior (Topbar) **********************/
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #2c3e50; /* Color oscuro corporativo */
+    padding: 10px 30px;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.topbar-logo {
+    height: 55px; /* Tamaño un poco más grande y nítido */
+    width: auto;
+    border-radius: 4px;
+    background: white;
+    padding: 3px;
+}
+
+.topbar-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.view-subtitle {
+    font-size: 0.85rem;
+    color: #bdc3c7;
+    display: block;
+}
+
+
+/************* Botón de volver ******************/
+.btn-back {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    background: #3498db;
+    border-color: #3498db;
+    transform: translateX(-3px);
+}
+
+
+/****************** Sub-encabezado de la página ******************/
+.page-subheader {
+    background: #fdfdfd;
+    padding: 20px 30px;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 25px;
+}
+
+.page-subheader h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.obra-highlight {
+    color: #3498db;
+    font-weight: 800;
+    margin-left: 10px;
+}
+
+
+/***************Alineación central para todo el contenido*****************/
+.info-section, .documentos-base-container, .dashboard-grid {
+    max-width: 1500px; 
+    margin: 0 auto 60px auto; 
+    width: 96%;
+}
+
+
+/*************************** Tabla Informativa *********************/
+.info-section {
+    /* Centramos la sección y le damos un ancho máximo para que no se estire */
+    background: white;
+    padding: 1px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.tabla-generales {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+.tabla-generales td {
+    border: 1px solid #eee;
+    padding: 15px 20px;
+}
+
+.etiqueta {
+    background-color: #f8f9fa;
+    color: #7f8c8d; /* Un gris más suave y corporativo */
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    width: 15%;
+}
+
+.valor-texto {
+    font-weight: 600;
+    color: #333;
+}
+
+.highlight-monto {
+    color: #27ae60 !important;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+/* iniciales G: y R: en el azul de tu logo */
+.info-responsables strong {
+    color: var(--azul-om);
+    font-weight: 800;
+    font-size: 1.3rem;
+}
+
+.valor-azul {
+    color: var(--azul-om);
+    font-weight: 700;
+}
+
+
+/***********************Documentación de Obra***********************/
+.documentos-base-container {
+    padding: 25px 30px;
+    background: #fcfdfe;;
+    border-radius: 8px;
+    border-left: 6px solid #1e5d88;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.section-title {
+    font-size: 1.2rem;
+    color: #1e5d88;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.documentos-grid {
+    display: grid; 
+    grid-template-columns: repeat(6, 1fr); /* 6 Tarjetas por fila SIEMPRE */
+    gap: 15px;
+}
+
+/************************Tarjeta de Documentos***************/
+.doc-item {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 12px 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.doc-item:hover {
+    border-color: #3498db;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transform: translateY(-2px);
+}
+
+/**********Iconoooooo*****************************/
+.doc-icon {
+    font-size: 2.5rem; /* <--- ESTO ES LO ÚNICO QUE HACE CRECER AL EMOJI */
+    margin-right: 15px; /* Espacio para que no se pegue a las letras */
+    display: inline-block; 
+    line-height: 1; /* Evita que el emoji empuje el diseño hacia abajo */
+}
+
+.doc-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.doc-name {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #333;
+    margin-bottom: 2px;
+}
+
+.btn-download {
+    font-size: 0.9rem;
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.btn-download:hover {
+    text-decoration: underline;
+}
+
+/**********************Botones y Reporte *************************************/
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 35px; /* Separación de los botones */
+}
+/* Estilo común para los bloques inferiores */
+.bloque-boton, .bloque-boton-claro, .bloque-estatico-gris, .bloque-alerta, .bloque-gastos {
+    width: 100%;
+    min-height: 100px; /* Botones más altos */
+    padding: 15px 20px; /* Más espacio interior */
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    box-sizing: border-box;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+/* Botones claros con sombra (Requerimientos) */
+.bloque-boton-claro {
+    background: linear-gradient(to bottom, #ffffff, #f8fafc);
+    border: 1px solid var(--borde-gris);
+    color: var(--texto-oscuro);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.bloque-boton-claro:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+/* Bloque Gris (Reporte Semanal) */
+.bloque-estatico-gris {
+    background: #f1f5f9;
+    border: 1px solid var(--borde-gris);
+    color: #4a5568;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+/* Bloques de Alerta (Rojos) */
+.bloque-alerta {
+    background: #ffffff;
+    border: 2px solid var(--rojo-alerta);
+    color: var(--rojo-alerta);
+}
+
+/* Bloque de Gastos Totales */
+.bloque-gastos {
+    background: #e2e8f0;
+    border: 1px solid #cbd5e1;
+    color: #1a202c;
+    justify-content: left; 
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    .info-section, .documentos-base-container, .dashboard-grid {
+        width: 95%;
+    }
+    .doc-item {
+        flex: 1 1 calc(50% - 15px); /* 2 columnas en móvil */
+    }
+}
+
+
+
