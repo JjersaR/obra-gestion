@@ -8,7 +8,7 @@ function obtenerId() {
   // Busca el ID tanto si la URL es /detalles/123 como si es /detalles?id=123
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.has('id')) {
-      return urlParams.get('id');
+    return urlParams.get('id');
   }
   const partes = window.location.pathname.split("/");
   return partes[partes.length - 1];
@@ -41,7 +41,7 @@ function pintarObra(obra) {
   document.getElementById("fechaFin").textContent = formatearFecha(obra.fechaFin);
 
   document.getElementById("monto").textContent = "$" + Number(obra.montoAntesIva)
-      .toLocaleString("es-MX", { minimumFractionDigits: 2 });
+    .toLocaleString("es-MX", { minimumFractionDigits: 2 });
 
   document.getElementById("gerente").textContent = obra.gerente;
   document.getElementById("residente").textContent = obra.residente;
@@ -54,8 +54,8 @@ function pintarArchivos(archivos, nombreObra) {
   grid.innerHTML = "";
   // Si la obra es nueva y no tiene archivos, mostramos un mensajito
   if (!archivos || archivos.length === 0) {
-      grid.innerHTML = "<p style='color: #7f8c8d; font-size: 0.9rem;'>Aún no hay documentos subidos para esta obra.</p>";
-      return;
+    grid.innerHTML = "<p style='color: #7f8c8d; font-size: 0.9rem;'>Aún no hay documentos subidos para esta obra.</p>";
+    return;
   }
 
   // Quitamos los espacios del nombre de la obra para que el archivo se vea profesional
@@ -67,7 +67,7 @@ function pintarArchivos(archivos, nombreObra) {
 
     // Agregamos el &nombrePersonalizado a la ruta
     const urlSegura = `/api/v1/archivos/descargar?categoria=${encodeURIComponent(archivo.categoria)}&url=${encodeURIComponent(archivo.url)}&nombrePersonalizado=${encodeURIComponent(nombrePerfecto)}`;
-    
+
     const tarjeta = `
       <div class="doc-item">
         <span class="doc-icon">📄</span>
@@ -82,6 +82,16 @@ function pintarArchivos(archivos, nombreObra) {
 }
 
 function formatearFecha(fecha) {
-//Agregamos el "T00:00:00" para evitar que la zona horaria le reste un día a tu fecha
+  //Agregamos el "T00:00:00" para evitar que la zona horaria le reste un día a tu fecha
   return new Date(fecha + "T00:00:00").toLocaleDateString("es-MX");
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const botones = document.querySelectorAll("[data-ruta]");
+
+  botones.forEach(btn => {
+    const ruta = btn.dataset.ruta;
+    btn.href = `/obras/detalles/${ruta}/${id}`;
+  });
+
+});

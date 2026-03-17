@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="topbar-right">
-            <a th:href="@{/obras/detalles}" class="btn-back">
+            <a id="btnVolver" class="btn-back">
                 <span class="icon">←</span> Volver a Detalles
             </a>
         </div>
@@ -45,36 +45,21 @@
                         <th>Aceptado</th>
                         <th>Rechazado</th>
                         <th>observaciones</th>
-                        <th>Pago</th>
-                        <th>Fecha pago</th>
-                        <th>Ficha</th>
-                        <th>factura</th>
+                        <th class="col-admin">Pago</th>
+                        <th class="col-admin">Fecha pago</th>
+                        <th class="col-admin">Ficha</th>
+                        <th class="col-admin">factura</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>10/03/2026</td>
-                        <td>residente</td>
-                        <td class="file-cell">obra1compras.xlsx</td>
-                        <td class="check-cell">X</td>
-                        <td></td>
-                        <td>Todo en orden</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                    <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tbody id="tablaBody">
                 </tbody>
             </table>
 
             <div class="table-actions">
-                <button class="btn-submit">Subir requerimiento</button>
+                <button id="btnAgregar" type="button" class="btn-submit">Subir requerimiento</button>
             </div>
         </section>
     </main>
-
+    <script src="/js/requerimientos.js"></script>
 </body>
 </html>
