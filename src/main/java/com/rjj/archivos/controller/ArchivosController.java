@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-//para archivos 
+//para archivos
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rjj.archivos.controller.dto.IRequerimientosActivos;
@@ -49,26 +48,27 @@ public class ArchivosController {
     return (archivos.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(archivos);
   }
 
-  //ARCHIVOS
+  // ARCHIVOS
   @GetMapping("/descargar")
   public ResponseEntity<Resource> descargarArchivo(
       @RequestParam String categoria,
       @RequestParam String url,
       @RequestParam(required = false) String nombrePersonalizado // ¡NUEVO PARÁMETRO!
   ) {
-    
+
     // Vamos al servicio por el archivo de MinIO
     var stream = service.descargarArchivo(categoria, url);
     var resource = new InputStreamResource(stream);
 
     // Si el frontend nos mandó un nombre bonito, lo usamos. Si no, usamos la ruta.
-    String nombreFinal = (nombrePersonalizado != null && !nombrePersonalizado.isEmpty()) 
-        ? nombrePersonalizado 
+    String nombreFinal = (nombrePersonalizado != null && !nombrePersonalizado.isEmpty())
+        ? nombrePersonalizado
         : url.substring(url.lastIndexOf("/") + 1);
 
     // Preparamos la respuesta HTTP forzando la descarga
     return ResponseEntity.ok()
-        // La cabecera "attachment" le dice al navegador que lo descargue, no que lo abra en una pestaña nueva
+        // La cabecera "attachment" le dice al navegador que lo descargue, no que lo
+        // abra en una pestaña nueva
         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nombreFinal + "\"")
         // OCTET_STREAM es un comodín para decirle que es un archivo binario genérico
         .contentType(MediaType.APPLICATION_OCTET_STREAM)

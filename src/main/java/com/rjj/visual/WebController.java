@@ -30,8 +30,8 @@ public class WebController {
     return "detallesObra"; // regresa generales.html
   }
 
-  @GetMapping("/obras/detalles/requerimientos")
-  public String verRequerimientos() {
+  @GetMapping("/obras/detalles/requerimientos/{id}")
+  public String verRequerimientos(@PathVariable String id) {
     return "requerimientos";
   }
 
