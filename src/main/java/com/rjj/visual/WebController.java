@@ -27,12 +27,22 @@ public class WebController {
 
   @GetMapping("/obras/detalles/{id}")
   public String mostrarDetalles(@PathVariable String id) {
-    return "detallesObra"; // regresa generales.html
+    return "detallesObra"; // 
   }
 
   @GetMapping("/obras/detalles/requerimientos/{id}")
   public String verRequerimientos(@PathVariable String id) {
     return "requerimientos";
+  }
+
+    @GetMapping("/obras/detalles/manoObra/{id}")
+  public String verManoObra(@PathVariable String id) {
+    return "manoObra";
+  }
+
+    @GetMapping("/obras/detalles/reporteSemanal/{id}")
+  public String verReporteSemanal(@PathVariable String id) {
+    return "reporteSemanal";
   }
 
 }
