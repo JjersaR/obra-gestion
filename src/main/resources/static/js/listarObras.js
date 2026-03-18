@@ -62,11 +62,7 @@ function generarTarjetas(obras) {
 
     // 3. Aplicamos AMBAS clases a la tarjeta: la de ejecución y la del semáforo de tiempo
     const tarjeta = `
-<<<<<<< HEAD
       <div class="obra-card ${statusClass} ${semaforoClass}" data-status="${obra.status}">
-=======
-      <div class="obra-card ${statusClass} ${semaforoClass}">
->>>>>>> 48b0bbfbe1e06883de9c16c51607f32b38744459
 
         <div class="obra-card-header">
           <span class="obra-id">OBRA ${numeroObra}</span>
