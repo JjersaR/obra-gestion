@@ -84,19 +84,80 @@ body {
     padding: 2rem;
     display: flex;
     flex-direction: column; /* Esto obliga a que el header vaya arriba y las tarjetas abajo */
-    gap: 40px; /* separación hacia las tarjetas */
+    gap: 50px; /* separación hacia las tarjetas */
 }
 
 .main-header {
     display: flex;
     justify-content: center; /* Centra el contenido en lugar de separarlo a los extremos */
     align-items: center;
-    gap: 30px; /* Define el espacio exacto entre el título y el botón */
+    gap: 60px; /* Define el espacio exacto entre el título y el botón */
     width: 100%;
     padding-bottom: 20px;
     border-bottom: 2px solid #e2e8f0; /* Ajustado al color de borde de tu paleta */
 }
 
+.header-controles {
+    display: flex;
+    align-items: center;
+    gap: 70px; /* Separación entre el filtro y el botón azul */
+}
+
+
+/************************Estilos del Filtro*************************/
+.filtros-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #f8fafc; 
+    padding: 6px 15px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.filtros-container label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4a5568;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Select */
+.filtros-container select {
+    appearance: none; 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 8px 35px 8px 15px; /* Espacio extra a la derecha para flecha */
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2c3e50;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    /* Flecha personalizada */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+}
+
+/* Efectos al pasar el mouse y hacer clic */
+.filtros-container select:hover {
+    border-color: #94a3b8;
+}
+
+.filtros-container select:focus {
+    outline: none;
+    border-color: #2c3e50;
+    box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+}
+
+/*****************Header*******************/
 .main-header-info {
     text-align: right; /* Para que el texto se alinee bien respecto al botón que estará a la derecha */
 }
@@ -310,4 +371,26 @@ body {
     color: #27ae60;
     background-color: #eafaf1;
     border: 1px solid #abebc6;
+}
+
+/* Filtro de status*/
+.filtros-container{
+    margin-bottom: 20px; 
+    display: flex; 
+    justify-content: flex-end; 
+    align-items: center; 
+    gap: 10px;
+}
+
+.filtroStatus{
+    font-weight: 600; 
+    font-size: 0.9rem; 
+    color: #2c3e50;
+    padding: 8px 15px; 
+    border-radius: 6px; 
+    border: 1px solid #d1d8dd; 
+    font-family: 'Inter', sans-serif; 
+    cursor: pointer; 
+    background-color: white; 
+    outline: none;
 }

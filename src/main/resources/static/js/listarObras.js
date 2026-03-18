@@ -1,5 +1,28 @@
 document.addEventListener("DOMContentLoaded", function () {
   getObras();
+
+  // Activamos el filtro por status
+  const selectFiltro = document.getElementById('filtroStatus');
+
+  if (selectFiltro) {
+    selectFiltro.addEventListener('change', function() {
+      const estatusSeleccionado = this.value; // "TODOS", "EJECUCION" o "CIERRE"
+      
+      // Buscamos todas las tarjetas en el HTML
+      const todasLasTarjetas = document.querySelectorAll('.obra-card');
+
+      todasLasTarjetas.forEach(tarjeta => {
+        const estatusObra = tarjeta.getAttribute('data-status');
+
+        // Lógica de filtrado, si coincide-muestra; si no - ocultamos
+        if (estatusSeleccionado === 'TODOS' || estatusObra === estatusSeleccionado) {
+          tarjeta.style.display = ''; // Regresa a su estado visible
+        } else {
+          tarjeta.style.display = 'none'; // Desaparece al instante
+        }
+      });
+    });
+  }
 });
 
 async function getObras() {
@@ -39,7 +62,7 @@ function generarTarjetas(obras) {
 
     // 3. Aplicamos AMBAS clases a la tarjeta: la de ejecución y la del semáforo de tiempo
     const tarjeta = `
-      <div class="obra-card ${statusClass} ${semaforoClass}">
+      <div class="obra-card ${statusClass} ${semaforoClass}" data-status="${obra.status}">
 
         <div class="obra-card-header">
           <span class="obra-id">OBRA ${numeroObra}</span>
