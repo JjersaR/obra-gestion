@@ -371,6 +371,7 @@ body {
     color: #27ae60;
     background-color: #eafaf1;
     border: 1px solid #abebc6;
+<<<<<<< HEAD
 }
 
 /* Filtro de status*/
@@ -393,4 +394,6 @@ body {
     cursor: pointer; 
     background-color: white; 
     outline: none;
+=======
+>>>>>>> 48b0bbfbe1e06883de9c16c51607f32b38744459
 }
