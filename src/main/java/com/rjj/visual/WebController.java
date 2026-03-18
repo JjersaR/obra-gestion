@@ -42,15 +42,20 @@ public class WebController {
 
   @GetMapping("/obras/detalles/pagoProveedores/{id}")
   public String verpagoProveedores(@PathVariable String id) {
+    return "pagoProveedores";
   }
 
   @GetMapping("/obras/detalles/reporteSemanal/{id}")
   public String verReporteSemanal(@PathVariable String id) {
     return "reporteSemanal";
+<<<<<<< HEAD
 
   @GetMapping("/obras/detalles/reportes/{id}")
   public String verReporteSemanal(@PathVariable String id) {
     return "reportes";
   }
   
+=======
+  }
+>>>>>>> 095d022 (FiltroListo)
 }
