@@ -1,7 +1,5 @@
 package com.rjj.movobra.entity;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -17,6 +15,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,23 +51,7 @@ public class Movobra {
 
   private String observaciones;
 
-  @Column(name = "fecha_pago")
-  private LocalDate fechaPago;
-
-  @Column(name = "pp_comprobante_id")
-  private UUID ppComprobanteId;
-
-  @Column(name = "pn_comprobante_pago_id")
-  private UUID pnComprobantePagoId;
-
-  @Column(name = "r_pago")
-  private BigDecimal rPago;
-
-  @Column(name = "r_ficha_id")
-  private UUID rFichaId;
-
-  @Column(name = "r_factura_id")
-  private UUID rFacturaId;
+  private boolean pagado = false;
 
   // Audit fields
   @CreatedDate
@@ -78,4 +61,9 @@ public class Movobra {
   @Column(name = "modificado_en")
   @LastModifiedDate
   private LocalDateTime modificadoEn;
+
+  @PrePersist
+  public void prePersist() {
+    this.creadoEn = LocalDateTime.now();
+  }
 }

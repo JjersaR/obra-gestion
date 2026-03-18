@@ -27,4 +27,9 @@ public class ObraVisualizacion {
 
   private LocalDateTime fecha;
 
+  @PrePersist
+  public void prePersist() {
+    this.fecha = LocalDateTime.now();
+  }
+
 }

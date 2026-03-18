@@ -18,6 +18,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -80,4 +81,9 @@ public class Archivos {
   @Column(name = "modificado_en")
   @LastModifiedDate
   private LocalDateTime modificadoEn;
+
+  @PrePersist
+  public void prePersist() {
+    this.creadoEn = LocalDateTime.now();
+  }
 }

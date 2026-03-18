@@ -59,37 +59,23 @@ public class ArchivosService {
     archivo.setSizeBytes(file.getSize());
     archivo.setChecksum(calcularChecksum(file));
     archivo.setMimeType(file.getContentType());
-    archivo.setInmutable(esFinanciero(categoria));
+    archivo.setInmutable(false);
 
     var guardado = repository.save(archivo);
 
     return guardado.getId();
   }
 
-  private Boolean esFinanciero(ETipo categoria) {
-    switch (categoria) {
-      case REQUERIMIENTOS,
-          R_FACTURA,
-          PAGO_PROVEEDOR,
-          PP_COMPROBANTE,
-          PAGO_NOMINA,
-          PN_ARCHIVO,
-          PN_COMPROBANTE:
-        return false;
-      default:
-        return true;
-    }
-  }
-
-  //petición, vaya a MinIO por el archivo usando tu método download(), lo convierta en un InputStreamResource 
+  // petición, vaya a MinIO por el archivo usando tu método download(), lo
+  // convierta en un InputStreamResource
   // y se lo inyecte directamente al navegador para que comience la descarga.
   public InputStream descargarArchivo(String categoriaStr, String url) {
     // Convertimos el texto a tu Enum
     ETipo categoria = ETipo.valueOf(categoriaStr.toUpperCase());
-    
+
     // Usamos la lógica existente para saber si es "financieros" o "documentos"
     String bucket = determinarBucket(categoria);
-    
+
     // Vamos a MinIO por los bytes
     return storageService.download(bucket, url);
   }
@@ -115,13 +101,17 @@ public class ArchivosService {
 
   private String determinarBucket(ETipo categoria) {
     switch (categoria) {
-      case R_FACTURA,
-          PAGO_PROVEEDOR,
-          PP_COMPROBANTE,
-          PAGO_NOMINA,
-          PN_ARCHIVO,
-          PN_COMPROBANTE:
-        return "financieros";
+      case
+          ORDEN_COMPRA,
+          PRESUPUESTO,
+          EXPLOSION_INSUMOS,
+          PROYECTO,
+          PROGRAMA,
+          MEMORIAS,
+          COMENTARIOS_AD:
+        return "requerimientos";
+      case CONSTRUCCION:
+        return "construccion";
       default:
         return "documentos";
     }

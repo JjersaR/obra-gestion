@@ -21,7 +21,8 @@ public class AppBucketConfig {
 
   @PostConstruct
   public void init() {
-    createBucketIfNotExists(props.especial());
+    createBucketIfNotExists(props.requerimiento());
+    createBucketIfNotExists(props.construccion());
     createBucketIfNotExists(props.comun());
   }
 

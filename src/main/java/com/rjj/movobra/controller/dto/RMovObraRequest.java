@@ -1,7 +1,8 @@
 package com.rjj.movobra.controller.dto;
 
-public record RRESIDENTERequest(String obraId,
-    String tipoMovimiento,
+public record RMovObraRequest(
+    String obraId, // FK
+    String tipoMovimiento, // ETipo
     String usuarioRegistraId,
     String archivoId) {
 

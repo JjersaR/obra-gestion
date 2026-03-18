@@ -49,7 +49,10 @@ public interface IArchivosRepository extends JpaRepository<Archivos, UUID> {
       ETipo categoria);
 
   @Query(value = """
-      select a.id, a.categoria, a.movobra_id, a.nombre, a.url from archivos a where a.movobra_id = :movobraId and a.tipo_entidad = 'REQUERIMIENTOS' and a.version = 1
+      select a.id, a.categoria, a.movobra_id, a.nombre, a.url from archivos a
+        where a.movobra_id = :movobraId and a.tipo_entidad = 'REQUERIMIENTOS'
+        and a.categoria in ('ORDEN_COMPRA', 'PRESUPUESTO', 'EXPLOSION_INSUMOS', 'PROYECTO', 'PROGRAMA', 'MEMORIAS', 'COMENTARIOS_AD')
+        and a.version = 1
           """, nativeQuery = true)
   List<IRequerimientosActivos> findByRequerimientosActivos(UUID movobraId);
 }

@@ -54,13 +54,17 @@ public class MinioStorageServiceImpl implements IStorageService {
 
   private String determinarBucket(ETipo categoria) {
     switch (categoria) {
-      case R_FACTURA,
-          PAGO_PROVEEDOR,
-          PP_COMPROBANTE,
-          PAGO_NOMINA,
-          PN_ARCHIVO,
-          PN_COMPROBANTE:
-        return "financieros";
+      case
+          ORDEN_COMPRA,
+          PRESUPUESTO,
+          EXPLOSION_INSUMOS,
+          PROYECTO,
+          PROGRAMA,
+          MEMORIAS,
+          COMENTARIOS_AD:
+        return "requerimientos";
+      case CONSTRUCCION:
+        return "construccion";
       default:
         return "documentos";
     }

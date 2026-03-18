@@ -42,13 +42,9 @@
                         <th>Fecha de subida</th>
                         <th>rol</th>
                         <th>Archivo</th>
-                        <th>Aceptado</th>
-                        <th>Rechazado</th>
+                        <th>Estado</th>
                         <th>observaciones</th>
-                        <th class="col-admin">Pago</th>
-                        <th class="col-admin">Fecha pago</th>
-                        <th class="col-admin">Ficha</th>
-                        <th class="col-admin">factura</th>
+                        <th class="col-admin">Pagado</th>
                     </tr>
                 </thead>
                 <tbody id="tablaBody">
@@ -57,9 +53,12 @@
 
             <div class="table-actions">
                 <button id="btnAgregar" type="button" class="btn-submit">Subir requerimiento</button>
+                <button id="btnActualizar" type="button" class="btn-submit" style="display: none;">Actualizar</button>
             </div>
         </section>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/requerimientos.js"></script>
 </body>
 </html>
