@@ -123,6 +123,7 @@ function agregarFila() {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // --- Lógica de Actualización (Botón Actualizar) ---
 
 /**
@@ -225,11 +226,16 @@ async function actualizarTabla() {
     });
   }
 =======
+=======
+>>>>>>> eaeba9703c11f32c4545a4b8ec692047fa9c78c4
 function cambiarBotonAGuardar() {
   const btn = document.getElementById("btnAgregar");
   btn.innerText = "Guardar";
   modoAgregar = false;
+<<<<<<< HEAD
 >>>>>>> 3cff0ba (Ya agrega requerimientos construccion)
+=======
+>>>>>>> eaeba9703c11f32c4545a4b8ec692047fa9c78c4
 }
 
 async function manejarBoton(e) {

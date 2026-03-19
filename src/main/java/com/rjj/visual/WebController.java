@@ -49,6 +49,7 @@ public class WebController {
   public String verReporteSemanal(@PathVariable String id) {
     return "reporteSemanal";
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   @GetMapping("/obras/detalles/reportes/{id}")
   public String verReporteSemanal(@PathVariable String id) {
@@ -58,4 +59,8 @@ public class WebController {
 =======
   }
 >>>>>>> 095d022 (FiltroListo)
+=======
+  }
+
+>>>>>>> eaeba9703c11f32c4545a4b8ec692047fa9c78c4
 }
