@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pago a Proveedores - OM Diseño y Construcción</title>
+    <title>Reporte de obras - OM Diseño y Construcción</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap">
-    <link rel="stylesheet" href="/css/proveedores.css">
+    <link rel="stylesheet" href="/css/reporte.css">
 </head>
 <body>
 
@@ -29,7 +29,7 @@
     <main class="main-content">
         <div class="page-subheader">
             <div class="title-container">
-                <h2>PAGO A PROVEEDORES: <span class="obra-highlight">(PAGO PROVEEDORES NOMINA)</span></h2>
+                <h2>REPORTE DE OBRA: <span class="obra-highlight">(REPORTE SEMANALES)</span></h2>
             </div>
         </div>
 
@@ -37,15 +37,13 @@
             <table class="tabla-captura">
                 <thead>
                 <tr>
-                    <th>No.</th>
+                    <th>No. Reporte</th>
                     <th>Fecha</th>
                     <th>Rol</th>
                     <th>Archivo</th>
                     <th class="texto-centro">Aceptado</th>
                     <th class="texto-centro">Rechazado</th>
                     <th>Observaciones</th>
-                    <th class="texto-centro">Pagado</th>
-                    <th class="texto-centro">No Pagado</th>
                 </tr>
                 </thead>
                 <tbody id="cuerpoTablaCaptura">
@@ -65,12 +63,7 @@
                         
                         <td><input type="text" name="observaciones_1" class="input-tabla" placeholder="Escribe aquí..."></td>
                         
-                        <td class="texto-centro">
-                            <input type="radio" name="pago_1" value="pagado" class="radio-custom radio-bien" title="Pagado">
-                        </td>
-                        <td class="texto-centro">
-                            <input type="radio" name="pago_1" value="no_pagado" class="radio-custom radio-mal" title="No Pagado">
-                        </td>
+                        
                     </tr>
 
                     <tr>
@@ -88,12 +81,7 @@
                         
                         <td><input type="text" name="observaciones_2" class="input-tabla"></td>
                         
-                        <td class="texto-centro">
-                            <input type="radio" name="pago_2" value="pagado" class="radio-custom radio-bien">
-                        </td>
-                        <td class="texto-centro">
-                            <input type="radio" name="pago_2" value="no_pagado" class="radio-custom radio-mal">
-                        </td>
+                        
                     </tr>
 
                 </tbody>
@@ -102,7 +90,7 @@
 
 
         <div class="table-actions">
-            <button id="btnAgregar" type="button" class="btn-submit">Subir Pago a Proveedores</button>
+            <button id="btnAgregar" type="button" class="btn-submit">Subir Reporte</button>
         </div>
 
         

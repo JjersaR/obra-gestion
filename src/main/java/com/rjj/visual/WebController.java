@@ -45,9 +45,9 @@ public class WebController {
     return "pagoProveedores";
   }
 
-  @GetMapping("/obras/detalles/reporteSemanal/{id}")
+  @GetMapping("/obras/detalles/reportes/{id}")
   public String verReporteSemanal(@PathVariable String id) {
-    return "reporteSemanal";
+    return "reportes";
   }
-
+  
 }
