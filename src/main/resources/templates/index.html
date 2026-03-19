@@ -11,7 +11,7 @@
 
     <header class="topbar">
         <div class="topbar-left">
-            <img src="/img/logo.jpeg" alt="Logo OM" class="topbar-logo">
+            <img src="/img/logo.png" alt="Logo OM" class="topbar-logo">
             <h1 class="topbar-title">OM Diseño y Construcción</h1>
         </div>
         <div class="topbar-right">
@@ -27,11 +27,24 @@
             <div class="main-header-info">
                 <h2>Relación de Obras en Proceso</h2>
             </div>
-            <!--Boton de Nueva Obra-->
-            <div class="main-header-actions oculto">
-                <a th:href="@{/obras/nueva}" class="btn-action">
-                    <span class="btn-icon">+</span> NUEVA OBRA
-                </a>
+
+            <div class="header-controles"></div>
+                <!--Filtro por Status-->
+                <div class="filtros-container">
+                    <label for="filtroStatus">Filtrar por Estatus:</label>
+                    <select id="filtroStatus">
+                        <option value="TODOS">Todas las Obras</option>
+                        <option value="EJECUCION">En Ejecución</option>
+                        <option value="CIERRE">En Cierre</option>
+                    </select>
+                </div>
+
+                <!--Boton de Nueva Obra-->
+                <div class="main-header-actions oculto">
+                    <a th:href="@{/obras/nueva}" class="btn-action">
+                        <span class="btn-icon">+</span> NUEVA OBRA
+                    </a>
+                </div>
             </div>
         </div>
 

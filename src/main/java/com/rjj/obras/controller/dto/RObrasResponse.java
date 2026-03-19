@@ -14,6 +14,9 @@ public record RObrasResponse(
     String gerente,
     String residente,
     String observaciones,
-    String status) {
+    String status,
+// --- NUEVOS CAMPOS ---
+    String semaforo,      // Ejemplo: "ROJO", "AMARILLO", "VERDE"
+    String mensajeTiempo ) { // Ejemplo: "Faltan 5 días", "Retrasada" 
 
 }

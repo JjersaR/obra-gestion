@@ -1,49 +1,48 @@
 document.getElementById('loginForm').addEventListener('submit', async function (e) {
   e.preventDefault();
 
-  // Guardamos el input de la contraseña en una variable para manipularlo más fácil
   const contrasenaInput = document.getElementById('contrasena');
+  const correoInput = document.getElementById('correo');
   const mensajeDiv = document.getElementById('mensaje');
-  if (validarDatos(document.getElementById('correo').value, contrasenaInput.value)) {
-    try {
-      const response = await fetch('/api/v1/usuarios/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nombre: document.getElementById('correo').value,
-          password: contrasenaInput.value
-        })
-      });
 
-      if (response.status === 200) {
-        //leemos el JSON directamente
-        const datosUsuario = await response.json();
-
-        // Convertimos el objeto a texto y lo guardamos en la memoria del navegador
-        localStorage.setItem('usuarioLogueado', JSON.stringify(datosUsuario));
-
-        mensajeDiv.textContent = '¡Acceso concedido! Redirigiendo...';
-        mensajeDiv.className = 'success';
-        window.location.href = '/obras';
-
-      } else if (response.status === 204) {
-        // Manejo de credenciales incorrectas
-        mensajeDiv.textContent = 'Correo o contraseña incorrectos.';
-        mensajeDiv.className = 'error';
-        contrasenaInput.value = '';
-        contrasenaInput.focus();
-
-      } else {
-        mensajeDiv.textContent = 'Error inesperado del servidor. Código: ' + response.status;
-        mensajeDiv.className = 'error';
-      }
-
-    } catch (error) {
-      mensajeDiv.textContent = 'Error de conexión con el servidor.';
-      mensajeDiv.className = 'error';
-    }
+  // 1. Validar datos localmente primero
+  if (!validarDatos(correoInput.value, contrasenaInput.value)) {
+    mensajeDiv.textContent = 'Formato de correo inválido o contraseña muy corta.';
+    mensajeDiv.className = 'error';
+    return; // Detenemos la ejecución aquí
   }
-  mensajeDiv.textContent = 'Correo o contraseña incorrectos.';
+
+  try {
+    const response = await fetch('/api/v1/usuarios/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nombre: correoInput.value,
+        password: contrasenaInput.value
+      })
+    });
+
+    if (response.status === 200) {
+      const datosUsuario = await response.json();
+      localStorage.setItem('usuarioLogueado', JSON.stringify(datosUsuario));
+
+      mensajeDiv.textContent = '¡Acceso concedido! Redirigiendo...';
+      mensajeDiv.className = 'success';
+      window.location.href = '/obras';
+      return; // Éxito total, salimos de la función
+    } 
+    
+    if (response.status === 204) {
+      mensajeDiv.textContent = 'Correo o contraseña incorrectos.';
+    } else {
+      mensajeDiv.textContent = 'Error inesperado del servidor. Código: ' + response.status;
+    }
+
+  } catch (error) {
+    mensajeDiv.textContent = 'Error de conexión con el servidor.';
+  }
+
+  // Si llegamos a este punto, es porque algo falló (204, 500 o error de red)
   mensajeDiv.className = 'error';
   contrasenaInput.value = '';
   contrasenaInput.focus();

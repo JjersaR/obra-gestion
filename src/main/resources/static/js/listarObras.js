@@ -1,5 +1,28 @@
 document.addEventListener("DOMContentLoaded", function () {
   getObras();
+
+  // Activamos el filtro por status
+  const selectFiltro = document.getElementById('filtroStatus');
+
+  if (selectFiltro) {
+    selectFiltro.addEventListener('change', function() {
+      const estatusSeleccionado = this.value; // "TODOS", "EJECUCION" o "CIERRE"
+      
+      // Buscamos todas las tarjetas en el HTML
+      const todasLasTarjetas = document.querySelectorAll('.obra-card');
+
+      todasLasTarjetas.forEach(tarjeta => {
+        const estatusObra = tarjeta.getAttribute('data-status');
+
+        // Lógica de filtrado, si coincide-muestra; si no - ocultamos
+        if (estatusSeleccionado === 'TODOS' || estatusObra === estatusSeleccionado) {
+          tarjeta.style.display = ''; // Regresa a su estado visible
+        } else {
+          tarjeta.style.display = 'none'; // Desaparece al instante
+        }
+      });
+    });
+  }
 });
 
 async function getObras() {
@@ -11,7 +34,6 @@ async function getObras() {
     }
 
     const data = await response.json();
-
     generarTarjetas(data);
   } catch (error) {
     const grid = document.getElementById("obrasGrid");
@@ -20,9 +42,7 @@ async function getObras() {
 }
 
 function generarTarjetas(obras) {
-
   const grid = document.getElementById("obrasGrid");
-
   grid.innerHTML = "";
 
   if (!obras || obras.length === 0) {
@@ -31,32 +51,25 @@ function generarTarjetas(obras) {
   }
 
   obras.forEach((obra, index) => {
+    // 1. Mantenemos tus clases de estatus originales
+    const statusClass = obra.status === "EJECUCION" ? "status-execution" : "status-closing";
+    const statusText = obra.status === "EJECUCION" ? "en proceso de ejecución" : "en cierre";
 
-    const statusClass =
-      obra.status === "EJECUCION"
-        ? "status-execution"
-        : "status-closing";
-
-    const statusText =
-      obra.status === "EJECUCION"
-        ? "en proceso de ejecución"
-        : "en cierre";
+    // 2. NUEVO: Obtenemos la clase del semáforo calculada en Java (status-rojo, status-amarillo, status-verde)
+    const semaforoClass = `status-${obra.semaforo.toLowerCase()}`;
 
     const numeroObra = String(index + 1).padStart(2, "0");
 
+    // 3. Aplicamos AMBAS clases a la tarjeta: la de ejecución y la del semáforo de tiempo
     const tarjeta = `
-      <div class="obra-card ${statusClass}">
+      <div class="obra-card ${statusClass} ${semaforoClass}" data-status="${obra.status}">
 
         <div class="obra-card-header">
           <span class="obra-id">OBRA ${numeroObra}</span>
-
-          <span class="obra-status">
-            ${statusText}
-          </span>
+          <span class="obra-status">${statusText}</span>
         </div>
 
         <div class="obra-card-body">
-
           <p class="obra-detail-pair">
             <strong>NOMBRE O NÚMERO:</strong>
             <span>${obra.nombre}</span>
@@ -82,20 +95,9 @@ function generarTarjetas(obras) {
             <span>${formatearFecha(obra.fechaFin)}</span>
           </p>
 
-          <p class="obra-detail-pair">
-            <strong>NÚMERO DE SEMANAS:</strong>
-            <span>${obra.noSemanas}</span>
-          </p>
-
-          <p class="obra-detail-pair">
-            <strong>GERENTE:</strong>
-            <span>${obra.gerente}</span>
-          </p>
-
-          <p class="obra-detail-pair">
-            <strong>RESIDENTE:</strong>
-            <span>${obra.residente}</span>
-          </p>
+          <div class="obra-tiempo-msg">
+            ${obra.mensajeTiempo}
+          </div>
 
           <div class="obra-actions">
             <a href="/obras/detalles/${obra.id}" class="btn-detalle">
@@ -112,5 +114,8 @@ function generarTarjetas(obras) {
 }
 
 function formatearFecha(fecha) {
-  return new Date(fecha).toLocaleDateString("es-MX");
+  // Usamos split para evitar problemas de zona horaria con el constructor de Date
+  if(!fecha) return "---";
+  const [year, month, day] = fecha.split('-');
+  return `${day}/${month}/${year}`;
 }
