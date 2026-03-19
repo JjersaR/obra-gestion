@@ -371,9 +371,10 @@ async function actualizarTabla() {
 
     const estado = estadoSelect ? estadoSelect.value : null;
     const observaciones = observacionesTd ? observacionesTd.innerText.trim() : null;
+    const pagado = pagadoCheckbox ? pagadoCheckbox.checked : null;
 
     // Para pagado, solo procesamos si existe el checkbox (solo ADMIN lo ve)
-    if (pagadoCheckbox.checked) {
+    if (pagado !== null) {
       // Solo agregamos a updatesPago si el checkbox existe
       // Nota: No podemos comparar con el valor original fácilmente,
       // así que enviaremos siempre. El backend debe manejarlo.
