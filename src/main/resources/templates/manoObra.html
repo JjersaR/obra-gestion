@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Requerimientos Mano de Obra - OM Diseño y Construcción</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap">
-    <link rel="stylesheet" href="/css/manoObra.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/tablas-detalle.css">
 </head>
 <body>
 
@@ -33,81 +34,33 @@
             </div>
         </div>
 
-        <div class="tabla-captura-container">
-            <table class="tabla-captura">
+        <section class="table-container">
+            <table class="custom-table">
                 <thead>
-                <tr>
-                    <th>No.</th>
-                    <th>Fecha</th>
-                    <th>Rol</th>
-                    <th>Archivo</th>
-                    <th class="texto-centro">Aceptado</th>
-                    <th class="texto-centro">Rechazado</th>
-                    <th>Observaciones</th>
-                    <th class="texto-centro">Pagado</th>
-                    <th class="texto-centro">No Pagado</th>
-                </tr>
+                    <tr>
+                        <th>no</th>
+                        <th>Fecha de subida</th>
+                        <th>rol</th>
+                        <th>Archivo</th>
+                        <th>Estado</th>
+                        <th>observaciones</th>
+                        <th class="col-admin">Pagado</th>
+                    </tr>
                 </thead>
-                <tbody id="cuerpoTablaCaptura">
-            
-                    <tr>
-                        <td class="texto-centro">1</td>
-                        <td><input type="date" name="fecha_1" class="input-tabla"></td>
-                        <td><input type="text" name="rol_1" class="input-tabla" placeholder="Ej. Compras"></td>
-                        <td><input type="file" name="archivo_1" class="input-file-tabla"></td>
-                        
-                        <td class="texto-centro">
-                            <input type="radio" name="estado_1" value="aceptado" class="radio-custom radio-bien" title="Aceptado">
-                        </td>
-                        <td class="texto-centro">
-                            <input type="radio" name="estado_1" value="rechazado" class="radio-custom radio-mal" title="Rechazado">
-                        </td>
-                        
-                        <td><input type="text" name="observaciones_1" class="input-tabla" placeholder="Escribe aquí..."></td>
-                        
-                        <td class="texto-centro">
-                            <input type="radio" name="pago_1" value="pagado" class="radio-custom radio-bien" title="Pagado">
-                        </td>
-                        <td class="texto-centro">
-                            <input type="radio" name="pago_1" value="no_pagado" class="radio-custom radio-mal" title="No Pagado">
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="texto-centro">2</td>
-                        <td><input type="date" name="fecha_2" class="input-tabla"></td>
-                        <td><input type="text" name="rol_2" class="input-tabla"></td>
-                        <td><input type="file" name="archivo_2" class="input-file-tabla"></td>
-                        
-                        <td class="texto-centro">
-                            <input type="radio" name="estado_2" value="aceptado" class="radio-custom radio-bien">
-                        </td>
-                        <td class="texto-centro">
-                            <input type="radio" name="estado_2" value="rechazado" class="radio-custom radio-mal">
-                        </td>
-                        
-                        <td><input type="text" name="observaciones_2" class="input-tabla"></td>
-                        
-                        <td class="texto-centro">
-                            <input type="radio" name="pago_2" value="pagado" class="radio-custom radio-bien">
-                        </td>
-                        <td class="texto-centro">
-                            <input type="radio" name="pago_2" value="no_pagado" class="radio-custom radio-mal">
-                        </td>
-                    </tr>
-
+                <tbody id="tablaBody">
                 </tbody>
             </table>
-        </div>
+
+            <div class="table-actions">
+                <button id="btnAgregar" type="button" class="btn-submit">Subir requerimiento</button>
+                <button id="btnActualizar" type="button" class="btn-submit" style="display: none;">Actualizar</button>
+            </div>
+        </section>
 
 
-        <div class="table-actions">
-            <button id="btnAgregar" type="button" class="btn-submit">Subir Nomina</button>
-        </div>
-
-        
     </main>
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/manoObra.js"></script>
 
 </body>
 </html>

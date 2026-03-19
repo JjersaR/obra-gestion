@@ -63,7 +63,7 @@ public class MinioStorageServiceImpl implements IStorageService {
           MEMORIAS,
           COMENTARIOS_AD:
         return "requerimientos";
-      case CONSTRUCCION:
+      case CONSTRUCCION, MANO_OBRA:
         return "construccion";
       default:
         return "documentos";

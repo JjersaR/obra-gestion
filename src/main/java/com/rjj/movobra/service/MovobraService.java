@@ -30,8 +30,8 @@ public class MovobraService {
     return true;
   }
 
-  public List<IMovObraTabla> datosParaTabla(UUID movobraId) {
-    return repository.datosParaTabla(movobraId);
+  public List<IMovObraTabla> datosParaTabla(UUID movobraId, String categoria, String movimiento) {
+    return repository.datosParaTabla(movobraId, categoria, movimiento);
   }
 
   @Transactional

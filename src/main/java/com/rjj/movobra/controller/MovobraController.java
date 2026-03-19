@@ -35,9 +35,10 @@ public class MovobraController {
     return ResponseEntity.created(new URI(API_V1_MOVOBRA)).build();
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<List<IMovObraTabla>> datosParaTabla(@PathVariable String id) {
-    return ResponseEntity.ok(service.datosParaTabla(UUID.fromString(id)));
+  @GetMapping("/{id}/{categoria}/{movimiento}")
+  public ResponseEntity<List<IMovObraTabla>> datosParaTabla(@PathVariable String id, @PathVariable String categoria,
+      @PathVariable String movimiento) {
+    return ResponseEntity.ok(service.datosParaTabla(UUID.fromString(id), categoria, movimiento));
   }
 
   @PutMapping("/{id}")

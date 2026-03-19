@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.rjj.movobra.controller.dto.IMovObraTabla;
+import com.rjj.movobra.entity.ETipo;
 import com.rjj.movobra.entity.Movobra;
 
 @Repository
@@ -52,9 +53,9 @@ public interface IMovobraRepository extends JpaRepository<Movobra, UUID> {
 
         WHERE
           mo.obra_id = :obraId
-          AND mo.tipo_movimiento = 'REQUERIMIENTOS'
-          AND a.categoria = 'CONSTRUCCION';
+          AND mo.tipo_movimiento = :movimiento
+          AND a.categoria = :categoria
                   """, nativeQuery = true)
-  List<IMovObraTabla> datosParaTabla(UUID obraId);
+  List<IMovObraTabla> datosParaTabla(UUID obraId, String categoria, String movimiento);
 
 }

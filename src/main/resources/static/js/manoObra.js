@@ -150,14 +150,14 @@ function controlarBotonesPorRol() {
     case 'ADMINISTRACION':
       if (btnActualizar) btnActualizar.style.display = "block";
       break;
-    case 'COMPRAS':
+    case 'CONTADOR':
       if (btnAgregar && hayArchivoAceptado()) {
         btnAgregar.style.display = "block";
       }
       break;
-    // COMPRAS no tiene botones de acción en esta vista, solo puede ver y descargar (si está aceptado)
+    // CONTADOR no tiene botones de acción en esta vista, solo puede ver y descargar (si está aceptado)
     default:
-      // Otros roles (como COMPRAS) no ven botones
+      // Otros roles (como CONTADOR) no ven botones
       break;
   }
 }
@@ -205,8 +205,8 @@ function puedeSubir() {
   // GERENTE y ADMINISTRACION siempre pueden subir
   if (usuario.tipoUsuario === 'GERENTE' || usuario.tipoUsuario === 'ADMINISTRACION') return true;
 
-  // COMPRAS solo puede subir si hay un archivo ACEPTADO
-  if (usuario.tipoUsuario === 'COMPRAS') {
+  // CONTADOR solo puede subir si hay un archivo ACEPTADO
+  if (usuario.tipoUsuario === 'CONTADOR') {
     return hayArchivoAceptado();
   }
 
@@ -225,7 +225,7 @@ function puedeDescargar(estado) {
   if (usuario.tipoUsuario === 'RESIDENTE') return false;
 
   // Compras solo puede descargar si el estado es ACEPTADO
-  if (usuario.tipoUsuario === 'COMPRAS') {
+  if (usuario.tipoUsuario === 'CONTADOR') {
     return estado === 'ACEPTADO';
   }
 
@@ -244,7 +244,7 @@ function puedeDescargar(estado) {
  */
 async function cargarMovimientos() {
   try {
-    const response = await fetch(`/api/v1/movobra/${idObra}/CONSTRUCCION/REQUERIMIENTOS`);
+    const response = await fetch(`/api/v1/movobra/${idObra}/MANO_OBRA/REQUERIMIENTOS`);
 
     if (!response.ok) {
       throw new Error("Error al obtener movimientos");
@@ -325,7 +325,7 @@ function pintarTabla(movimientos) {
     // pero podemos no poner el checkbox si no es admin para ahorrar DOM.
     let pagadoHtml = '<td class="col-admin"></td>'; // Celda vacía por defecto
     if (usuario && usuario.tipoUsuario === 'ADMINISTRACION') {
-      pagadoHtml = `<td class="col-admin"><input type="checkbox" class="pagado-checkbox" data-id="${mov.movobraid}" ${mov.pagado ? "checked" : ""}></td>`;
+      pagadoHtml = `<td class="col-admin"><input type="checkbox" class="pagado-checkbox" data-id="${mov.movobraid}" ${mov.pagado ? "checked" : ""} data-original="${mov.pagado}"></td>`;
     }
 
     // Construcción de la fila
@@ -622,7 +622,7 @@ async function guardarArchivo() {
   const formData = new FormData();
   formData.append("tipoEntidad", "REQUERIMIENTOS");
   formData.append("movobraId", idObra);
-  formData.append("categoria", "CONSTRUCCION");
+  formData.append("categoria", "MANO_OBRA");
   formData.append("file", file);
 
   // Mostrar loading
