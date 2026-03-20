@@ -121,8 +121,8 @@ function ocultarElementosParaNoLogueado() {
 function controlarColumnasPorRol() {
   const columnasAdmin = document.querySelectorAll(".col-admin");
   columnasAdmin.forEach(col => col.style.display = "none"); // Ocultar por defecto
-
-  if (usuario && usuario.tipoUsuario === 'ADMINISTRACION') {
+   const rolesAutorizados = ['ADMINISTRACION', 'GERENTE', 'RESIDENTE', 'CONTADOR'];
+  if (usuario && rolesAutorizados.includes(usuario.tipoUsuario)) {
     columnasAdmin.forEach(col => col.style.display = ""); // Mostrar
   }
 }
@@ -323,10 +323,32 @@ function pintarTabla(movimientos) {
     // --- Lógica para la celda de Pagado (Checkbox) ---
     // Solo se pinta si el usuario es ADMINISTRACION. La columna se oculta/muestra con CSS,
     // pero podemos no poner el checkbox si no es admin para ahorrar DOM.
-    let pagadoHtml = '<td class="col-admin"></td>'; // Celda vacía por defecto
-    if (usuario && usuario.tipoUsuario === 'ADMINISTRACION') {
-      pagadoHtml = `<td class="col-admin"><input type="checkbox" class="pagado-checkbox" data-id="${mov.movobraid}" ${mov.pagado ? "checked" : ""} data-original="${mov.pagado}"></td>`;
+     // --- Lógica para la celda de Pagado (Checkbox) ---
+    // Solo se pinta si el usuario es ADMINISTRACION. La columna se oculta/muestra con CSS,
+    // pero podemos no poner el checkbox si no es admin para ahorrar DOM.
+    // --- Lógica para la celda de Pagado (Checkbox o Solo Lectura) ---
+let pagadoHtml = '<td class="col-admin"></td>'; // Celda vacía por defecto
+
+if (usuario) {
+  // Verificamos si el movimiento está RECHAZADO
+  const estaRechazado = mov.estado === "RECHAZADO";
+
+  if (usuario.tipoUsuario === 'ADMINISTRACION') {
+    // Si es ADMIN: Puede editar SIEMPRE Y CUANDO no esté rechazado
+    if (estaRechazado) {
+      // Si está rechazado, el Admin lo ve pero NO puede marcarlo (disabled)
+      // Le quitamos la clase 'pagado-checkbox' para que 'actualizarTabla' no lo intente guardar
+      pagadoHtml = `<td class="col-admin"><input type="checkbox" disabled ${mov.pagado ? "checked" : ""} title="No se puede pagar un requerimiento rechazado"></td>`;
+    } else {
+      // Si NO está rechazado, funciona normal
+      pagadoHtml = `<td class="col-admin"><input type="checkbox" class="pagado-checkbox" data-id="${mov.movobraid}" ${mov.pagado ? "checked" : ""}></td>`;
     }
+  } else {
+    // OTROS ROLES (GERENTE, RESIDENTE, COMPRAS): Solo lectura siempre
+    // Mostramos si está pagado o no, pero bloqueado
+    pagadoHtml = `<td class="col-admin"><input type="checkbox" disabled ${mov.pagado ? "checked" : ""}></td>`;
+  }
+}
 
     // Construcción de la fila
     const fila = document.createElement('tr');
