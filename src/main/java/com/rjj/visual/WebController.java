@@ -27,7 +27,7 @@ public class WebController {
 
   @GetMapping("/obras/detalles/{id}")
   public String mostrarDetalles(@PathVariable String id) {
-    return "detallesObra"; // 
+    return "detallesObra";
   }
 
   @GetMapping("/obras/detalles/requerimientos/{id}")
@@ -45,22 +45,9 @@ public class WebController {
     return "pagoProveedores";
   }
 
-  @GetMapping("/obras/detalles/reporteSemanal/{id}")
-  public String verReporteSemanal(@PathVariable String id) {
-    return "reporteSemanal";
-<<<<<<< HEAD
-<<<<<<< HEAD
-
   @GetMapping("/obras/detalles/reportes/{id}")
   public String verReporteSemanal(@PathVariable String id) {
     return "reportes";
   }
-  
-=======
-  }
->>>>>>> 095d022 (FiltroListo)
-=======
-  }
 
->>>>>>> eaeba9703c11f32c4545a4b8ec692047fa9c78c4
 }
