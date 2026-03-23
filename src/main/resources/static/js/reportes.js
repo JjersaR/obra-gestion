@@ -7,7 +7,7 @@ const usuarioString = localStorage.getItem('usuarioLogueado');
 const usuario = usuarioString ? JSON.parse(usuarioString) : null;
 const idObra = obtenerId();
 
-let modoAgregar = true; 
+let modoAgregar = true;
 let movimientosGlobal = [];
 
 /**
@@ -160,7 +160,7 @@ function pintarTabla(movimientos) {
     }
 
     // --- Observaciones ---
-    let obsHtml = editable 
+    let obsHtml = editable
       ? `<td contenteditable="true" class="observaciones" data-id="${mov.movobraid}">${mov.observaciones ?? ''}</td>`
       : `<td>${mov.observaciones ?? ''}</td>`;
 
@@ -337,11 +337,11 @@ async function guardarArchivo() {
   try {
     const responseArchivo = await fetch("/api/v1/archivos", { method: "POST", body: formData });
     if (!responseArchivo.ok) throw new Error("Error al subir archivo físico");
-    
+
     const archivoId = await responseArchivo.text();
 
     const movobraBody = {
-      obraId: idObra, 
+      obraId: idObra,
       tipoMovimiento: "DOCUMENTOS",
       usuarioRegistraId: usuario.id,
       archivoId: archivoId,
@@ -357,7 +357,7 @@ async function guardarArchivo() {
     if (!responseMov.ok) throw new Error("Error al registrar movimiento en BD");
 
     Swal.fire({ title: '¡Éxito!', text: 'Archivo subido correctamente', icon: 'success', timer: 1500, showConfirmButton: false });
-    
+
     resetearEstadoSubida();
 
   } catch (error) {
