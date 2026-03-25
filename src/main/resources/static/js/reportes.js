@@ -111,7 +111,7 @@ function puedeDescargar() {
 
 async function cargarMovimientos() {
   try {
-    const response = await fetch(`/api/v1/movobra/${idObra}/DOCUMENTOS/DOCUMENTOS`);
+    const response = await fetch(`/api/v1/movobra/${idObra}/REPORTES/REPORTES`);
     if (!response.ok) throw new Error("Error al obtener movimientos");
     const movimientos = await response.json();
     movimientosGlobal = movimientos;
@@ -327,9 +327,9 @@ async function guardarArchivo() {
   }
 
   const formData = new FormData();
-  formData.append("tipoEntidad", "PAGO_PROVEEDORES");
+  formData.append("tipoEntidad", "REPORTES");
   formData.append("movobraId", idObra);
-  formData.append("categoria", "DOCUMENTOS");
+  formData.append("categoria", "REPORTES");
   formData.append("file", file);
 
   Swal.fire({ title: 'Subiendo archivo...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
@@ -342,7 +342,7 @@ async function guardarArchivo() {
 
     const movobraBody = {
       obraId: idObra,
-      tipoMovimiento: "DOCUMENTOS",
+      tipoMovimiento: "REPORTES",
       usuarioRegistraId: usuario.id,
       archivoId: archivoId,
       estado: "PENDIENTE"
