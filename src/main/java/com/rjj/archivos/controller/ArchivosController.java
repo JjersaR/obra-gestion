@@ -74,4 +74,12 @@ var archivo = service.subirArchivo(ETipo.valueOf(request.tipoEntidad()), UUID.fr
  .body(resource);
  }
 
+
+ // Endpoint para obtener el total de la nómina (mano de obra)
+  @GetMapping("/gasto-mano-obra/{movobraId}")
+  public ResponseEntity<Double> obtenerGastoManoObra(@PathVariable UUID movobraId) {
+      // Llamamos al método que creamos en el service
+      double total = service.obtenerGastoTotalManoObra(movobraId);
+      return ResponseEntity.ok(total);
+  }
 }

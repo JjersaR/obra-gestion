@@ -55,4 +55,6 @@ public interface IArchivosRepository extends JpaRepository<Archivos, UUID> {
         and a.version = 1
           """, nativeQuery = true)
   List<IRequerimientosActivos> findByRequerimientosActivos(UUID movobraId);
+  // Busca el archivo que esté marcado como 'actual' para una obra y categoría específica
+Archivos findByMovobraIdAndCategoriaAndActualTrue(UUID movobraId, ETipo categoria);
 }
