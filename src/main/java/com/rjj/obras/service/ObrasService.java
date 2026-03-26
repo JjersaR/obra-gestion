@@ -1,4 +1,5 @@
 package com.rjj.obras.service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -11,10 +12,13 @@ import org.springframework.stereotype.Service;
 import com.rjj.obras.controller.dto.IObrasMapper;
 import com.rjj.obras.controller.dto.RObrasRequest;
 import com.rjj.obras.controller.dto.RObrasResponse;
+import com.rjj.obras.entity.EStatus;
 import com.rjj.obras.repository.IObrasRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ObrasService {
@@ -75,6 +79,27 @@ public class ObrasService {
             r.gerente(), r.residente(), r.observaciones(), r.status(),
             semaforo, mensaje
         );
+    }
+
+    //para el status a CIERRE
+    @Transactional
+    public void actualizarEstatus(String id, String nuevoEstatus) {
+        
+        // Buscamos la obra en la base de datos usando repositorio
+        var obra = repository.findById(UUID.fromString(id))
+            .orElseThrow(() -> new RuntimeException("Obra no encontrada con ID: " + id));
+
+        // Convertimos "CIERRE" a tu Enum de Java (EStatus.CIERRE)
+        // Usamos toUpperCase() por seguridad, para que coincida perfectamente
+        EStatus estatusEnum = EStatus.valueOf(nuevoEstatus.toUpperCase());
+
+        // Actualizamos el valor
+        obra.setStatus(estatusEnum);
+
+        // Guardamos los cambios
+        repository.save(obra);
+        
+        log.info("Estatus de la obra {} actualizado a {}", obra.getNombre(), nuevoEstatus);
     }
     
 }

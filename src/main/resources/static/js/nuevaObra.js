@@ -98,28 +98,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function calcularSemanas() {
 
-  const fechaInicio = document.getElementById("fechaInicio").value;
-  const fechaFin = document.getElementById("fechaTerminacion").value;
+  const fechaInicioInput = document.getElementById("fechaInicio").value;
+  const fechaFinInput = document.getElementById("fechaTerminacion").value;
+//Si alguno de los campos está vacío, no hacemos nada todavía
+  if (!fechaInicioInput || !fechaFinInput) return;
 
-  if (!fechaInicio || !fechaFin) return;
+  // Extraemos el año de ambas fechas
+  const añoInicio = parseInt(fechaInicioInput.split('-')[0]);
+  const añoFin = parseInt(fechaFinInput.split('-')[0]);
 
-  const inicio = new Date(fechaInicio);
-  const fin = new Date(fechaFin);
+  //Validamos que ambos años tengan un valor lógico
+  if(añoInicio < 2000 || añoFin < 2000){
+    return;
+  }
 
-  const diferenciaMs = fin - inicio;
-
-  const semanas = Math.ceil(diferenciaMs / (1000 * 60 * 60 * 24 * 7)) + 1;
+  //tienes la fecha completa y 
+  const inicio = new Date(fechaInicioInput);
+  const fin = new Date(fechaFinInput);
 
   if (fin < inicio) {
     Swal.fire({
-      title: 'Error en semanas',
+      title: 'Error en fechas',
       text: 'La fecha de terminación no puede ser menor que la fecha de inicio',
       icon: 'warning',
       confirmButtonText: 'Aceptar',
       confirmButtonColor: '#f39c12'
     });
+    // Limpiamos el campo de semanas porque hay un error
+    document.getElementById("numeroSemanas").value = "";
     return;
   }
+  //Si todo está bien, calculamos las semanas
+  const diferenciaMs = fin - inicio;
+  const semanas = Math.ceil(diferenciaMs / (1000 * 60 * 60 * 24 * 7)) + 1;
 
   document.getElementById("numeroSemanas").value = semanas;
 }

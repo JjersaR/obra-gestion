@@ -99,10 +99,16 @@ function generarTarjetas(obras) {
             ${obra.mensajeTiempo}
           </div>
 
-          <div class="obra-actions">
-            <a href="/obras/detalles/${obra.id}" class="btn-detalle">
+          <div class="obra-actions" style="display: flex; gap: 10px; margin-top: 15px;">
+            <a href="/obras/detalles/${obra.id}" class="btn-detalle" style="flex: 1; text-align: center; background-color: #2c3e50; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: 600;">
               DETALLES DE OBRA
             </a>
+
+            ${obra.status === 'EJECUCION' ? `
+              <button onclick="confirmarCierreObra('${obra.id}')" class="btn-cerrar-obra" style="flex: 1; background: #e74c3c; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                CERRAR OBRA
+              </button>
+            ` : ''}
           </div>
 
         </div>
@@ -118,4 +124,59 @@ function formatearFecha(fecha) {
   if(!fecha) return "---";
   const [year, month, day] = fecha.split('-');
   return `${day}/${month}/${year}`;
+}
+
+
+// Es para volver el Status de la obra a CIERRE
+function confirmarCierreObra(idObra) {
+    Swal.fire({
+        title: '¿Pasar obra a Cierre?',
+        text: "Al confirmar, el estatus de esta obra cambiará permanentemente a CIERRE. ¿Estás seguro?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#2c3e50', // Tu azul corporativo
+        cancelButtonColor: '#e74c3c', // Rojo para cancelar
+        confirmButtonText: 'Sí, cerrar obra',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            ejecutarCambioEstatus(idObra, 'CIERRE');
+        }
+    });
+}
+
+// Mandamos la orden a Java
+async function ejecutarCambioEstatus(idObra, nuevoEstatus) {
+    try {
+        // Hacemos una petición PATCH (ideal para actualizar un solo campo)
+        const response = await fetch(`/api/v1/obras/${idObra}/estatus`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            // Mandamos el nuevo estatus en formato JSON
+            body: JSON.stringify({ status: nuevoEstatus }) 
+        });
+
+        if (response.ok) {
+            Swal.fire({
+                title: '¡Obra Cerrada!',
+                text: 'El estatus se ha actualizado correctamente.',
+                icon: 'success',
+                confirmButtonColor: '#2c3e50'
+            });
+             
+            // la pantalla se actualice sola sin tener que recargar el navegador
+            getObras(); 
+            
+        } else if (response.status === 403) {
+            // Si un Residente intenta hacer trampa invocando la función, Java lo bloquea
+            Swal.fire('Acceso Denegado', 'Solo el perfil de GERENTE puede cerrar obras.', 'error');
+        } else {
+            Swal.fire('Error', 'No se pudo actualizar el estatus.', 'error');
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        Swal.fire('Error de conexión', 'No pudimos comunicarnos con el servidor.', 'error');
+    }
 }
