@@ -1,6 +1,7 @@
 package com.rjj.descargas.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,4 +29,9 @@ public class ObraVisualizacionService {
       repository.save(v);
     }
   }
+
+  // Dentro de ObraVisualizacionService.java
+public List<ObraVisualizacion> obtenerPorObra(String obraId) {
+    return repository.findByObraId(obraId);
+}
 }

@@ -49,30 +49,36 @@ public class ObrasService {
      * Calcula el estado del semáforo basado en el 15% del tiempo total.
      */
     private RObrasResponse enriquecerConSemaforo(RObrasResponse r) {
-        LocalDate hoy = LocalDate.now();
-        
-        // 1. Calcular días totales de la obra y días que faltan
-        long diasTotales = ChronoUnit.DAYS.between(r.fechaInicio(), r.fechaFin());
-        long diasRestantes = ChronoUnit.DAYS.between(hoy, r.fechaFin());
-        
-        // 2. Calcular el 15% de margen
-        double margen15 = diasTotales * 0.15;
-        
         String semaforo;
         String mensaje;
 
-        if (diasRestantes < 0) {
-            semaforo = "ROJO";
-            mensaje = "PLAZO VENCIDO (" + Math.abs(diasRestantes) + " días de retraso)";
-        } else if (diasRestantes <= margen15) {
-            semaforo = "AMARILLO";
-            mensaje = "ALERTA: Queda menos del 15% del tiempo (" + diasRestantes + " días)";
+        // --- NUEVA LÓGICA DE PAUSA ---
+        // Verificamos si el status es CIERRE (usando equals o comparando con tu Enum EStatus)
+        if ("CIERRE".equalsIgnoreCase(r.status())) {
+            semaforo = "GRIS"; // Color neutro para el CSS
+            mensaje = "OBRA CONCLUIDA / ETAPA DE CIERRE";
         } else {
-            semaforo = "VERDE";
-            mensaje = "EN TIEMPO (" + diasRestantes + " días restantes)";
+            // --- TU LÓGICA ORIGINAL DE CÁLCULO ---
+            LocalDate hoy = LocalDate.now();
+            
+            long diasTotales = ChronoUnit.DAYS.between(r.fechaInicio(), r.fechaFin());
+            long diasRestantes = ChronoUnit.DAYS.between(hoy, r.fechaFin());
+            
+            double margen15 = diasTotales * 0.15;
+
+            if (diasRestantes < 0) {
+                semaforo = "ROJO";
+                mensaje = "PLAZO VENCIDO (" + Math.abs(diasRestantes) + " días de retraso)";
+            } else if (diasRestantes <= margen15) {
+                semaforo = "AMARILLO";
+                mensaje = "ALERTA: Queda menos del 15% del tiempo (" + diasRestantes + " días)";
+            } else {
+                semaforo = "VERDE";
+                mensaje = "EN TIEMPO (" + diasRestantes + " días restantes)";
+            }
         }
 
-        // Devolvemos un nuevo Record con los campos calculados inyectados
+        // Devolvemos el Record con los datos (ya sean los calculados o los de "Pausa")
         return new RObrasResponse(
             r.id(), r.nombre(), r.cliente(), r.montoAntesIva(), 
             r.fechaInicio(), r.fechaFin(), r.noSemanas(), 

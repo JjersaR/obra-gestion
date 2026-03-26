@@ -35,6 +35,82 @@ async function cargarObra() {
   const archivos = await archivoResponse.json();
   pintarArchivos(archivos, obra.nombre);
   actualizarGastoManoObra(id);
+  // 1. REGISTRAMOS (Usa await para esperar a que se guarde)
+    await registrarIngreso(id); 
+    
+    // 2. CARGAMOS (Traemos la lista actualizada)
+    await cargarHistorialRevisiones(id);
+}
+
+async function registrarIngreso(idObra) {
+    // 1. Recuperamos el objeto del usuario que se guarda en el Login
+    const sesion = localStorage.getItem('usuarioLogueado');
+    
+    if (sesion) {
+        // 2. Lo convertimos de texto a un objeto real
+        const usuario = JSON.parse(sesion);
+        
+        // 3. Extraemos el nombre y el rol
+        const payload = {
+            obraId: idObra,
+            rol: usuario.tipoUsuario || "SIN_ROL", 
+            usuarioId: usuario.nombre || "ANÓNIMO"
+        };
+
+        // 4. Enviamos el registro real a Java
+        await fetch('/api/v1/visualizacion', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+    } else {
+        console.warn("No hay sesión iniciada. No se registrará la visualización.");
+    }
+}  
+
+async function cargarHistorialRevisiones(idObra) {
+    try {
+        const response = await fetch(`/api/v1/visualizacion/${idObra}`);
+        if (!response.ok) throw new Error("Error al obtener historial");
+
+        const revisiones = await response.json(); // Aquí se recibe la lista de Java
+
+        // --- AQUÍ ES DONDE SE MANDA A LLAMAR ---
+        pintarHistorial(revisiones); 
+
+    } catch (error) {
+        console.error("Fallo al cargar historial:", error);
+    }
+}
+
+function pintarHistorial(revisiones) {
+    const tbody = document.getElementById("tablaRevisiones");
+    if (!tbody) return; // Seguridad por si el elemento no existe
+
+    tbody.innerHTML = ""; // Limpiamos el "Nadie ha revisado..."
+
+    if (revisiones.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted p-4">Sin registros previos.</td></tr>`;
+        return;
+    }
+
+    revisiones.forEach(rev => {
+        const fechaObj = new Date(rev.fecha);
+        const fechaStr = fechaObj.toLocaleDateString('es-MX');
+        const horaStr = fechaObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+
+        const fila = `
+            <tr>
+                <td class="usuario-nombre">${rev.usuarioId}</td>
+                <td><span class="badge-rol">${rev.rol}</span></td>
+                <td class="fecha-hora">${fechaStr} • ${horaStr}</td>
+                <td class="text-center">
+                    <div class="status-icon"><i class="fas fa-check"></i></div>
+                </td>
+            </tr>
+        `;
+        tbody.insertAdjacentHTML("beforeend", fila);
+    });
 }
 
 function pintarObra(obra) {
