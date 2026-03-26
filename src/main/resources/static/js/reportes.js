@@ -370,7 +370,7 @@ function resetearEstadoSubida() {
   // Solo regresamos el botón a su estado normal y recargamos la tabla
   // cargarMovimientos() limpiará la tabla y traerá todo fresco del servidor
   const btn = document.getElementById("btnAgregar");
-  btn.textContent = "Subir requerimiento";
+  btn.textContent = "Agregar Reporte";
   modoAgregar = true;
   cargarMovimientos();
 }
