@@ -360,3 +360,78 @@ body {
     border-radius: 4px;
 }
 
+
+/* --- Estilos para la Tabla de Historial --- */
+
+/* 1. Fondo y Espaciado de la Tabla */
+.table-custom {
+    background: #ffffff;
+    border-radius: 8px;
+    font-size: 0.9rem; /* Un poco más pequeña pero legible */
+}
+
+/* 2. Cabeceras (Titulos) en Gris y Mayúsculas */
+.table-custom thead th {
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #a0aec0; /* Un gris suave pero claro */
+    font-size: 0.75rem;
+    letter-spacing: 0.8px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+/* 3. Filas y Celdas - Mejor espaciado */
+.table-custom tbody tr {
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #edf2f7; /* Líneas divisorias suaves */
+}
+
+.table-custom tbody tr:last-child {
+    border-bottom: none; /* Quitamos la línea final */
+}
+
+.table-custom tbody td {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    vertical-align: middle; /* Centrado vertical */
+    color: #4a5568; /* Un color de texto cómodo */
+}
+
+/* 4. Estilo para el Nombre del Usuario */
+.table-custom td.usuario-nombre {
+    font-weight: 600;
+    color: #2d3748; /* Más oscuro para que resalte */
+}
+
+/* 5. Estilo para el Rol (Badge) */
+.badge-rol {
+    background: #f7fafc; /* Fondo gris muy tenue */
+    color: #718096;      /* Texto gris */
+    font-size: 0.7rem;
+    padding: 6px 12px;
+    border-radius: 20px; /* Redondeado total */
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border: 1px solid #edf2f7;
+}
+
+/* 6. Estilo para la Fecha y Hora */
+.table-custom td.fecha-hora {
+    color: #a0aec0; /* Gris para la fecha (secundario) */
+    font-family: 'Courier New', Courier, monospace; /* Tipografía monospace para precisión */
+    font-weight: 400;
+}
+
+/* 7. Icono de Estado (Verde) */
+.status-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: #c6f6d5; /* Verde pastel suave */
+    color: #27ae60;      /* Tu verde de presupuesto */
+    border-radius: 50%; /* Círculo perfecto */
+}
