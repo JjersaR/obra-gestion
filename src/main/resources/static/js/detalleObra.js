@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 let id = "";
+let montoAcordadoGlobal = 0;
 
 function obtenerId() {
   // Busca el ID tanto si la URL es /detalles/123 como si es /detalles?id=123
@@ -33,14 +34,16 @@ async function cargarObra() {
 
   const archivos = await archivoResponse.json();
   pintarArchivos(archivos, obra.nombre);
+  actualizarGastoManoObra(id);
 }
 
 function pintarObra(obra) {
   document.getElementById("nombreObra").textContent = obra.nombre.toUpperCase();
   document.getElementById("fechaInicio").textContent = formatearFecha(obra.fechaInicio);
   document.getElementById("fechaFin").textContent = formatearFecha(obra.fechaFin);
-
+  montoAcordadoGlobal = Number(obra.montoAntesIva);
   document.getElementById("monto").textContent = "$" + Number(obra.montoAntesIva)
+  
     .toLocaleString("es-MX", { minimumFractionDigits: 2 });
 
   document.getElementById("gerente").textContent = obra.gerente;
@@ -110,3 +113,44 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
+async function actualizarGastoManoObra(movobraId) {
+    const url = `/api/v1/archivos/gasto-mano-obra/${movobraId}`;
+
+    try {
+        const response = await fetch(url);
+        const totalGasto = await response.json(); // Aquí recibimos los gastos
+        
+        // 1. Ponemos el monto en el cuadro de "GASTOS TOTALES"
+        const elementoGasto = document.getElementById('totalGastoManoObra');
+        if (elementoGasto) {
+            elementoGasto.innerText = new Intl.NumberFormat('es-MX', { 
+                style: 'currency', 
+                currency: 'MXN' 
+            }).format(totalGasto);
+        }
+
+        // 2. BUSCAMOS EL CUADRO DE ALERTA PARA PINTARLO
+        //  id="indicadorCostoDirecto" en html 
+        const elementoAlerta = document.getElementById('indicadorCostoDirecto');
+        
+        if (elementoAlerta) {
+            // COMPARA Lo gastado es más que el presupuesto
+            if (totalGasto > montoAcordadoGlobal) {
+                // CASO ROJO: Te pasaste 
+                elementoAlerta.textContent = "🚨 INDICADOR FUERA DE COSTO DIRECTO";
+                elementoAlerta.style.backgroundColor = "#ff4d4d"; 
+                elementoAlerta.style.color = "white";
+                elementoAlerta.style.border = "2px solid #b30000";
+            } else {
+                // CASO VERDE: Todo bajo control 
+                elementoAlerta.textContent = "✅ COSTO DENTRO DE PRESUPUESTO";
+                elementoAlerta.style.backgroundColor = "#2ecc71"; 
+                elementoAlerta.style.color = "white";
+                elementoAlerta.style.border = "2px solid #1d8348";
+            }
+        }
+
+    } catch (error) {
+        console.error("Error al traer la lana del Excel:", error);
+    }
+}

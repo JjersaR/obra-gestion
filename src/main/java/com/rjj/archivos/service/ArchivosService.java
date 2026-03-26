@@ -1,5 +1,5 @@
 package com.rjj.archivos.service;
-
+import com.rjj.archivos.controller.utils.ExcelUtils;
 import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
@@ -46,6 +46,22 @@ public class ArchivosService {
         tipoEntidad,
         movobraId,
         categoria);
+
+        // --- AQUÍ EMPIEZA lo del excel ---
+    if (categoria == ETipo.MANO_OBRA) {
+        try {
+            // Leemos el total directamente del archivo que acaba de llegar
+            double totalExtraido = ExcelUtils.extraerTotalNomina(file.getInputStream());
+            log.info("TOTAL extraido del Excel de Mano de Obra: {}", totalExtraido);
+            
+            // TODO: Aquí se llamaria al  ObraService para actualizar el Gasto Total
+            // obraService.actualizarGastoManoObra(movobraId, totalExtraido);
+            
+        } catch (Exception e) {
+            log.error("No se pudo leer el total del Excel: {}", e.getMessage());
+        }
+    }
+    // --- AQUÍ TERMINA LO NUEVO ---
 
     Archivos archivo = new Archivos();
     archivo.setBucket(determinarBucket(categoria));
@@ -166,4 +182,46 @@ public class ArchivosService {
   public List<IRequerimientosActivos> findByRequerimientosActivos(UUID movobraId) {
     return repository.findByRequerimientosActivos(movobraId);
   }
+
+ public double obtenerGastoTotalManoObra(UUID movobraId) {
+    double totalManoObra = 0.0;
+    double totalProveedores = 0.0;
+
+    System.out.println("=== INICIO DE DIAGNÓSTICO DE GASTOS ===");
+
+    try {
+        // 1. MANO_OBRA (Esto ya te funciona perfecto)
+        Archivos archivoMO = repository.findByMovobraIdAndCategoriaAndActualTrue(movobraId, ETipo.MANO_OBRA);
+        if (archivoMO != null) {
+            try (InputStream is = storageService.download(archivoMO.getBucket(), archivoMO.getUrl())) {
+                totalManoObra = ExcelUtils.extraerTotalNomina(is);
+                System.out.println("💰 Valor MO: " + totalManoObra);
+            }
+        }
+
+        // 2. PAGO_PROVEEDORES (El truco: buscamos en DOCUMENTOS si el otro falla)
+        Archivos archivoProv = repository.findByMovobraIdAndCategoriaAndActualTrue(movobraId, ETipo.DOCUMENTOS);
+        
+        // Si lo encontró y el nombre tiene la palabra "PROVEEDORES", lo procesamos
+        if (archivoProv != null && archivoProv.getNombre().toUpperCase().contains("PROVEEDORES")) {
+            System.out.println("✅ Archivo PROVEEDORES detectado en Documentos: " + archivoProv.getNombre());
+            try (InputStream is = storageService.download(archivoProv.getBucket(), archivoProv.getUrl())) {
+                totalProveedores = ExcelUtils.extraerTotalNomina(is);
+                System.out.println("💰 Valor Proveedores: " + totalProveedores);
+            }
+        } else {
+            System.out.println("⚠️ No se encontró archivo de proveedores con ese nombre en DOCUMENTOS");
+        }
+
+        return totalManoObra + totalProveedores;
+
+    } catch (Exception e) {
+        // Si hay un error (como que encuentre 2 archivos en docuemntos ), devolvemos al menos la Mano de Obra
+        System.err.println("🚨 Nota: " + e.getMessage());
+        return totalManoObra;
+    }
+}
+
+
+
 }
