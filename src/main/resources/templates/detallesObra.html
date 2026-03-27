@@ -95,22 +95,23 @@
       <div class="bloque-gastos"> 
           Gastos totales: <span id="totalGastoManoObra">$ 0.00</span>
       </div>
+
     </section>
-    <section class="historial-container" style="margin-top: 2rem;">
-        <div class="card border-0 shadow-sm" style="border-radius: 12px; background: white;">
-            <div class="card-body p-4">
-                <h5 class="card-title text-uppercase text-muted fw-bold mb-3" style="font-size: 0.9rem; letter-spacing: 1px;">
+    <section class="historial-container" >
+        <div class="historial-card">
+            <div class="historial-body">
+                <h5 class="historial-title" >
                     Historial de Visualizaciones
                 </h5>
                 
-                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                    <table class="table table-hover table-custom table-borderless mt-3" id="tablaHistorial">
+                <div class="table-responsive historial-scroll">
+                    <table class="table table-custom" id="tablaHistorial">
                         <thead>
                             <tr>
-                                <th class="ps-0">Usuario</th>
-                                <th>Rol</th>
-                                <th>Fecha y Hora</th>
-                                <th class="pe-0 text-center">Estado Visualizacion</th>
+                                <th>USUARIO</th>
+                                <th>ROL</th>
+                                <th>FECHA Y HORA</th>
+                                <th class="texto-centro">ESTADO DE VISUALIZACIÓN</th>
                             </tr>
                         </thead>
                         <tbody id="tablaRevisiones">
