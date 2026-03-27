@@ -361,77 +361,141 @@ body {
 }
 
 
-/* --- Estilos para la Tabla de Historial --- */
+/**************************Estilos para la Tabla de Historial ***********************/
+/*Contenedor del Historial*/
+.historial-container {
+    max-width: 1400px;
+    margin: 40px auto; 
+    width: 96%;
+}
 
-/* 1. Fondo y Espaciado de la Tabla */
+.historial-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+}
+
+.historial-body {
+    padding: 30px;
+}
+
+.historial-title {
+    font-size: 1.1rem;
+    color: #1e5d88; /* Azul corporativo OM */
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+/* Área con scroll si hay muchos registros */
+.historial-scroll {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 5px; /* Espacio para el scrollbar */
+}
+
+/* Scrollbar personalizado y estilizado */
+.historial-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.historial-scroll::-webkit-scrollbar-track {
+    background: #f1f5f9; 
+    border-radius: 4px;
+}
+.historial-scroll::-webkit-scrollbar-thumb {
+    background: #cbd5e1; 
+    border-radius: 4px;
+}
+.historial-scroll::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8; 
+}
+
+/*****DISEÑO DE LA TABLA "TABLE-CUSTOM"*/
 .table-custom {
-    background: #ffffff;
-    border-radius: 8px;
-    font-size: 0.9rem; /* Un poco más pequeña pero legible */
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
 }
 
-/* 2. Cabeceras (Titulos) en Gris y Mayúsculas */
+/* Encabezados modernos (Gris claro) */
+.table-custom thead {
+    position: sticky;
+    top: 0;
+    background-color: #f8fafc; /* Color de fondo para que no se transparente al hacer scroll */
+    z-index: 1;
+}
+
 .table-custom thead th {
+    background-color: #f1f5f9;
+    color: #4a5568;
+    font-size: 0.85rem;
     text-transform: uppercase;
-    font-weight: 700;
-    color: #a0aec0; /* Un gris suave pero claro */
-    font-size: 0.75rem;
-    letter-spacing: 0.8px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #edf2f7;
-}
-
-/* 3. Filas y Celdas - Mejor espaciado */
-.table-custom tbody tr {
-    transition: background-color 0.2s ease;
-    border-bottom: 1px solid #edf2f7; /* Líneas divisorias suaves */
-}
-
-.table-custom tbody tr:last-child {
-    border-bottom: none; /* Quitamos la línea final */
-}
-
-.table-custom tbody td {
-    padding-top: 14px;
-    padding-bottom: 14px;
-    vertical-align: middle; /* Centrado vertical */
-    color: #4a5568; /* Un color de texto cómodo */
-}
-
-/* 4. Estilo para el Nombre del Usuario */
-.table-custom td.usuario-nombre {
-    font-weight: 600;
-    color: #2d3748; /* Más oscuro para que resalte */
-}
-
-/* 5. Estilo para el Rol (Badge) */
-.badge-rol {
-    background: #f7fafc; /* Fondo gris muy tenue */
-    color: #718096;      /* Texto gris */
-    font-size: 0.7rem;
-    padding: 6px 12px;
-    border-radius: 20px; /* Redondeado total */
-    text-transform: uppercase;
+    padding: 14px 15px;
     font-weight: 700;
     letter-spacing: 0.5px;
-    border: 1px solid #edf2f7;
+    border-bottom: 2px solid #e2e8f0;
+    text-align: center;
 }
 
-/* 6. Estilo para la Fecha y Hora */
-.table-custom td.fecha-hora {
-    color: #a0aec0; /* Gris para la fecha (secundario) */
-    font-family: 'Courier New', Courier, monospace; /* Tipografía monospace para precisión */
-    font-weight: 400;
+/* Celdas del cuerpo */
+.table-custom tbody td {
+    padding: 15px;
+    color: #2c3e50;
+    font-size: 0.95rem;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
 }
 
-/* 7. Icono de Estado (Verde) */
-.status-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    background: #c6f6d5; /* Verde pastel suave */
-    color: #27ae60;      /* Tu verde de presupuesto */
-    border-radius: 50%; /* Círculo perfecto */
+/* Efecto hover en las filas */
+.table-custom tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.table-custom tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.texto-centro {
+    text-align: center !important;
+}
+
+/* ETIQUETAS Y BADGES (Para los datos de JS) */
+/* Etiqueta gris para el rol */
+.rol-etiqueta {
+    background-color: #e2e8f0;
+    color: #4a5568;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Píldoras de Estado (Visto / Pendiente) */
+.badge-estado {
+    display: inline-block;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-visto {
+    background-color: #e6fffa;
+    color: #27ae60;
+    border: 1px solid #27ae60;
+}
+
+.badge-pendiente {
+    background-color: #fffaf0;
+    color: #f39c12;
+    border: 1px solid #f39c12;
 }
