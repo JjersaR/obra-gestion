@@ -87,31 +87,43 @@ function pintarHistorial(revisiones) {
     const tbody = document.getElementById("tablaRevisiones");
     if (!tbody) return; // Seguridad por si el elemento no existe
 
-    tbody.innerHTML = ""; // Limpiamos el "Nadie ha revisado..."
+    tbody.innerHTML = ""; // Limpiamos el nadie ha revisado
 
     if (revisiones.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted p-4">Sin registros previos.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4" class="texto-centro" style="padding: 20px; color: #718096;">Sin registros previos.</td></tr>`;
         return;
     }
 
     revisiones.forEach(rev => {
+      //Fecha y hora
         const fechaObj = new Date(rev.fecha);
-        const fechaStr = fechaObj.toLocaleDateString('es-MX');
-        const horaStr = fechaObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+        // Extraemos día, mes y año forzando 2 dígitos (ej. 05 en vez de 5)
+        const dia = String(fechaObj.getDate()).padStart(2, '0');
+        const mes = String(fechaObj.getMonth() + 1).padStart(2, '0');
+        const anio = fechaObj.getFullYear();
 
+        // Extraemos la hora directamente en formato 24 hrs
+        const horas = String(fechaObj.getHours()).padStart(2, '0');
+        const minutos = String(fechaObj.getMinutes()).padStart(2, '0');
+        // Armamos los textos limpios
+        const fechaLimpia = `${dia}/${mes}/${anio}`;
+        const horaFinal = `${horas}:${minutos} hrs`; // Le agregamos "hrs"
+
+        //Inyección del html
         const fila = `
             <tr>
-                <td class="usuario-nombre">${rev.usuarioId}</td>
-                <td><span class="badge-rol">${rev.rol}</span></td>
-                <td class="fecha-hora">${fechaStr} • ${horaStr}</td>
-                <td class="text-center">
-                    <div class="status-icon"><i class="fas fa-check"></i></div>
+                <td><strong> ${rev.usuarioId} </strong></td>
+                <td><span class="rol-etiqueta"> ${rev.rol} </span></td>
+                <td>${fechaLimpia} a las ${horaFinal}</td>
+                <td class="texto-centro">
+                    <span class="badge-estado badge-visto">Visto</span>
                 </td>
             </tr>
         `;
         tbody.insertAdjacentHTML("beforeend", fila);
     });
 }
+
 
 function pintarObra(obra) {
   document.getElementById("nombreObra").textContent = obra.nombre.toUpperCase();
