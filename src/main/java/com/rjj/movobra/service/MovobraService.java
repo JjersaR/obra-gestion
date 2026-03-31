@@ -11,6 +11,7 @@ import com.rjj.movobra.controller.dto.IMovObraMapper;
 import com.rjj.movobra.controller.dto.IMovObraTabla;
 import com.rjj.movobra.controller.dto.RMovObraRequest;
 import com.rjj.movobra.controller.dto.RMovObraUpdateRequest;
+import com.rjj.movobra.controller.dto.RPago;
 import com.rjj.movobra.entity.ETipo;
 import com.rjj.movobra.repository.IMovobraRepository;
 import com.rjj.usuarios.service.CustomUserDetails;
@@ -57,9 +58,9 @@ public class MovobraService {
   }
 
   @Transactional
-  public void actualizarPagado(UUID movobraId) {
-    var movobra = repository.findById(movobraId).get();
-    movobra.setPagado(true);
+  public void actualizarPagado(RPago request) {
+    var movobra = repository.findById(request.id()).get();
+    movobra.setPagado(request.pagado());
     repository.save(movobra);
   }
 }

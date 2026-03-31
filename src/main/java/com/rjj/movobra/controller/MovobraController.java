@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rjj.movobra.controller.dto.IMovObraTabla;
 import com.rjj.movobra.controller.dto.RMovObraRequest;
 import com.rjj.movobra.controller.dto.RMovObraUpdateRequest;
+import com.rjj.movobra.controller.dto.RPago;
 import com.rjj.movobra.service.MovobraService;
 
 import lombok.RequiredArgsConstructor;
@@ -49,9 +50,9 @@ public class MovobraController {
     return ResponseEntity.noContent().build();
   }
 
-  @PutMapping("/pago/{id}")
-  public ResponseEntity<Void> actualizarPagado(@PathVariable UUID id) {
-    service.actualizarPagado(id);
+  @PutMapping("/pago")
+  public ResponseEntity<Void> actualizarPagado(@RequestBody RPago request) {
+    service.actualizarPagado(request);
     return ResponseEntity.noContent().build();
   }
 
