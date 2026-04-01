@@ -121,7 +121,7 @@ function ocultarElementosParaNoLogueado() {
 function controlarColumnasPorRol() {
   const columnasAdmin = document.querySelectorAll(".col-admin");
   columnasAdmin.forEach(col => col.style.display = "none"); // Ocultar por defecto
-  const rolesAutorizados = ['ADMINISTRACION', 'GERENTE', 'RESIDENTE'];
+  const rolesAutorizados = ['ADMINISTRACION', 'GERENTE', 'RESIDENTE', 'COMPRAS'];
   if (usuario && rolesAutorizados.includes(usuario.tipoUsuario)) {
     columnasAdmin.forEach(col => col.style.display = ""); // Mostrar
   }
@@ -129,7 +129,7 @@ function controlarColumnasPorRol() {
 
 /**
  * Controla la visibilidad de los botones 'Subir requerimiento' y 'Actualizar'.
- * - RESIDENTE: Puede ver y usar "Subir requerimiento".
+ * - RESIDENTE o COMPRAS: Puede ver y usar "Subir requerimiento".
  * - GERENTE/ADMINISTRACION: Pueden ver y usar "Actualizar".
  */
 function controlarBotonesPorRol() {
@@ -144,6 +144,7 @@ function controlarBotonesPorRol() {
 
   switch (usuario.tipoUsuario) {
     case 'RESIDENTE':
+    case 'COMPRAS':
       if (btnAgregar) btnAgregar.style.display = "block";
       break;
     case 'GERENTE':
@@ -193,7 +194,7 @@ function puedeSubir() {
   if (!usuario) return false;
 
   // RESIDENTE siempre puede subir
-  if (usuario.tipoUsuario === 'RESIDENTE') return true;
+  if (usuario.tipoUsuario === 'RESIDENTE' || usuario.tipoUsuario === 'COMPRAS') return true;
 
   // GERENTE y ADMINISTRACION siempre pueden subir
   if (usuario.tipoUsuario === 'GERENTE' || usuario.tipoUsuario === 'ADMINISTRACION') return true;
@@ -210,7 +211,7 @@ function puedeDescargar(estado) {
   if (!usuario) return false;
 
   // Residentes NO pueden descargar (solo subir)
-  if (usuario.tipoUsuario === 'RESIDENTE') return false;
+  if (usuario.tipoUsuario === 'RESIDENTE' || usuario.tipoUsuario === 'COMPRAS') return false;
 
   // Gerente y Administración pueden descargar siempre (para revisar)
   if (usuario.tipoUsuario === 'GERENTE' || usuario.tipoUsuario === 'ADMINISTRACION') {
@@ -416,17 +417,15 @@ async function actualizarTabla() {
     // Para pagado, solo procesamos si existe el checkbox (solo ADMIN lo ve)
     if (pagadoCheckbox) {
 
-      const original = pagadoCheckbox.dataset.original === "true";
-      const actual = pagadoCheckbox.checked;
+      const pagado = pagadoCheckbox.checked;
 
-      if (original !== actual) {
-        // Solo agregamos a updatesPago si el checkbox existe
-        // Nota: No podemos comparar con el valor original fácilmente,
-        // así que enviaremos siempre. El backend debe manejarlo.
-        updatesPago.push({
-          id
-        });
-      }
+      // Solo agregamos a updatesPago si el checkbox existe
+      // Nota: No podemos comparar con el valor original fácilmente,
+      // así que enviaremos siempre. El backend debe manejarlo.
+      updatesPago.push({
+        id: id,
+        pagado: pagado
+      });
     }
 
     // Solo agregamos a la lista si hay al menos un campo que haya cambiado (opcional, pero eficiente)
@@ -472,7 +471,7 @@ async function actualizarTabla() {
     }
     if (updatesPago.length > 0) {
       const pagoPromises = updatesPago.map(item =>
-        actualizarPago(item.id)
+        actualizarPago(item.id, item.pagado)
       );
       promises.push(...pagoPromises);
     }
@@ -524,9 +523,13 @@ async function actualizarCampo(id, data) {
  * Actualiza SOLO el estado de pagado en el endpoint específico.
  * @param {string|number} id - ID del movimiento.
  */
-async function actualizarPago(id) {
-  const response = await fetch(`/api/v1/movobra/pago/${id}`, {
-    method: "PUT"
+async function actualizarPago(id, pagado) {
+  const response = await fetch(`/api/v1/movobra/pago`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ id: id, pagado: pagado })
   });
 
   if (!response.ok) {
