@@ -450,6 +450,7 @@ body {
     font-size: 0.95rem;
     border-bottom: 1px solid #f1f5f9;
     vertical-align: middle;
+    text-align: center;
 }
 
 /* Efecto hover en las filas */

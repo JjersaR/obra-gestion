@@ -17,8 +17,8 @@ function obtenerId() {
 
 async function cargarObra() {
   id = obtenerId();
+  //cargar datos de la obra
   const obraResponse = await fetch(`/api/v1/obras/detalles/${id}`);
-
   if (!obraResponse.ok) {
     throw new Error("No se pudo obtener la obra");
   }
@@ -26,14 +26,19 @@ async function cargarObra() {
   const obra = await obraResponse.json();
   document.title = `Detalle - ${obra.nombre}`;
   pintarObra(obra);
-  const archivoResponse = await fetch(`/api/v1/archivos/${id}`);
 
+  ///cargar archivos 
+  const archivoResponse = await fetch(`/api/v1/archivos/${id}`);
   if (!archivoResponse.ok) {
     throw new Error("No se pudo obtener el archivo");
   }
 
-  const archivos = await archivoResponse.json();
+  const textoArchivos = await archivoResponse.text();
+  // Si Java manda en blanco, forzamos un arreglo vacío [], si trae datos los convertimos a JSON
+  const archivos = textoArchivos ? JSON.parse(textoArchivos) : [];
   pintarArchivos(archivos, obra.nombre);
+
+
   actualizarGastoManoObra(id);
   // 1. REGISTRAMOS (Usa await para esperar a que se guarde)
     await registrarIngreso(id); 
@@ -41,6 +46,9 @@ async function cargarObra() {
     // 2. CARGAMOS (Traemos la lista actualizada)
     await cargarHistorialRevisiones(id);
 }
+
+
+
 
 async function registrarIngreso(idObra) {
     // 1. Recuperamos el objeto del usuario que se guarda en el Login
@@ -57,12 +65,19 @@ async function registrarIngreso(idObra) {
             usuarioId: usuario.nombre || "ANÓNIMO"
         };
 
-        // 4. Enviamos el registro real a Java
-        await fetch('/api/v1/visualizacion', {
+        // CORRECCIÓN: Agregamos try...catch para que, si falla en la obra 2, no detenga la pantalla
+        try{
+          const response =await fetch('/api/v1/visualizacion', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
+        if (!response.ok) {
+                console.warn("El servidor no pudo registrar la visita. Código:", response.status);
+            }
+        } catch (error) {
+            console.error("Error de red al intentar registrar la visualización:", error);
+        }
     } else {
         console.warn("No hay sesión iniciada. No se registrará la visualización.");
     }
@@ -96,18 +111,32 @@ function pintarHistorial(revisiones) {
 
     revisiones.forEach(rev => {
       //Fecha y hora
-        const fechaObj = new Date(rev.fecha);
-        // Extraemos día, mes y año forzando 2 dígitos (ej. 05 en vez de 5)
-        const dia = String(fechaObj.getDate()).padStart(2, '0');
-        const mes = String(fechaObj.getMonth() + 1).padStart(2, '0');
-        const anio = fechaObj.getFullYear();
+        let fechaLimpia = "---";
+        let horaFinal = "--- hrs";
 
-        // Extraemos la hora directamente en formato 24 hrs
-        const horas = String(fechaObj.getHours()).padStart(2, '0');
-        const minutos = String(fechaObj.getMinutes()).padStart(2, '0');
-        // Armamos los textos limpios
-        const fechaLimpia = `${dia}/${mes}/${anio}`;
-        const horaFinal = `${horas}:${minutos} hrs`; // Le agregamos "hrs"
+        if (rev.fecha) {
+            // Si la fecha de Java no indica la zona horaria, le agregamos una 'Z' (Zulu/UTC)
+            // Esto le dice al navegador: "Oye, esta hora es de Londres"
+            let fechaUTC = rev.fecha;
+            if (!fechaUTC.endsWith('Z') && !fechaUTC.includes('+')) {
+                fechaUTC += 'Z'; 
+            }
+
+            // Al crear el Date, tu navegador le resta automáticamente tus 6 horas locales
+            const fechaObj = new Date(fechaUTC);
+
+            // Extraemos el día, mes y año ya convertidos a tu zona horaria
+            const dia = String(fechaObj.getDate()).padStart(2, '0');
+            const mes = String(fechaObj.getMonth() + 1).padStart(2, '0');
+            const anio = fechaObj.getFullYear();
+
+            // Extraemos la hora local asegurando el formato de 24 horas (00 a 23)
+            const horas = String(fechaObj.getHours()).padStart(2, '0');
+            const minutos = String(fechaObj.getMinutes()).padStart(2, '0');
+
+            fechaLimpia = `${dia}/${mes}/${anio}`;
+            horaFinal = `${horas}:${minutos} hrs`;
+        }
 
         //Inyección del html
         const fila = `
