@@ -48,7 +48,8 @@ function configurarBotones() {
   const btnActualizar = document.getElementById("btnActualizar");
   if (btnActualizar) {
     btnActualizar.addEventListener("click", actualizarTabla);
-  }
+ 
+   }
 }
 
 // --- Funciones de Utilidad (IDs, Fechas) ---
