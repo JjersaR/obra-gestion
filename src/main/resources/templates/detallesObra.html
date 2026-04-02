@@ -6,6 +6,7 @@
     <title>Cargando Obra...</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap">
     <link rel="stylesheet" href="/css/detallesObra.css">
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -97,6 +98,20 @@
       </div>
 
     </section>
+
+  <div class="visualizadores-seccion" style="margin-top: 25px; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden;">
+    <div style="background: #edf2f7; padding: 10px; display: flex; gap: 10px; border-bottom: 1px solid #e2e8f0;">
+        <button onclick="verPdf()" class="btn-visor">📄 Ver Reporte Semanal</button>
+    </div>
+
+    <div id="visorPrincipal" style="height: 600px; background: #ffffff; position: relative;">
+        <div id="mensajeVisor" style="text-align: center; padding-top: 250px; color: #a0aec0;">
+            Selecciona una opción arriba para visualizar el contenido.
+        </div>
+    </div>
+</div>
+
+
     <section class="historial-container" >
         <div class="historial-card">
             <div class="historial-body">

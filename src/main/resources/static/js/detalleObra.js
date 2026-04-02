@@ -45,6 +45,8 @@ async function cargarObra() {
     
     // 2. CARGAMOS (Traemos la lista actualizada)
     await cargarHistorialRevisiones(id);
+    // Solo buscamos si hay reportes, pero NO los mostramos ni descargamos todavía
+    await cargarDatosVisualizadores(id);
 }
 
 
@@ -269,5 +271,50 @@ async function actualizarGastoManoObra(movobraId) {
 
     } catch (error) {
         console.error("Error al traer la lana del Excel:", error);
+    }
+}
+
+
+// --- LÓGICA DE VISUALIZACIÓN MIXTA ---
+// Variable para guardar los datos y no pedirlos cada vez
+let datosReporteAceptado = null;
+
+async function cargarDatosVisualizadores(idObra) {
+    try {
+        // Buscamos el reporte en tu historial de REPORTES/REPORTES
+        const res = await fetch(`/api/v1/movobra/${idObra}/REPORTES/REPORTES`);
+        if (res.ok) {
+            const movimientos = await res.json();
+            // Buscamos el último ACEPTADO
+            datosReporteAceptado = movimientos.reverse().find(m => m.estado === "ACEPTADO");
+        }
+    } catch (e) {
+        console.error("Error al buscar reportes:", e);
+    }
+}
+
+async function verPdf() {
+    const visor = document.getElementById('visorPrincipal');
+    
+    // 1. Limpiamos el visor antes de empezar para que no se vea el viejo mientras carga
+    visor.innerHTML = `<div style="text-align:center; padding-top:250px;">⏳ Cargando el reporte más reciente...</div>`;
+
+    if (!datosReporteAceptado) {
+        visor.innerHTML = `<div style="text-align:center; padding-top:250px; color:#e53e3e;">⚠️ No hay reportes aceptados.</div>`;
+        return;
+    }
+
+    try {
+        const urlFetch = `/api/v1/archivos/descargar?categoria=${encodeURIComponent(datosReporteAceptado.bucket)}&url=${encodeURIComponent(datosReporteAceptado.url)}`;
+        const res = await fetch(urlFetch);
+        const blob = await res.blob();
+        
+        // 2. IMPORTANTE: Creamos una URL nueva cada vez
+        const urlVistaPrevia = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+
+        visor.innerHTML = `<iframe src="${urlVistaPrevia}" width="100%" height="100%" style="border:none;"></iframe>`;
+        
+    } catch (err) {
+        visor.innerHTML = `<div style="text-align:center; padding-top:250px;">❌ Error al conectar con el servidor.</div>`;
     }
 }
