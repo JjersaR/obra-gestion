@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rjj.movobra.controller.dto.IMovObraTabla;
+import com.rjj.movobra.controller.dto.RJefe;
 import com.rjj.movobra.controller.dto.RMovObraRequest;
 import com.rjj.movobra.controller.dto.RMovObraUpdateRequest;
 import com.rjj.movobra.controller.dto.RPago;
@@ -53,6 +54,12 @@ public class MovobraController {
   @PutMapping("/pago")
   public ResponseEntity<Void> actualizarPagado(@RequestBody RPago request) {
     service.actualizarPagado(request);
+    return ResponseEntity.noContent().build();
+  }
+
+  @PutMapping("/jefecito")
+  public ResponseEntity<Void> actualizarJefe(@RequestBody RJefe request) {
+    service.actualizarJefe(request);
     return ResponseEntity.noContent().build();
   }
 

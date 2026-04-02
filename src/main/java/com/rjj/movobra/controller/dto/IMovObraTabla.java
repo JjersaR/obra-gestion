@@ -21,5 +21,7 @@ public interface IMovObraTabla {
 
   boolean getPagado();
 
+  boolean getJefe();
+
   String getNombreobra();
 }

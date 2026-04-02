@@ -53,6 +53,8 @@ public class Movobra {
 
   private boolean pagado = false;
 
+  private boolean jefe = false;
+
   // Audit fields
   @CreatedDate
   @Column(name = "creado_en")

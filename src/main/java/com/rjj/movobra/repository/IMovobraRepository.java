@@ -31,7 +31,8 @@ public interface IMovobraRepository extends JpaRepository<Movobra, UUID> {
         -- Movimiento
         mo.estado,
         mo.observaciones,
-          mo.pagado,
+        mo.pagado,
+        mo.jefe,
 
           -- Obra
           o.nombre nombreobra

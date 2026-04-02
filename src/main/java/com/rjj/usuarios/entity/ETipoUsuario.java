@@ -5,6 +5,7 @@ public enum ETipoUsuario {
   GERENTE,
   CONTADOR,
   ADMINISTRACION,
+  JEFE,
   COMPRAS,
   PRESUPUESTOS
 }

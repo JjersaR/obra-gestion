@@ -48,8 +48,7 @@ function configurarBotones() {
   const btnActualizar = document.getElementById("btnActualizar");
   if (btnActualizar) {
     btnActualizar.addEventListener("click", actualizarTabla);
- 
-   }
+  }
 }
 
 // --- Funciones de Utilidad (IDs, Fechas) ---
@@ -116,15 +115,22 @@ function ocultarElementosParaNoLogueado() {
 }
 
 /**
- * Controla la visibilidad de la columna 'Pagado' (col-admin).
- * Solo visible para ADMINISTRACION.
+ * Controla la visibilidad de las columnas de acuerdo al rol.
  */
 function controlarColumnasPorRol() {
   const columnasAdmin = document.querySelectorAll(".col-admin");
-  columnasAdmin.forEach(col => col.style.display = "none"); // Ocultar por defecto
-  const rolesAutorizados = ['ADMINISTRACION', 'GERENTE', 'RESIDENTE', 'COMPRAS'];
-  if (usuario && rolesAutorizados.includes(usuario.tipoUsuario)) {
-    columnasAdmin.forEach(col => col.style.display = ""); // Mostrar
+  const columnasJefe = document.querySelectorAll(".col-jefe");
+
+  // Ocultar por defecto
+  columnasAdmin.forEach(col => col.style.display = "none");
+  columnasJefe.forEach(col => col.style.display = "none");
+
+  // Mostrar según el rol
+  if (usuario) {
+    if (usuario.tipoUsuario === 'ADMINISTRACION' || usuario.tipoUsuario === 'JEFE' || usuario.tipoUsuario === 'GERENTE' || usuario.tipoUsuario === 'RESIDENTE') {
+      columnasAdmin.forEach(col => col.style.display = "");
+      columnasJefe.forEach(col => col.style.display = "");
+    }
   }
 }
 
@@ -151,6 +157,10 @@ function controlarBotonesPorRol() {
     case 'ADMINISTRACION':
       if (btnActualizar) btnActualizar.style.display = "block";
       break;
+    case 'JEFE':
+      // JEFE puede ver el botón Actualizar para guardar validaciones
+      if (btnActualizar) btnActualizar.style.display = "block";
+      break;
     case 'COMPRAS':
       if (btnAgregar && hayArchivoAceptado()) {
         btnAgregar.style.display = "block";
@@ -173,13 +183,6 @@ function hayArchivoAceptado() {
   }
 
   return movimientosGlobal.some(mov => mov.estado === 'ACEPTADO');
-}
-
-function puedeEditar() {
-  return usuario && (
-    usuario.tipoUsuario === "GERENTE" ||
-    usuario.tipoUsuario === "ADMINISTRACION"
-  );
 }
 
 /**
@@ -231,7 +234,7 @@ function puedeDescargar(estado) {
   }
 
   // Gerente y Administración pueden descargar siempre (para revisar)
-  if (usuario.tipoUsuario === 'GERENTE' || usuario.tipoUsuario === 'ADMINISTRACION') {
+  if (usuario.tipoUsuario === 'GERENTE' || usuario.tipoUsuario === 'ADMINISTRACION' || usuario.tipoUsuario === 'JEFE') {
     return true;
   }
 
@@ -348,6 +351,24 @@ function pintarTabla(movimientos) {
       }
     }
 
+    // --- Validación para JEFE ---
+    let validacionHtml = '<td class="col-jefe"></td>';
+    if (usuario) {
+      const estaRechazado = mov.estado === "RECHAZADO";
+
+      if (usuario.tipoUsuario === 'JEFE') {
+        // Si es JEFE: Puede editar SIEMPRE Y CUANDO no esté rechazado
+        if (estaRechazado) {
+          validacionHtml = `<td class="col-jefe"><input type="checkbox" disabled ${mov.jefe ? "checked" : ""} title="No se puede validar un requerimiento rechazado"></td>`;
+        } else {
+          validacionHtml = `<td class="col-jefe"><input type="checkbox" class="validacion-checkbox" data-id="${mov.movobraid}" ${mov.jefe ? "checked" : ""}></td>`;
+        }
+      } else {
+        // OTROS ROLES: Solo lectura
+        validacionHtml = `<td class="col-jefe"><input type="checkbox" disabled ${mov.jefe ? "checked" : ""}></td>`;
+      }
+    }
+
     // Construcción de la fila
     const fila = document.createElement('tr');
     fila.dataset.id = mov.movobraid;
@@ -359,6 +380,7 @@ function pintarTabla(movimientos) {
       <td>${estadoHtml}</td>
       ${obsHtml}
       ${pagadoHtml}
+      ${validacionHtml}
     `;
 
     tbody.appendChild(fila);
@@ -419,6 +441,7 @@ async function actualizarTabla() {
   const filas = document.querySelectorAll("#tablaBody tr");
   const updates = [];
   const updatesPago = [];
+  const updatesValidacion = [];
 
   filas.forEach(fila => {
     const id = fila.dataset.id;
@@ -427,6 +450,7 @@ async function actualizarTabla() {
     const estadoSelect = fila.querySelector(".estado-select");
     const observacionesTd = fila.querySelector(".observaciones");
     const pagadoCheckbox = fila.querySelector(".pagado-checkbox");
+    const validacionCheckbox = fila.querySelector(".validacion-checkbox");
 
     const estado = estadoSelect ? estadoSelect.value : null;
     const observaciones = observacionesTd ? observacionesTd.innerText.trim() : null;
@@ -445,6 +469,15 @@ async function actualizarTabla() {
       });
     }
 
+    // Para validación (JEFE)
+    if (validacionCheckbox) {
+      const jefeValidacion = validacionCheckbox.checked;
+      updatesValidacion.push({
+        id: id,
+        jefe: jefeValidacion
+      });
+    }
+
     // Solo agregamos a la lista si hay al menos un campo que haya cambiado (opcional, pero eficiente)
     // Por simplicidad, enviaremos todos los que tengan datos. El backend debe manejar qué campos actualizar.
     if (estado || observaciones !== null) {
@@ -456,7 +489,7 @@ async function actualizarTabla() {
     }
   });
 
-  if (updates.length === 0 && updatesPago.length === 0) {
+  if (updates.length === 0 && updatesPago.length === 0 && updatesValidacion.length === 0) {
     Swal.fire({
       title: 'Sin cambios',
       text: 'No hay datos para actualizar',
@@ -491,6 +524,13 @@ async function actualizarTabla() {
         actualizarPago(item.id, item.pagado)
       );
       promises.push(...pagoPromises);
+    }
+
+    if (updatesValidacion.length > 0) {
+      const validacionPromises = updatesValidacion.map(item =>
+        actualizarValidacion(item.id, item.jefe)
+      );
+      promises.push(...validacionPromises);
     }
 
     await Promise.all(promises);
@@ -555,6 +595,26 @@ async function actualizarPago(id, pagado) {
   }
 }
 
+/**
+ * Actualiza la validación del JEFE en el endpoint específico.
+ * @param {string|number} id - ID del movimiento.
+ * @param {boolean} jefeValidacion - Nuevo estado de validación.
+ */
+async function actualizarValidacion(id, jefe) {
+  const response = await fetch(`/api/v1/movobra/jefecito`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ id: id, jefe: jefe })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Error al actualizar validación: ${response.status} ${errorText}`);
+  }
+}
+
 // --- Lógica de Subida de Archivos (Solo RESIDENTE) ---
 
 /**
@@ -604,6 +664,7 @@ function agregarFila() {
     <td></td>
     <td></td>
     <td class="col-admin"></td>
+    <td class="col-jefe"></td>
   `;
 
   tbody.appendChild(fila);

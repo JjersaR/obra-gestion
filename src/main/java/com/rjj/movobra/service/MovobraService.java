@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.rjj.movobra.controller.dto.IMovObraMapper;
 import com.rjj.movobra.controller.dto.IMovObraTabla;
+import com.rjj.movobra.controller.dto.RJefe;
 import com.rjj.movobra.controller.dto.RMovObraRequest;
 import com.rjj.movobra.controller.dto.RMovObraUpdateRequest;
 import com.rjj.movobra.controller.dto.RPago;
@@ -61,6 +62,13 @@ public class MovobraService {
   public void actualizarPagado(RPago request) {
     var movobra = repository.findById(request.id()).get();
     movobra.setPagado(request.pagado());
+    repository.save(movobra);
+  }
+
+  @Transactional
+  public void actualizarJefe(RJefe request) {
+    var movobra = repository.findById(request.id()).get();
+    movobra.setJefe(request.jefe());
     repository.save(movobra);
   }
 }
