@@ -168,7 +168,9 @@ function pintarObra(obra) {
   document.getElementById("gerente").textContent = obra.gerente;
   document.getElementById("residente").textContent = obra.residente;
   document.getElementById("status").textContent = obra.status;
-
+// --- AGREGA ESTA LÍNEA ---
+  // Guardamos el estatus para que 'requerimientos.js' sepa si puede dejar subir archivos
+  localStorage.setItem(`estatus_obra_${id}`, obra.status);
   // --- LÓGICA DEL SEMÁFORO (Indicador de Programa) ---
   const alertaPrograma = document.getElementById("indicadorPrograma");
   

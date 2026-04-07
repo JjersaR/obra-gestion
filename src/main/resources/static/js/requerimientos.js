@@ -143,6 +143,20 @@ function controlarBotonesPorRol() {
   const btnAgregar = document.getElementById("btnAgregar");
   const btnActualizar = document.getElementById("btnActualizar");
 
+  // --- BLOQUEO VISUAL POR OBRA CERRADA ---
+  const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
+  if (estatusObra === "CIERRE") {
+    if (btnAgregar) {
+      btnAgregar.style.display = "block";
+      btnAgregar.disabled = true;
+      btnAgregar.textContent = "OBRA CERRADA";
+      btnAgregar.style.backgroundColor = "#94a3b8"; // Un color grisaceo
+    }
+    // Si quieres que tampoco puedan actualizar estados/observaciones cuando esté cerrada:
+    // if (btnActualizar) btnActualizar.style.display = "none"; 
+    return; 
+  }
+
   // Ocultar ambos por defecto
   if (btnAgregar) btnAgregar.style.display = "none";
   if (btnActualizar) btnActualizar.style.display = "none";
@@ -202,6 +216,12 @@ function puedeEditar() {
  */
 function puedeSubir() {
   if (!usuario) return false;
+
+  // 1. REVISAR SI LA OBRA ESTÁ CERRADA
+  const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
+  if (estatusObra === "CIERRE") {
+    return false; // Si está cerrada, nadie sube nada.
+  }
 
   // RESIDENTE siempre puede subir
   if (usuario.tipoUsuario === 'RESIDENTE') return true;

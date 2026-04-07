@@ -86,7 +86,20 @@ function controlarBotonesPorRol() {
   if (btnActualizar) btnActualizar.style.display = "none";
 
   if (!usuario) return;
-
+// --- NUEVA LÓGICA DE BLOQUEO VISUAL ---
+  const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
+  if (estatusObra === "CIERRE") {
+    if (btnAgregar && usuario.tipoUsuario === 'RESIDENTE') {
+      btnAgregar.style.display = "block";
+      btnAgregar.disabled = true;
+      btnAgregar.textContent = "REPORTES BLOQUEADOS (OBRA CERRADA)";
+      btnAgregar.style.backgroundColor = "#475569"; // Gris azulado
+      btnAgregar.style.cursor = "not-allowed";
+    }
+    // El botón actualizar no se muestra si la obra está cerrada
+    return; 
+  }
+  // ---------------------------------------
   if (usuario.tipoUsuario === 'RESIDENTE') {
     if (btnAgregar) btnAgregar.style.display = "block";
   } else if (usuario.tipoUsuario === 'GERENTE') {
@@ -95,10 +108,24 @@ function controlarBotonesPorRol() {
 }
 
 function puedeEditar() {
+  // --- BLOQUEO POR OBRA CERRADA ---
+  const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
+  if (estatusObra === "CIERRE") return false;
+  // --------------------------------
+
   return usuario && usuario.tipoUsuario === "GERENTE";
 }
 
 function puedeSubir() {
+
+  if (!usuario) return false;
+
+  // --- BLOQUEO POR OBRA CERRADA ---
+  const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
+  if (estatusObra === "CIERRE") {
+    return false; 
+  }
+  // --------------------------------
   return usuario && usuario.tipoUsuario === 'RESIDENTE';
 }
 

@@ -1,8 +1,12 @@
+const usuarioLogueado = JSON.parse(localStorage.getItem('usuarioLogueado'));
 document.addEventListener("DOMContentLoaded", function () {
   getObras();
 
   // Activamos el filtro por status
   const selectFiltro = document.getElementById('filtroStatus');
+
+  // 
+
 
   if (selectFiltro) {
     selectFiltro.addEventListener('change', function() {
@@ -49,6 +53,9 @@ function generarTarjetas(obras) {
     grid.innerHTML = "<p>No hay obras registradas</p>";
     return;
   }
+// 2. Definimos quiénes tienen permiso de ver el botón de cierre
+  const rolesAutorizados = ['JEFE', 'GERENTE'];
+  const puedeCerrar = usuarioLogueado && rolesAutorizados.includes(usuarioLogueado.tipoUsuario);
 
   obras.forEach((obra, index) => {
     // 1. Mantenemos tus clases de estatus originales
@@ -63,54 +70,31 @@ function generarTarjetas(obras) {
     // 3. Aplicamos AMBAS clases a la tarjeta: la de ejecución y la del semáforo de tiempo
     const tarjeta = `
       <div class="obra-card ${statusClass} ${semaforoClass}" data-status="${obra.status}">
-
         <div class="obra-card-header">
           <span class="obra-id">OBRA ${numeroObra}</span>
           <span class="obra-status">${statusText}</span>
         </div>
 
         <div class="obra-card-body">
-          <p class="obra-detail-pair">
-            <strong>NOMBRE O NÚMERO:</strong>
-            <span>${obra.nombre}</span>
-          </p>
+          <p class="obra-detail-pair"><strong>NOMBRE O NÚMERO:</strong> <span>${obra.nombre}</span></p>
+          <p class="obra-detail-pair"><strong>CLIENTE:</strong> <span>${obra.cliente}</span></p>
+          <p class="obra-detail-pair"><strong>MONTO ANTES DE IVA:</strong> <span>$${Number(obra.montoAntesIva).toLocaleString("es-MX", { minimumFractionDigits: 2 })}</span></p>
+          <p class="obra-detail-pair"><strong>FECHA INICIO:</strong> <span>${formatearFecha(obra.fechaInicio)}</span></p>
+          <p class="obra-detail-pair"><strong>FECHA TERMINACIÓN:</strong> <span>${formatearFecha(obra.fechaFin)}</span></p>
 
-          <p class="obra-detail-pair">
-            <strong>CLIENTE:</strong>
-            <span>${obra.cliente}</span>
-          </p>
-
-          <p class="obra-detail-pair">
-            <strong>MONTO ANTES DE IVA:</strong>
-            <span>$${Number(obra.montoAntesIva).toLocaleString("es-MX", { minimumFractionDigits: 2 })}</span>
-          </p>
-
-          <p class="obra-detail-pair">
-            <strong>FECHA INICIO:</strong>
-            <span>${formatearFecha(obra.fechaInicio)}</span>
-          </p>
-
-          <p class="obra-detail-pair">
-            <strong>FECHA TERMINACIÓN:</strong>
-            <span>${formatearFecha(obra.fechaFin)}</span>
-          </p>
-
-          <div class="obra-tiempo-msg">
-            ${obra.mensajeTiempo}
-          </div>
+          <div class="obra-tiempo-msg">${obra.mensajeTiempo}</div>
 
           <div class="obra-actions" style="display: flex; gap: 10px; margin-top: 15px;">
             <a href="/obras/detalles/${obra.id}" class="btn-detalle" style="flex: 1; text-align: center; background-color: #2c3e50; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: 600;">
               DETALLES DE OBRA
             </a>
 
-            ${obra.status === 'EJECUCION' ? `
+            ${obra.status === 'EJECUCION' && puedeCerrar ? `
               <button onclick="confirmarCierreObra('${obra.id}')" class="btn-cerrar-obra" style="flex: 1; background: #e74c3c; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
                 CERRAR OBRA
               </button>
             ` : ''}
           </div>
-
         </div>
       </div>
     `;
@@ -129,6 +113,19 @@ function formatearFecha(fecha) {
 
 // Es para volver el Status de la obra a CIERRE
 function confirmarCierreObra(idObra) {
+
+  // 1. Validar roles permitidos: JEFE y GERENTE
+    const rolesAutorizados = ['JEFE', 'GERENTE'];
+    if (!usuarioLogueado || !rolesAutorizados.includes(usuarioLogueado.tipoUsuario)) {
+        Swal.fire({
+            title: 'Acceso Denegado',
+            text: 'Solo el perfil de JEFE o GERENTE puede cerrar obras.',
+            icon: 'error',
+            confirmButtonColor: '#2c3e50'
+        });
+        return; // Detenemos la ejecución
+    }
+
     Swal.fire({
         title: '¿Pasar obra a Cierre?',
         text: "Al confirmar, el estatus de esta obra cambiará permanentemente a CIERRE. ¿Estás seguro?",
@@ -173,8 +170,7 @@ async function ejecutarCambioEstatus(idObra, nuevoEstatus) {
             // Si un Residente intenta hacer trampa invocando la función, Java lo bloquea
             Swal.fire('Acceso Denegado', 'Solo el perfil de GERENTE puede cerrar obras.', 'error');
         } else {
-            Swal.fire('Error', 'No se pudo actualizar el estatus.', 'error');
-        }
+            Swal.fire('Acceso Denegado', 'No tienes los permisos suficientes (JEFE/GERENTE) para realizar esta acción.', 'error');} 
     } catch (error) {
         console.error("Error:", error);
         Swal.fire('Error de conexión', 'No pudimos comunicarnos con el servidor.', 'error');

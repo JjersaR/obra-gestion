@@ -146,6 +146,23 @@ function controlarBotonesPorRol() {
 
   if (!usuario) return;
 
+
+  // --- NUEVA LÓGICA DE BLOQUEO VISUAL ---
+  const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
+  if (estatusObra === "CIERRE") {
+    if (btnAgregar) {
+      btnAgregar.style.display = "block";
+      btnAgregar.disabled = true;
+      btnAgregar.textContent = "OBRA FINALIZADA";
+      btnAgregar.style.backgroundColor = "#64748b"; // Gris oscuro
+      btnAgregar.style.cursor = "not-allowed";
+    }
+    // Opcional: Si tampoco quieres que actualicen estados al cerrar, descomenta:
+    // if (btnActualizar) btnActualizar.style.display = "none";
+    return; // Salimos para no ejecutar el switch de abajo
+  }
+
+
   switch (usuario.tipoUsuario) {
     case 'RESIDENTE':
     case 'COMPRAS':
@@ -181,6 +198,10 @@ function hayArchivoAceptado() {
  * @returns {boolean}
  */
 function puedeEditar() {
+
+  // Si la obra está cerrada, ya no se debería poder editar la tabla
+  const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
+  if (estatusObra === "CIERRE") return false;
   return usuario && (
     usuario.tipoUsuario === "GERENTE" ||
     usuario.tipoUsuario === "ADMINISTRACION"
@@ -193,7 +214,11 @@ function puedeEditar() {
  */
 function puedeSubir() {
   if (!usuario) return false;
-
+// --- BLOQUEO POR OBRA CERRADA ---
+  const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
+  if (estatusObra === "CERRADA") {
+    return false; 
+  }
   // RESIDENTE siempre puede subir
   if (usuario.tipoUsuario === 'RESIDENTE' || usuario.tipoUsuario === 'COMPRAS') return true;
 
