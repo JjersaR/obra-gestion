@@ -20,11 +20,9 @@
                 <span class="view-subtitle">Gestión de Proyectos</span>
             </div>
         </div>
-        <div class="topbar-right">
-            <a th:href="@{/obras}" class="btn-back">
-                <span class="icon">←</span> Volver al Panel
-            </a>
-        </div>
+        <a th:href="@{/obras}" class="btn-back">
+            <span class="icon">←</span> Volver al Panel
+        </a>
     </header>
 
   <main class="main-content">
@@ -39,32 +37,34 @@
     </div>
 
     <section class="info-section">
-      <table class="tabla-generales">
-        <tr>
-          <td class="etiqueta">PROGRAMA : </td>
-          <td class="valor-texto">
-            <span id="fechaInicio"></span> al <span id="fechaFin"></span>
-          </td>
-
-          <td class="etiqueta">MONTO ACORDADO : </td>
-          <td class="valor-texto highlight-monto">
-            <span id="monto"></span>
-          </td>
-        </tr>
-
-        <tr>
-          <td class="etiqueta">RESPONSABLES : </td>
-          <td class="valor-texto info-responsables">
-           <strong> G:</strong> <span id="gerente"></span> &nbsp;|&nbsp; |
-           <strong> R:</strong><span id="residente"></span>
-          </td>
-
-          <td class="etiqueta">ESTADO ACTUAL : </td>
-          <td>
-            <span id="status"></span>
-          </td>
-        </tr>
-      </table>
+      <div class="table-container">
+          <table class="tabla-generales">
+            <tr>
+              <td class="etiqueta">PROGRAMA : </td>
+              <td class="valor-texto">
+                <span id="fechaInicio"></span> al <span id="fechaFin"></span>
+              </td>
+    
+              <td class="etiqueta">MONTO ACORDADO : </td>
+              <td class="valor-texto highlight-monto">
+                <span id="monto"></span>
+              </td>
+            </tr>
+    
+            <tr>
+              <td class="etiqueta">RESPONSABLES : </td>
+              <td class="valor-texto info-responsables">
+               <strong> G:</strong> <span id="gerente"></span> &nbsp;|&nbsp;
+               <strong> R:</strong><span id="residente"></span>
+              </td>
+    
+              <td class="etiqueta">ESTADO ACTUAL : </td>
+              <td>
+                <span id="status"></span>
+              </td>
+            </tr>
+          </table>
+      </div>
     </section>
 
     <div class="documentos-base-container">
@@ -72,9 +72,7 @@
       <div id="documentosGrid" class="documentos-grid"></div>
     </div>
 
-    <!-- BOTONES-->
     <section class="dashboard-grid">
-
       <a data-ruta="requerimientos" class="bloque-boton-claro">
         REQUERIMIENTOS CONSTRUCCIÓN: (MATERIAL, HERRAMIENTA, EQUIPO, SEGURIDAD)
       </a>
@@ -84,59 +82,51 @@
       <a data-ruta="pagoProveedores" class="bloque-boton-claro">
         PAGO A PROVEEDORES
       </a>
-
       <a data-ruta="reportes" class="bloque-boton-claro">
         REPORTE SEMANAL
       </a>
 
       <div id="indicadorPrograma" class="bloque-alerta"> INDICADOR FUERA DE PROGRAMA </div>
-      <div id="indicadorCostoDirecto" class="bloque-alerta"> 
-    Calculando presupuesto... 
-</div>
+      <div id="indicadorCostoDirecto" class="bloque-alerta"> Calculando presupuesto... </div>
       <div class="bloque-gastos"> 
           Gastos totales: <span id="totalGastoManoObra">$ 0.00</span>
       </div>
-
     </section>
 
-  <div class="visualizadores-seccion" style="margin-top: 25px; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden;">
-    <div style="background: #edf2f7; padding: 10px; display: flex; gap: 10px; border-bottom: 1px solid #e2e8f0;">
-        <button onclick="verPdf()" class="btn-visor">📄 Ver Reporte Semanal</button>
-    </div>
+    <div class="visualizadores-seccion" style="margin: 25px auto; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; width: 96%; max-width: 1500px;">
+        <div style="background: #edf2f7; padding: 10px; display: flex; gap: 10px; border-bottom: 1px solid #e2e8f0;">
+            <button onclick="verPdf()" class="btn-visor" style="padding: 10px 15px; cursor: pointer; border-radius: 5px; border: 1px solid #cbd5e1; font-weight: 600;">📄 Ver Reporte Semanal</button>
+        </div>
 
-    <div id="visorPrincipal" style="height: 600px; background: #ffffff; position: relative;">
-        <div id="mensajeVisor" style="text-align: center; padding-top: 250px; color: #a0aec0;">
-            Selecciona una opción arriba para visualizar el contenido.
+        <div id="visorPrincipal" style="min-height: 400px; height: 60vh; background: #ffffff; position: relative;">
+            <div id="mensajeVisor" style="text-align: center; padding-top: 150px; color: #a0aec0; padding-inline: 20px;">
+                Selecciona una opción arriba para visualizar el contenido.
+            </div>
         </div>
     </div>
-</div>
 
-
-    <section class="historial-container" >
+    <section class="historial-container">
         <div class="historial-card">
             <div class="historial-body">
-                <h5 class="historial-title" >
-                    Historial de Visualizaciones
-                </h5>
+                <h5 class="historial-title">Historial de Visualizaciones</h5>
                 
-                <div class="table-responsive historial-scroll">
-                    <table class="table table-custom" id="tablaHistorial">
+                <div class="table-container historial-scroll">
+                    <table class="table-custom" id="tablaHistorial">
                         <thead>
                             <tr>
                                 <th>USUARIO</th>
                                 <th>ROL</th>
                                 <th>FECHA Y HORA</th>
-                                <th class="texto-centro">ESTADO DE VISUALIZACIÓN</th>
+                                <th class="texto-centro">ESTADO</th>
                             </tr>
                         </thead>
-                        <tbody id="tablaRevisiones">
-                            </tbody>
+                        <tbody id="tablaRevisiones"></tbody>
                     </table>
                 </div>
             </div>
         </div>
     </section>
   </main>
-        <script src="/js/detalleObra.js"></script>
+  <script src="/js/detalleObra.js"></script>
 </body>
 </html>

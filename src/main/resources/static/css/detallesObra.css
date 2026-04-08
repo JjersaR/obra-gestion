@@ -181,7 +181,7 @@ body {
 
 .documentos-grid {
     display: grid; 
-    grid-template-columns: repeat(6, 1fr); /* 6 Tarjetas por fila SIEMPRE */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
     gap: 15px;
 }
 
@@ -499,4 +499,115 @@ body {
     background-color: #fffaf0;
     color: #f39c12;
     border: 1px solid #f39c12;
+}
+
+/* Envuelve tus tablas en el HTML con un <div class="table-container"> */
+.table-container {
+    width: 100%;
+    overflow-x: auto; /* Permite scroll lateral en móvil */
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 20px;
+}
+
+/* Ajuste para que la tabla no se colapse demasiado */
+.tabla-generales, .table-custom {
+    min-width: 600px; /* Evita que las columnas se amontonen en exceso */
+    width: 100%;
+}
+
+/* --- CORRECCIONES RESPONSIVAS --- */
+
+@media (max-width: 768px) {
+    /* 1. TOPBAR: Apilar elementos y centrar */
+    .topbar {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        padding: 20px 10px;
+    }
+
+    .topbar-left {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn-back {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* 2. SUBHEADER: Ajustar título */
+    .page-subheader h2 {
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+    .obra-highlight {
+        display: block;
+        margin-left: 0;
+        margin-top: 8px;
+        font-size: 1.3rem;
+    }
+
+    /* 3. TABLA INFORMATIVA: ¡Aquí está la solución al desborde! */
+    /* Forzamos a que la tabla se comporte como bloques, no como celdas */
+    .tabla-generales, 
+    .tabla-generales tbody, 
+    .tabla-generales tr, 
+    .tabla-generales td {
+        display: block;
+        width: 100% !important;
+    }
+
+    .tabla-generales tr {
+        border-bottom: 2px solid #eee;
+    }
+
+    .etiqueta {
+        background-color: #f8f9fa;
+        padding: 8px 15px !important;
+        width: 100% !important;
+        text-align: left;
+    }
+
+    .valor-texto {
+        padding: 10px 15px 20px 15px !important;
+        text-align: left;
+    }
+}
+
+@media (max-width: 600px) {
+    /* 4. CONTENEDORES: Menos margen lateral */
+    .info-section, .documentos-base-container, .dashboard-grid, .historial-container, .semaforo-banner {
+        width: 95%; 
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+    /* 5. DOCUMENTOS: 2 columnas en lugar de 6 */
+    .documentos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
+    }
+
+    .doc-item {
+        flex-direction: column; /* Icono arriba, texto abajo */
+        text-align: center;
+        padding: 15px 5px;
+    }
+
+    .doc-icon {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    /* 6. BOTONES GRANDES (DASHBOARD) */
+    .dashboard-grid {
+        grid-template-columns: 1fr; /* Uno por fila */
+    }
+
+    .bloque-boton, .bloque-boton-claro, .bloque-estatico-gris, .bloque-alerta, .bloque-gastos {
+        font-size: 0.9rem;
+        min-height: 80px;
+    }
 }

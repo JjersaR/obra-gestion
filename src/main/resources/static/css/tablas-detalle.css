@@ -102,3 +102,49 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
 }
+/* --- AJUSTES RESPONSIVOS PARA LA TABLA --- */
+
+@media (max-width: 768px) {
+    .table-container {
+        /* Reducimos el margen lateral de 30px a 10px para ganar espacio */
+        margin: 0 10px 20px 10px; 
+        padding: 10px;
+        /* IMPORTANTE: Esto permite que la tabla se deslice sin romper el resto de la web */
+        overflow-x: auto; 
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .custom-table {
+        /* Forzamos un ancho mínimo para que los datos no se encimen */
+        min-width: 700px; 
+    }
+
+    /* Ajustamos el encabezado para que no ocupe tanto espacio vertical */
+    .custom-table th {
+        font-size: 10px;
+        padding: 10px 5px;
+    }
+
+    .custom-table td {
+        font-size: 12px;
+        padding: 8px 5px;
+    }
+
+    /* Alineamos el botón de acción al centro en móviles */
+    .table-actions {
+        justify-content: center;
+    }
+
+    .btn-submit {
+        width: 100%; /* Botón ancho para que sea fácil de presionar */
+        padding: 15px;
+    }
+}
+
+/* Ajustes para pantallas muy pequeñas (celulares mini) */
+@media (max-width: 480px) {
+    .table-container {
+        margin: 0 5px 15px 5px;
+        border-radius: 8px;
+    }
+}

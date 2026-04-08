@@ -20,42 +20,46 @@
                 <span class="view-subtitle">Gestión de Proyectos</span>
             </div>
         </div>
-        <div class="topbar-right">
-            <a id="btnVolver" class="btn-back">
-                <span class="icon">←</span> Volver a Detalles
-            </a>
-        </div>
+        <a id="btnVolver" class="btn-back">
+            <span class="icon">←</span> Volver a Detalles
+        </a>
     </header>
 
     <main class="main-content">
         <div class="page-subheader">
             <div class="title-container">
-                <h2>REQUERIMIENTOS CONSTRUCCION: <span class="obra-highlight">(MATERIAL, HERRAMIENTA, EQUIPO, SEGURIDAD)</span></h2>
+                <h2>REQUERIMIENTOS CONSTRUCCION: 
+                    <span class="obra-highlight">(MATERIAL, HERRAMIENTA, EQUIPO, SEGURIDAD)</span>
+                </h2>
             </div>
         </div>
 
-        <section class="table-container">
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>no</th>
-                        <th>Fecha de subida</th>
-                        <th>rol</th>
-                        <th>Archivo</th>
-                        <th>Estado</th>
-                        <th>observaciones</th>
-                        <th class="col-admin">Pagado</th>
-                        <th class="col-jefe">Validación</th>
-                    </tr>
-                </thead>
-                <tbody id="tablaBody">
-                </tbody>
-            </table>
+        <section class="section-container">
+            
+            <div class="table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>no</th>
+                            <th>Fecha de subida</th>
+                            <th>rol</th>
+                            <th>Archivo</th>
+                            <th>Estado</th>
+                            <th>observaciones</th>
+                            <th class="col-admin">Pagado</th>
+                            <th class="col-jefe">Validación</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaBody">
+                        </tbody>
+                </table>
+            </div>
 
             <div class="table-actions">
                 <button id="btnAgregar" type="button" class="btn-submit">Subir requerimiento</button>
                 <button id="btnActualizar" type="button" class="btn-submit" style="display: none;">Actualizar</button>
             </div>
+            
         </section>
     </main>
 
