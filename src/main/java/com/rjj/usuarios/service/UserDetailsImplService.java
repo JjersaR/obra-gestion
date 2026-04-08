@@ -65,7 +65,7 @@ public class UserDetailsImplService implements UserDetailsService {
     log.debug("Usuario encontrado: {}", usuario.getNombre());
 
     return new CustomUserDetails(usuario.getId(), usuario.getNombre(), usuario.getEmail(), usuario.getPassword(),
-        usuario.getTipoUsuario().name(), usuario.isEnabled(), usuario.isAccountNoLocked(),
+        usuario.getTipoUsuario().name(), usuario.getCambioPassword(), usuario.isEnabled(), usuario.isAccountNoLocked(),
         usuario.isAccountNoExpired(), usuario.isCredentialNoExpired(), autoridades);
   }
 

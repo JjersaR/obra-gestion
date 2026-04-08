@@ -4,6 +4,7 @@ public record RUsuarioRegistrado(
     String id,
     String nombre,
     String tipoUsuario,
-    String email) {
+    String email,
+    boolean cambioPassword) {
 
 }

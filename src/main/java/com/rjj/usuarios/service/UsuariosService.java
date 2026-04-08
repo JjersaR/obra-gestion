@@ -1,6 +1,7 @@
 package com.rjj.usuarios.service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.rjj.usuarios.controller.dto.IUsuariosMapper;
+import com.rjj.usuarios.controller.dto.RCambioPassword;
+import com.rjj.usuarios.controller.dto.RContraOlvidada;
 import com.rjj.usuarios.controller.dto.RUsuarioCredencialesRequest;
 import com.rjj.usuarios.controller.dto.RUsuarioRegistrado;
 import com.rjj.usuarios.controller.dto.RUsuariosRequest;
@@ -61,11 +64,51 @@ public class UsuariosService {
               userDetails.getId().toString(),
               userDetails.getUsername(),
               userDetails.getTipoUsuario(),
-              userDetails.getEmail()));
+              userDetails.getEmail(),
+              userDetails.isCambioPassword()));
 
     } catch (AuthenticationException ex) {
       log.warn("Error de autenticación: {}", ex.getMessage());
       return Optional.empty();
+    }
+  }
+
+  public String contraOlvidada(RContraOlvidada request) {
+    try {
+      var usuario = repository.findByEmail(request.email())
+          .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+      var temp = UUID.randomUUID().toString();
+
+      usuario.setCambioPassword(true);
+      usuario.setPassword(encoder.encode(temp));
+
+      repository.save(usuario);
+
+      // TODO: PROXIMAMENTE SE ENVIARÁ TEMP POR EMAIL
+
+      return temp;
+    } catch (Exception e) {
+      log.warn("Error con el usuario: {}", e.getMessage());
+      return "";
+    }
+
+  }
+
+  public boolean cambiarPassword(RCambioPassword request) {
+    try {
+      var usuario = repository.findById(request.id()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+      if (usuario.getCambioPassword()) {
+        usuario.setCambioPassword(false);
+        usuario.setPassword(encoder.encode(request.password()));
+
+        repository.save(usuario);
+        return true;
+      }
+      return false;
+    } catch (Exception e) {
+      log.warn("Error con el usuario: {}", e.getMessage());
+      return false;
     }
   }
 

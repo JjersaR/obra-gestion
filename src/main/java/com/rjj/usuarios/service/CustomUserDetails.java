@@ -17,6 +17,7 @@ public class CustomUserDetails implements UserDetails {
   private final String email;
   private final String password;
   private final String tipoUsuario;
+  private final boolean cambioPassword;
   private final boolean enabled;
   private final boolean accountNonLocked;
   private final boolean accountNonExpired;

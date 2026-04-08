@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rjj.usuarios.controller.dto.RCambioPassword;
+import com.rjj.usuarios.controller.dto.RContraOlvidada;
 import com.rjj.usuarios.controller.dto.RUsuarioCredencialesRequest;
 import com.rjj.usuarios.controller.dto.RUsuarioRegistrado;
 import com.rjj.usuarios.controller.dto.RUsuariosRequest;
@@ -58,5 +60,16 @@ public class UsuariosController {
     } else {
       return ResponseEntity.noContent().build();
     }
+  }
+
+  @PostMapping("/olvidado")
+  public ResponseEntity<String> contraOlvidada(@RequestBody @Valid RContraOlvidada request) {
+    var status = service.contraOlvidada(request);
+    return (status.equals("")) ? ResponseEntity.ok(status) : ResponseEntity.ok("");
+  }
+
+  @PostMapping("/cambio")
+  public ResponseEntity<Boolean> cambiarPassword(@RequestBody @Valid RCambioPassword request) {
+    return ResponseEntity.ok(service.cambiarPassword(request));
   }
 }
