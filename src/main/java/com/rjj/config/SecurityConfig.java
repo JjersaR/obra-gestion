@@ -2,6 +2,7 @@ package com.rjj.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -22,16 +23,16 @@ public class SecurityConfig {
     http.csrf(csrf -> csrf.disable())
         .httpBasic(Customizer.withDefaults())
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/", "/img/**", "/css/**", "/js/**", "/api/v1/usuarios/**")
-            .permitAll()
+            .requestMatchers("/", "/img/**", "/css/**", "/js/**").permitAll()
+            .requestMatchers("/api/v1/usuarios/login").permitAll()
+            .requestMatchers(HttpMethod.POST, "/api/v1/usuarios").hasAnyRole("JEFE", "ADMINISTRACION")
             .anyRequest().authenticated())
-            //cierre de sesión
-            .logout(logout -> logout
-              .logoutUrl("/logout")
-              .logoutSuccessUrl("/login?logout")
-              .invalidateHttpSession(true)
-              .deleteCookies("JSESSIONID")
-            ) 
+        // cierre de sesión
+        .logout(logout -> logout
+            .logoutUrl("/logout")
+            .logoutSuccessUrl("/login?logout")
+            .invalidateHttpSession(true)
+            .deleteCookies("JSESSIONID"))
         .formLogin(form -> form.disable());
 
     return http.build();
