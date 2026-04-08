@@ -62,11 +62,18 @@ public class UsuariosController {
     }
   }
 
-  @PostMapping("/olvidado")
-  public ResponseEntity<String> contraOlvidada(@RequestBody @Valid RContraOlvidada request) {
-    var status = service.contraOlvidada(request);
-    return (status.equals("")) ? ResponseEntity.ok(status) : ResponseEntity.ok("");
-  }
+@PostMapping("/olvidado")
+public ResponseEntity<String> contraOlvidada(@RequestBody @Valid RContraOlvidada request) {
+    String tempPassword = service.contraOlvidada(request);
+    
+    // Si el servicio retornó algo (no está vacío), lo enviamos al cliente
+    if (!tempPassword.isEmpty()) {
+        return ResponseEntity.ok(tempPassword);
+    } else {
+        // Si hubo error o no se encontró, enviamos un error 404 o 400
+        return ResponseEntity.badRequest().body("No se pudo generar la clave.");
+    }
+}
 
   @PostMapping("/cambio")
   public ResponseEntity<Boolean> cambiarPassword(@RequestBody @Valid RCambioPassword request) {

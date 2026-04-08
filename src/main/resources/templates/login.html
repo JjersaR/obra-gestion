@@ -6,7 +6,7 @@
     <title>Login - OM Diseño y Construcción</title>
     <link rel="stylesheet" href="/css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+    
 </head>
 <body>
 
@@ -32,16 +32,50 @@
                     <label>Contraseña</label>
                     <div class="input-icon">
                         <i class="fa-solid fa-lock"></i>
-                        <input type="password" id="contrasena" placeholder="" required>
+                        <input type="password" id="contrasena" placeholder="********" required>
                     </div>
                 </div>
+                
+                <div style="text-align: right; margin-bottom: 15px;">
+                    <a href="#" id="olvidePass" style="font-size: 0.85rem; color: #555; text-decoration: none;">¿Olvidó su contraseña?</a>
+                </div>
+
                 <button type="submit" class="btn-login">Iniciar Sesión</button>
             </form>
+
             <div id="mensaje"></div>
         </div>
     </div>
 
+    <div id="modalTemporal" class="modal-personalizado">
+        <div class="modal-contenido">
+            <i class="fa-solid fa-key" style="font-size: 2rem; color: #1a2e35; margin-bottom: 10px;"></i>
+            <h3>Contraseña Temporal</h3>
+            <p>Copia este código y úsalo para iniciar sesión:</p>
+            <div class="uuid-box">
+                <span id="uuidTemporal"></span>
+            </div>
+            <button onclick="cerrarModalOlvido()" class="btn-cerrar">Cerrar y volver al login</button>
+        </div>
+    </div>
+
+    <div id="modalCambioObligatorio" class="modal-personalizado">
+        <div class="modal-contenido">
+            <i class="fa-solid fa-shield-halved" style="font-size: 2rem; color: #28a745; margin-bottom: 10px;"></i>
+            <h3>Cambio de Contraseña</h3>
+            <p>Por seguridad, debes actualizar tu contraseña antes de continuar.</p>
+            <input type="password" id="nuevaPassword" placeholder="Nueva contraseña (mín. 6 caracteres)" class="input-modal">
+            <button id="btnGuardarCambio" class="btn-login" style="width: 100%;">Actualizar y Entrar</button>
+        </div>
+    </div>
+
     <script src="/js/script.js"></script>
+    <script>
+        // Funciones de control visual para los modales
+        function cerrarModalOlvido() {
+            document.getElementById('modalTemporal').style.display = 'none';
+        }
+    </script>
 
 </body>
 </html>
