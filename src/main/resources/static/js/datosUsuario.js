@@ -17,6 +17,9 @@ function permisoBoton() {
     if (usuario.tipoUsuario === 'ADMINISTRACION' || usuario.tipoUsuario === 'PRESUPUESTOS') {
       document.querySelector(".main-header-actions").style.display = "block";
     }
+    if (usuario.tipoUsuario === 'ADMINISTRACION' || usuario.tipoUsuario === 'JEFE') {
+      document.querySelector(".main-header-usuario").style.display = "block";
+    }
   }
 }
 

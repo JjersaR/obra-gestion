@@ -25,6 +25,12 @@ public class WebController {
     return "nuevaObra";
   }
 
+  @PreAuthorize("hasAnyRole('ADMINISTRACION', 'JEFE')")
+  @GetMapping("/nuevo-usuario")
+  public String nuevoUsuario() {
+    return "nuevoUsuario";
+  }
+
   @GetMapping("/obras/detalles/{id}")
   public String mostrarDetalles(@PathVariable String id) {
     return "detallesObra";
