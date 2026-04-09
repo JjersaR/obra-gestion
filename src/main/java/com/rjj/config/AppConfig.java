@@ -4,15 +4,16 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.rjj.config.props.RMinioProperties;
-
-import io.minio.MinioClient;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
+import com.rjj.config.props.RAzureProperties;
 
 @Configuration
-@EnableConfigurationProperties(RMinioProperties.class)
+@EnableConfigurationProperties(RAzureProperties.class)
 public class AppConfig {
+
   @Bean
-  public MinioClient minioClient(RMinioProperties props) {
-    return MinioClient.builder().endpoint(props.endpoint()).credentials(props.accessKey(), props.secretKey()).build();
+  public BlobServiceClient blobServiceClient(RAzureProperties props) {
+    return new BlobServiceClientBuilder().connectionString(props.url()).buildClient();
   }
 }

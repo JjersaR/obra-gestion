@@ -7,13 +7,16 @@ spring:
     name: obra-gestion
   servlet:
     multipart:
-      max-file-size: 2GB
-      max-request-size: 2GB  
+      max-file-size: ${FILE_SIZE}
+      max-request-size: ${FILE_SIZE}
   datasource:
     url: ${DATABASE_URL}
     username: ${DATABASE_USER}
     password: ${DATABASE_PASSWORD}
     driver-class-name: ${DATABASE_DRIVER}
+    hikari:
+      maximum-pool-size: 500
+      minimum-idle: 100
   jpa:
     hibernate:
       ddl-auto: update
@@ -23,14 +26,13 @@ spring:
       enabled: false
 
 external-server:
-  minio:
-    endpoint: ${MINIO_ENDPOINT}
-    accessKey: ${MINIO_ACCESS_KEY}
-    secretKey: ${MINIO_SECRET_KEY}
-    buckets:
-      requerimiento: ${MINIO_BUCKET_REQUERIMIENTO}
-      construccion: ${MINIO_BUCKET_CONSTRUCCION}
-      comun: ${MINIO_BUCKET_DOCUMENTOS}
+  azure:
+    storage:
+      url: ${AZURE_STORAGE_URL}
+    container:
+      requerimiento: ${AZURE_CONTAINER_REQUERIMIENTO}
+      construccion: ${AZURE_CONTAINER_CONSTRUCCION}
+      comun: ${AZURE_CONTAINER_DOCUMENTOS}
 
 logging:
   pattern:

@@ -55,9 +55,12 @@ public class ArchivosService {
         double totalExtraido = ExcelUtils.extraerTotalNomina(file.getInputStream());
         log.info("TOTAL extraido del Excel de Mano de Obra: {}", totalExtraido);
 
+<<<<<<< HEAD
         // TODO: Aquí se llamaria al ObraService para actualizar el Gasto Total
         // obraService.actualizarGastoManoObra(movobraId, totalExtraido);
 
+=======
+>>>>>>> 586d746 (Pasando proyecto a produccion)
       } catch (Exception e) {
         log.error("No se pudo leer el total del Excel: {}", e.getMessage());
       }
@@ -191,7 +194,7 @@ public class ArchivosService {
     double totalManoObra = 0.0;
     double totalProveedores = 0.0;
 
-    System.out.println("=== INICIO DE DIAGNÓSTICO DE GASTOS ===");
+    log.info("=== INICIO DE DIAGNÓSTICO DE GASTOS ===");
 
     try {
       // 1. MANO_OBRA (Esto ya te funciona perfecto)
@@ -199,7 +202,7 @@ public class ArchivosService {
       if (archivoMO != null) {
         try (InputStream is = storageService.download(archivoMO.getBucket(), archivoMO.getUrl())) {
           totalManoObra = ExcelUtils.extraerTotalNomina(is);
-          System.out.println("💰 Valor MO: " + totalManoObra);
+          log.info("💰 Valor MO: " + totalManoObra);
         }
       }
 
@@ -208,13 +211,13 @@ public class ArchivosService {
 
       // Si lo encontró y el nombre tiene la palabra "PROVEEDORES", lo procesamos
       if (archivoProv != null && archivoProv.getNombre().toUpperCase().contains("PROVEEDORES")) {
-        System.out.println("✅ Archivo PROVEEDORES detectado en Documentos: " + archivoProv.getNombre());
+        log.info("✅ Archivo PROVEEDORES detectado en Documentos: " + archivoProv.getNombre());
         try (InputStream is = storageService.download(archivoProv.getBucket(), archivoProv.getUrl())) {
           totalProveedores = ExcelUtils.extraerTotalNomina(is);
-          System.out.println("💰 Valor Proveedores: " + totalProveedores);
+          log.info("💰 Valor Proveedores: " + totalProveedores);
         }
       } else {
-        System.out.println("⚠️ No se encontró archivo de proveedores con ese nombre en DOCUMENTOS");
+        log.info("⚠️ No se encontró archivo de proveedores con ese nombre en DOCUMENTOS");
       }
 
       return totalManoObra + totalProveedores;
@@ -222,7 +225,7 @@ public class ArchivosService {
     } catch (Exception e) {
       // Si hay un error (como que encuentre 2 archivos en docuemntos ), devolvemos al
       // menos la Mano de Obra
-      System.err.println("🚨 Nota: " + e.getMessage());
+      log.error("🚨 Nota: " + e.getMessage());
       return totalManoObra;
     }
   }

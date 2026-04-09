@@ -6,50 +6,34 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobServiceClient;
 import com.rjj.archivos.controller.utils.NameBuilder;
 import com.rjj.archivos.service.IStorageService;
 import com.rjj.movobra.entity.ETipo;
 
-import io.minio.BucketExistsArgs;
-import io.minio.GetObjectArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.RemoveObjectArgs;
-import io.minio.StatObjectArgs;
-import io.minio.StatObjectResponse;
-import io.minio.errors.MinioException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 @AllArgsConstructor
-public class MinioStorageServiceImpl implements IStorageService {
+public class AzureStorageServiceImpl implements IStorageService {
 
-  private MinioClient minioClient;
+  private BlobServiceClient serviceClient;
   private NameBuilder builder;
 
   @Override
-  public String upload(
-      ETipo tipoEntidad,
-      UUID movobraId,
-      ETipo categoria,
-      int version,
-      MultipartFile file) {
+  public String upload(ETipo tipoEntidad, UUID movobraId, ETipo categoria, int version, MultipartFile file) {
     try {
       var objectKey = builder.build(tipoEntidad, movobraId, categoria, version, file);
       var bucket = determinarBucket(categoria);
 
-      minioClient.putObject(
-          PutObjectArgs.builder()
-              .bucket(bucket)
-              .object(objectKey)
-              .stream(
-                  file.getInputStream(),
-                  file.getSize(),
-                  -1)
-              .contentType(file.getContentType())
-              .build());
+      BlobClient blobClient = serviceClient
+          .getBlobContainerClient(bucket)
+          .getBlobClient(objectKey);
+
+      blobClient.upload(file.getInputStream(), file.getSize(), true);
 
       return objectKey;
     } catch (Exception e) {
@@ -81,11 +65,10 @@ public class MinioStorageServiceImpl implements IStorageService {
   @Override
   public InputStream download(String bucket, String objectKey) {
     try {
-      return minioClient.getObject(
-          GetObjectArgs.builder()
-              .bucket(bucket)
-              .object(objectKey)
-              .build());
+      return serviceClient
+          .getBlobContainerClient(bucket)
+          .getBlobClient(objectKey)
+          .openInputStream();
     } catch (Exception e) {
       throw new RuntimeException("Error descargando archivo", e);
     }
@@ -94,12 +77,11 @@ public class MinioStorageServiceImpl implements IStorageService {
   @Override
   public void eliminarArchivo(String bucket, String url) {
     try {
-      minioClient.removeObject(
-          RemoveObjectArgs.builder()
-              .bucket(bucket)
-              .object(url)
-              .build());
-      log.info("Archivo eliminado de Minio: bucket={}, object={}",
+      serviceClient
+          .getBlobContainerClient(bucket)
+          .getBlobClient(url)
+          .delete();
+      log.info("Archivo eliminado de Azure: container={}, object={}",
           bucket, url);
 
     } catch (Exception e) {
