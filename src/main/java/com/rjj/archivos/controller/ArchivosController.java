@@ -31,55 +31,55 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/v1/archivos")
 public class ArchivosController {
 
-private final ArchivosService service;
-private static final String API_V1_ARCHIVOS = "/api/v1/archivos";
+  private final ArchivosService service;
+  private static final String API_V1_ARCHIVOS = "/api/v1/archivos";
 
-@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-public ResponseEntity<String> guardar(@ModelAttribute RArchivoRequest request) throws URISyntaxException {
-var archivo = service.subirArchivo(ETipo.valueOf(request.tipoEntidad()), UUID.fromString(request.movobraId()),
- ETipo.valueOf(request.categoria()), request.file());
+  @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<String> guardar(@ModelAttribute RArchivoRequest request) throws URISyntaxException {
+    var archivo = service.subirArchivo(ETipo.valueOf(request.tipoEntidad()), UUID.fromString(request.movobraId()),
+        ETipo.valueOf(request.categoria()), request.file());
 
-   return ResponseEntity.created(new URI(API_V1_ARCHIVOS)).body(archivo.toString());
-}
+    return ResponseEntity.created(new URI(API_V1_ARCHIVOS)).body(archivo.toString());
+  }
 
- @GetMapping("/{movobraId}")
- public ResponseEntity<List<IRequerimientosActivos>> listarRequerimientosActivos(@PathVariable String movobraId) {
- var archivos = service.findByRequerimientosActivos(UUID.fromString(movobraId));
- return (archivos.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(archivos);
- }
+  @GetMapping("/{movobraId}")
+  public ResponseEntity<List<IRequerimientosActivos>> listarRequerimientosActivos(@PathVariable String movobraId) {
+    var archivos = service.findByRequerimientosActivos(UUID.fromString(movobraId));
+    return (archivos.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(archivos);
+  }
 
- // ARCHIVOS
- @GetMapping("/descargar")
- public ResponseEntity<Resource> descargarArchivo(
- @RequestParam String categoria,
- @RequestParam String url,
- @RequestParam(required = false) String nombrePersonalizado // ¡NUEVO PARÁMETRO!
-) {
+  // ARCHIVOS
+  @GetMapping("/descargar")
+  public ResponseEntity<Resource> descargarArchivo(
+      @RequestParam String categoria,
+      @RequestParam String url,
+      @RequestParam(required = false) String nombrePersonalizado // ¡NUEVO PARÁMETRO!
+  ) {
 
- // Vamos al servicio por el archivo de MinIO
- var stream = service.descargarArchivo(categoria, url);
- var resource = new InputStreamResource(stream);
+    // Vamos al servicio por el archivo de MinIO
+    var stream = service.descargarArchivo(categoria, url);
+    var resource = new InputStreamResource(stream);
 
- // Si el frontend nos mandó un nombre bonito, lo usamos. Si no, usamos la ruta.
- String nombreFinal = (nombrePersonalizado != null && !nombrePersonalizado.isEmpty())
- ? nombrePersonalizado : url.substring(url.lastIndexOf("/") + 1);
+    // Si el frontend nos mandó un nombre bonito, lo usamos. Si no, usamos la ruta.
+    String nombreFinal = (nombrePersonalizado != null && !nombrePersonalizado.isEmpty())
+        ? nombrePersonalizado
+        : url.substring(url.lastIndexOf("/") + 1);
 
- // Preparamos la respuesta HTTP forzando la descarga
- return ResponseEntity.ok()
- // La cabecera "attachment" le dice al navegador que lo descargue, no que lo
- // abra en una pestaña nueva
- .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nombreFinal + "\"")
- // OCTET_STREAM es un comodín para decirle que es un archivo binario genérico
- .contentType(MediaType.APPLICATION_OCTET_STREAM)
- .body(resource);
- }
+    // Preparamos la respuesta HTTP forzando la descarga
+    return ResponseEntity.ok()
+        // La cabecera "attachment" le dice al navegador que lo descargue, no que lo
+        // abra en una pestaña nueva
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nombreFinal + "\"")
+        // OCTET_STREAM es un comodín para decirle que es un archivo binario genérico
+        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+        .body(resource);
+  }
 
-
- // Endpoint para obtener el total de la nómina (mano de obra)
+  // Endpoint para obtener el total de la nómina (mano de obra)
   @GetMapping("/gasto-mano-obra/{movobraId}")
   public ResponseEntity<Double> obtenerGastoManoObra(@PathVariable UUID movobraId) {
-      // Llamamos al método que creamos en el service
-      double total = service.obtenerGastoTotalManoObra(movobraId);
-      return ResponseEntity.ok(total);
+    // Llamamos al método que creamos en el service
+    double total = service.obtenerGastoTotalManoObra(movobraId);
+    return ResponseEntity.ok(total);
   }
 }

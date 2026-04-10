@@ -51,10 +51,12 @@ public interface IArchivosRepository extends JpaRepository<Archivos, UUID> {
   @Query(value = """
       select a.id, a.categoria, a.movobra_id, a.nombre, a.url from archivos a
         where a.movobra_id = :movobraId and a.tipo_entidad = 'REQUERIMIENTOS'
-        and a.categoria in ('ORDEN_COMPRA', 'PRESUPUESTO', 'EXPLOSION_INSUMOS', 'PROYECTO', 'PROGRAMA', 'MEMORIAS', 'COMENTARIOS_AD')
-        and a.version = 1
+        and a.categoria in ('ORDEN_COMPRA', 'PRESUPUESTO', 'EXPLOSION_INSUMOS', 'PROYECTO', 'PROGRAMA', 'MEMORIAS', 'COMENTARIOS_AD', 'ORDEN_COMPRA_EXT1', 'ORDEN_COMPRA_EXT2')
+        and a.actual = true
           """, nativeQuery = true)
   List<IRequerimientosActivos> findByRequerimientosActivos(UUID movobraId);
-  // Busca el archivo que esté marcado como 'actual' para una obra y categoría específica
-Archivos findByMovobraIdAndCategoriaAndActualTrue(UUID movobraId, ETipo categoria);
+
+  // Busca el archivo que esté marcado como 'actual' para una obra y categoría
+  // específica
+  Archivos findByMovobraIdAndCategoriaAndActualTrue(UUID movobraId, ETipo categoria);
 }
