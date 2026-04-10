@@ -41,14 +41,14 @@ public class Obras {
   @Column(name = "monto_antes_iva", nullable = false)
   private BigDecimal montoAntesIva;
 
-  @Column(name = "fecha_inicio", nullable = false)
+  @Column(name = "fecha_inicio")
   private LocalDate fechaInicio;
 
-  @Column(name = "fecha_fin", nullable = false)
+  @Column(name = "fecha_fin")
   private LocalDate fechaFin;
 
-  @Column(name = "no_semanas", nullable = false)
-  private int noSemanas;
+  @Column(name = "no_semanas")
+  private Integer noSemanas;
 
   @Column(name = "gerente", nullable = false)
   private String gerente;

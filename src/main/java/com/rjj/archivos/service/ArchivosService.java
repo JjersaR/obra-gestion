@@ -164,7 +164,7 @@ public class ArchivosService {
   }
 
   public List<RArchivoResponse> listarArchivos(String bucket, String tipoEntidad, String movobraId, String categoria) {
-    var archivos = repository.findByBucketAndTipoEntidadAndMovobraIdAndCategoriaOrderByVersionDesc(bucket,
+    var archivos = repository.findByBucketAndTipoEntidadAndMovobraIdAndActualTrueAndCategoriaOrderByVersionDesc(bucket,
         determinarCampo(tipoEntidad),
         movobraId, determinarCampo(categoria));
 

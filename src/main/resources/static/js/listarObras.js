@@ -56,6 +56,8 @@ function generarTarjetas(obras) {
 // 2. Definimos quiénes tienen permiso de ver el botón de cierre
   const rolesAutorizados = ['JEFE', 'GERENTE'];
   const puedeCerrar = usuarioLogueado && rolesAutorizados.includes(usuarioLogueado.tipoUsuario);
+    //PERMISO DE PRESUPUESTOS PARA EDITAR FECHA Y ARCHIVOS 
+  const puedeEditar = usuarioLogueado && usuarioLogueado.tipoUsuario === 'PRESUPUESTOS';
 
   obras.forEach((obra, index) => {
     // 1. Mantenemos tus clases de estatus originales
@@ -64,8 +66,11 @@ function generarTarjetas(obras) {
 
     // 2. NUEVO: Obtenemos la clase del semáforo calculada en Java (status-rojo, status-amarillo, status-verde)
     const semaforoClass = `status-${obra.semaforo.toLowerCase()}`;
-
     const numeroObra = String(index + 1).padStart(2, "0");
+
+    // Preparamos las fechas por si vienen nulas
+    const fechaInicioValida = obra.fechaInicio ? obra.fechaInicio : '';
+    const fechaFinValida = obra.fechaFin ? obra.fechaFin : '';
 
     // 3. Aplicamos AMBAS clases a la tarjeta: la de ejecución y la del semáforo de tiempo
     const tarjeta = `
@@ -88,6 +93,12 @@ function generarTarjetas(obras) {
             <a href="/obras/detalles/${obra.id}" class="btn-detalle" style="flex: 1; text-align: center; background-color: #2c3e50; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: 600;">
               DETALLES DE OBRA
             </a>
+
+            ${puedeEditar ? `
+              <button onclick="abrirModalEdicion('${obra.id}', '${fechaInicioValida}', '${fechaFinValida}')" class="btn-editar-obra" style="flex: 1; min-width: 120px; background: #f39c12; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                EDITAR OBRA
+              </button>
+            ` : ''}
 
             ${obra.status === 'EJECUCION' && puedeCerrar ? `
               <button onclick="confirmarCierreObra('${obra.id}')" class="btn-cerrar-obra" style="flex: 1; background: #e74c3c; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
@@ -174,5 +185,140 @@ async function ejecutarCambioEstatus(idObra, nuevoEstatus) {
     } catch (error) {
         console.error("Error:", error);
         Swal.fire('Error de conexión', 'No pudimos comunicarnos con el servidor.', 'error');
+    }
+}
+
+
+
+// --- LÓGICA DE EDICIÓN PARA PRESUPUESTOS ---
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Escuchar cambios en las fechas del modal para calcular semanas
+    const inputInicio = document.getElementById("editFechaInicio");
+    const inputFin = document.getElementById("editFechaTerminacion");
+    
+    if (inputInicio && inputFin) {
+        inputInicio.addEventListener("change", calcularSemanasModal);
+        inputFin.addEventListener("change", calcularSemanasModal);
+    }
+
+    // Manejar el envío del formulario de edición
+    const formEdicion = document.getElementById("formEdicionObra");
+    if (formEdicion) {
+        formEdicion.addEventListener("submit", guardarEdicionObra);
+    }
+});
+
+function abrirModalEdicion(idObra, fechaInicio, fechaFin) {
+    document.getElementById("editIdObra").value = idObra;
+    document.getElementById("editFechaInicio").value = fechaInicio;
+    document.getElementById("editFechaTerminacion").value = fechaFin;
+    document.getElementById("editArchivoDoc").value = "";
+    document.getElementById("editCategoriaDoc").value = "";
+    
+    calcularSemanasModal();
+    document.getElementById("modalEdicion").style.display = "flex";
+}
+
+function cerrarModalEdicion() {
+    document.getElementById("modalEdicion").style.display = "none";
+}
+
+function calcularSemanasModal() {
+    const fechaInicioInput = document.getElementById("editFechaInicio").value;
+    const fechaFinInput = document.getElementById("editFechaTerminacion").value;
+
+    if (!fechaInicioInput || !fechaFinInput) {
+        document.getElementById("editNumeroSemanas").value = "";
+        return;
+    }
+
+    const inicio = new Date(fechaInicioInput);
+    const fin = new Date(fechaFinInput);
+
+    if (fin < inicio) {
+        Swal.fire('Error', 'La fecha final no puede ser menor a la inicial', 'warning');
+        document.getElementById("editNumeroSemanas").value = "";
+        document.getElementById("editFechaTerminacion").value = "";
+        return;
+    }
+
+    const diferenciaMs = fin - inicio;
+    const semanas = Math.ceil(diferenciaMs / (1000 * 60 * 60 * 24 * 7)) + 1;
+    document.getElementById("editNumeroSemanas").value = semanas;
+}
+
+async function guardarEdicionObra(e) {
+    e.preventDefault();
+    const idObra = document.getElementById("editIdObra").value;
+    
+    // 1. Extraemos validando que no estén vacíos para evitar el NaN
+    const fechaInicioVal = document.getElementById("editFechaInicio").value;
+    const fechaFinVal = document.getElementById("editFechaTerminacion").value;
+    const semanasVal = document.getElementById("editNumeroSemanas").value;
+
+    const dataFechas = {
+        id: idObra,
+        fechaInicio: fechaInicioVal ? fechaInicioVal : null,
+        fechaFin: fechaFinVal ? fechaFinVal : null,
+        noSemanas: semanasVal ? parseInt(semanasVal) : null
+    };
+
+    // 2. Datos del archivo
+    const categoria = document.getElementById("editCategoriaDoc").value;
+    const archivoInput = document.getElementById("editArchivoDoc");
+    const archivo = archivoInput.files.length > 0 ? archivoInput.files[0] : null;
+
+    if (archivo && !categoria) {
+        Swal.fire('Atención', 'Si subes un archivo, debes seleccionar qué tipo de documento es.', 'warning');
+        return;
+    }
+
+    try {
+        // Enviar actualización de fechas
+        const responseFechas = await fetch(`/api/v1/obras`, {
+            method: 'PATCH', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataFechas)
+        });
+
+        if (!responseFechas.ok) throw new Error("Error actualizando fechas");
+
+        // Variables para controlar qué mensaje le mostramos al usuario
+        let mensajeAlerta = 'Las fechas se actualizaron correctamente.';
+        let iconoAlerta = 'success';
+
+        // Si hay archivo, lo subimos en su propio bloque try/catch (Igual que en Nueva Obra)
+        if (archivo) {
+            try {
+                const formData = new FormData();
+                formData.append("tipoEntidad", "REQUERIMIENTOS");
+                formData.append("movobraId", idObra);
+                formData.append("categoria", categoria);
+                formData.append("file", archivo);
+
+                const responseArchivo = await fetch("/api/v1/archivos", {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (!responseArchivo.ok) throw new Error("Error subiendo archivo");
+                
+                mensajeAlerta = 'Las fechas y el documento se actualizaron correctamente.';
+            } catch (errorArchivo) {
+                console.error("Error al subir documento:", errorArchivo);
+                // Si falla el documento, avisamos que las fechas SÍ se guardaron
+                mensajeAlerta = 'Las fechas se guardaron, pero hubo un problema de conexión al subir el documento.';
+                iconoAlerta = 'warning';
+            }
+        }
+
+        Swal.fire('¡Proceso Terminado!', mensajeAlerta, iconoAlerta);
+        cerrarModalEdicion();
+        getObras(); // Recargar la tabla sin refrescar la página
+
+    } catch (error) {
+        console.error("Error general:", error);
+        Swal.fire('Error', 'Hubo un problema al comunicarse con el servidor.', 'error');
     }
 }

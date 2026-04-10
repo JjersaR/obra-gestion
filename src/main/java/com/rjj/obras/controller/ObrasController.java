@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rjj.obras.controller.dto.RActualizarFecha;
 import com.rjj.obras.controller.dto.RObrasRequest;
 import com.rjj.obras.controller.dto.RObrasResponse;
 import com.rjj.obras.service.ObrasService;
 
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,6 +63,12 @@ public class ObrasController {
       service.actualizarEstatus(id, nuevoEstatus);
       
       return ResponseEntity.ok().build();
+  }
+
+  @PatchMapping
+  public ResponseEntity<Void> actualizarFecha(@RequestBody RActualizarFecha request) {
+    service.actualizarFecha(request);
+    return ResponseEntity.ok().build();
   }
 
 }
