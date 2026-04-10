@@ -55,12 +55,6 @@ public class ArchivosService {
         double totalExtraido = ExcelUtils.extraerTotalNomina(file.getInputStream());
         log.info("TOTAL extraido del Excel de Mano de Obra: {}", totalExtraido);
 
-<<<<<<< HEAD
-        // TODO: Aquí se llamaria al ObraService para actualizar el Gasto Total
-        // obraService.actualizarGastoManoObra(movobraId, totalExtraido);
-
-=======
->>>>>>> 586d746 (Pasando proyecto a produccion)
       } catch (Exception e) {
         log.error("No se pudo leer el total del Excel: {}", e.getMessage());
       }
