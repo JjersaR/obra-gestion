@@ -100,7 +100,7 @@ function calcularSemanas() {
 
   const fechaInicioInput = document.getElementById("fechaInicio").value;
   const fechaFinInput = document.getElementById("fechaTerminacion").value;
-//Si alguno de los campos está vacío, no hacemos nada todavía
+  //Si alguno de los campos está vacío, no hacemos nada todavía
   if (!fechaInicioInput || !fechaFinInput) return;
 
   // Extraemos el año de ambas fechas
@@ -108,11 +108,11 @@ function calcularSemanas() {
   const añoFin = parseInt(fechaFinInput.split('-')[0]);
 
   //Validamos que ambos años tengan un valor lógico
-  if(añoInicio < 2000 || añoFin < 2000){
+  if (añoInicio < 2000 || añoFin < 2000) {
     return;
   }
 
-  //tienes la fecha completa y 
+  //tienes la fecha completa y
   const inicio = new Date(fechaInicioInput);
   const fin = new Date(fechaFinInput);
 
@@ -161,7 +161,9 @@ const archivosConfig = [
   { id: "explosionInsumos", categoria: "EXPLOSION_INSUMOS" },
   { id: "proyectoDoc", categoria: "PROYECTO" },
   { id: "programaDoc", categoria: "PROGRAMA" },
-  { id: "memorias", categoria: "MEMORIAS" }
+  { id: "memorias", categoria: "MEMORIAS" },
+  { id: "OrdenExtra1", categoria: "ORDEN_COMPRA_EXT1" },
+  { id: "OrdenExtra2", categoria: "ORDEN_COMPRA_EXT2" }
 ];
 
 async function subirArchivosObra(idObra) {

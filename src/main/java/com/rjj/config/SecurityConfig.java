@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,11 +21,14 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
+        .httpBasic(Customizer.withDefaults())
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/", "/img/**", "/css/**", "/js/**", "/logout").permitAll()
-            .requestMatchers("/api/v1/usuarios/login", "/api/v1/usuarios/olvidado", "/api/v1/usuarios/cambio")
+            .requestMatchers("/api/v1/usuarios/login", "/api/v1/usuarios/olvidado", "/api/v1/usuarios/cambio",
+                "/api/v1/usuarios")
             .permitAll()
-            .requestMatchers(HttpMethod.POST, "/api/v1/usuarios").hasAnyRole("JEFE", "ADMINISTRACION")
+            // .requestMatchers(HttpMethod.POST, "/api/v1/usuarios").hasAnyRole("JEFE",
+            // "ADMINISTRACION")
             .anyRequest().authenticated())
         // cierre de sesión
         .logout(logout -> logout

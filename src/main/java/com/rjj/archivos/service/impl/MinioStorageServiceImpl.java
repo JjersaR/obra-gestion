@@ -58,6 +58,8 @@ public class MinioStorageServiceImpl implements IStorageService {
           ORDEN_COMPRA,
           PRESUPUESTO,
           EXPLOSION_INSUMOS,
+          ORDEN_COMPRA_EXT1,
+          ORDEN_COMPRA_EXT2,
           PROYECTO,
           PROGRAMA,
           MEMORIAS,
