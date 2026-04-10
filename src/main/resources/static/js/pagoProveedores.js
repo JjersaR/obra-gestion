@@ -162,18 +162,19 @@ function controlarBotonesPorRol() {
     return; // Salimos para no ejecutar el switch de abajo
   }
 
-
   switch (usuario.tipoUsuario) {
     case 'RESIDENTE':
-    case 'COMPRAS':
       if (btnAgregar) btnAgregar.style.display = "block";
+      break;
+    case 'COMPRAS':
+      // COMPRAS ahora solo ve el botón si hay algo ACEPTADO
+      if (btnAgregar && hayArchivoAceptado()) {
+        btnAgregar.style.display = "block";
+      }
       break;
     case 'GERENTE':
     case 'ADMINISTRACION':
-      if (btnActualizar) btnActualizar.style.display = "block";
-      break;
     case 'JEFE':
-      // JEFE puede ver el botón Actualizar para guardar validaciones
       if (btnActualizar) btnActualizar.style.display = "block";
       break;
     default:
@@ -219,11 +220,15 @@ function puedeSubir() {
   if (estatusObra === "CERRADA") {
     return false; 
   }
-  // RESIDENTE siempre puede subir
-  if (usuario.tipoUsuario === 'RESIDENTE' || usuario.tipoUsuario === 'COMPRAS') return true;
+  // RESIDENTE, GERENTE y ADMINISTRACION pueden subir siempre
+  if (['RESIDENTE', 'GERENTE', 'ADMINISTRACION'].includes(usuario.tipoUsuario)) {
+    return true;
+  }
 
-  // GERENTE y ADMINISTRACION siempre pueden subir
-  if (usuario.tipoUsuario === 'GERENTE' || usuario.tipoUsuario === 'ADMINISTRACION') return true;
+  // COMPRAS ahora está condicionado al estado de la tabla
+  if (usuario.tipoUsuario === 'COMPRAS') {
+    return hayArchivoAceptado();
+  }
 
   return false;
 }
@@ -236,11 +241,16 @@ function puedeSubir() {
 function puedeDescargar(estado) {
   if (!usuario) return false;
 
-  // Residentes NO pueden descargar (solo subir)
-  if (usuario.tipoUsuario === 'RESIDENTE' || usuario.tipoUsuario === 'COMPRAS') return false;
+  // Si es COMPRAS, solo puede descargar archivos ACEPTADOS
+  if (usuario.tipoUsuario === 'COMPRAS') {
+    return estado === 'ACEPTADO';
+  }
 
-  // Gerente y Administración pueden descargar siempre (para revisar)
-  if (usuario.tipoUsuario === 'GERENTE' || usuario.tipoUsuario === 'ADMINISTRACION' || usuario.tipoUsuario === 'JEFE') {
+  // Residentes no descargan en esta vista
+  if (usuario.tipoUsuario === 'RESIDENTE') return false;
+
+  // Roles administrativos y jefatura descargan todo para revisión
+  if (['GERENTE', 'ADMINISTRACION', 'JEFE'].includes(usuario.tipoUsuario)) {
     return true;
   }
 
