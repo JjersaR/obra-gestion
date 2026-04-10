@@ -122,8 +122,8 @@ function controlarColumnasPorRol() {
   const columnasJefe = document.querySelectorAll(".col-jefe");
 
   // Ocultar por defecto
-  columnasAdmin.forEach(col => col.style.display = "none");
-  columnasJefe.forEach(col => col.style.display = "none");
+  // columnasAdmin.forEach(col => col.style.display = "none");
+  // columnasJefe.forEach(col => col.style.display = "none");
 
   // Mostrar según el rol
   if (usuario) {

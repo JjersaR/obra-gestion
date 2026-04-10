@@ -104,7 +104,13 @@ document.getElementById('btnGuardarCambio').addEventListener('click', async () =
     const usuario = JSON.parse(localStorage.getItem('usuarioLogueado'));
 
     if (nuevaPass.length < 6) {
-        alert("La contraseña debe tener al menos 6 caracteres.");
+        //estilooooo
+        Swal.fire({
+            icon: 'warning',
+            title: 'Contraseña muy corta',
+            text: 'La nueva contraseña debe tener al menos 6 caracteres.',
+            confirmButtonColor: '#f39c12'
+        });
         return;
     }
 
@@ -121,13 +127,36 @@ document.getElementById('btnGuardarCambio').addEventListener('click', async () =
         const success = await resp.json();
 
         if (success === true) {
-            alert("¡Contraseña actualizada correctamente!");
-            window.location.href = '/obras';
+            // Cerramos el modal HTML que tenías abierto
+            document.getElementById('modalCambioObligatorio').style.display = 'none';
+
+            // Alerta de éxito hermosa que espera a que le des Aceptar para redirigir
+            Swal.fire({
+                title: '¡Contraseña Actualizada!',
+                text: 'Tu nueva contraseña se guardó correctamente. Ingresando al sistema...',
+                icon: 'success',
+                confirmButtonColor: '#2c3e50', // 
+                allowOutsideClick: false // Evita que den clic afuera y se cierre
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/obras';
+                }
+            });
         } else {
-            alert("No se pudo actualizar la contraseña. Reintente.");
+            Swal.fire({
+                title: 'No se pudo actualizar',
+                text: 'Hubo un problema al guardar la contraseña. Reintente.',
+                icon: 'error',
+                confirmButtonColor: '#e74c3c'
+            });
         }
     } catch (err) {
-        alert("Error de comunicación con el servidor.");
+        Swal.fire({
+            title:'Error de conexión',
+            text: 'No pudimos comunicarnos con el servidor',
+            icon:'error',
+            confirmButtonColor: '#e74c3c'
+        });
     }
 });
 

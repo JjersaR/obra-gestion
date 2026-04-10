@@ -43,7 +43,7 @@ public interface IArchivosRepository extends JpaRepository<Archivos, UUID> {
       UUID movobraId,
       ETipo categoria);
 
-  List<Archivos> findByBucketAndTipoEntidadAndMovobraIdAndCategoriaOrderByVersionDesc(String bucket,
+  List<Archivos> findByBucketAndTipoEntidadAndMovobraIdAndActualTrueAndCategoriaOrderByVersionDesc(String bucket,
       ETipo tipoEntidad,
       String movobraId,
       ETipo categoria);

@@ -1,4 +1,5 @@
 package com.rjj.obras.service;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.rjj.obras.controller.dto.IObrasMapper;
+import com.rjj.obras.controller.dto.RActualizarFecha;
 import com.rjj.obras.controller.dto.RObrasRequest;
 import com.rjj.obras.controller.dto.RObrasResponse;
 import com.rjj.obras.entity.EStatus;
@@ -52,18 +54,30 @@ public class ObrasService {
         String semaforo;
         String mensaje;
 
+        if (r.fechaInicio() == null || r.fechaFin() == null) {
+            semaforo = "AMARILLO";
+            mensaje = "ALERTA: Faltan asignar fechas";
+
+            return new RObrasResponse(
+                    r.id(), r.nombre(), r.cliente(), r.montoAntesIva(),
+                    r.fechaInicio(), r.fechaFin(), r.noSemanas(),
+                    r.gerente(), r.residente(), r.observaciones(), r.status(),
+                    semaforo, mensaje);
+        }
+
         // --- NUEVA LÓGICA DE PAUSA ---
-        // Verificamos si el status es CIERRE (usando equals o comparando con tu Enum EStatus)
+        // Verificamos si el status es CIERRE (usando equals o comparando con tu Enum
+        // EStatus)
         if ("CIERRE".equalsIgnoreCase(r.status())) {
             semaforo = "GRIS"; // Color neutro para el CSS
             mensaje = "OBRA CONCLUIDA / ETAPA DE CIERRE";
         } else {
             // --- TU LÓGICA ORIGINAL DE CÁLCULO ---
             LocalDate hoy = LocalDate.now();
-            
+
             long diasTotales = ChronoUnit.DAYS.between(r.fechaInicio(), r.fechaFin());
             long diasRestantes = ChronoUnit.DAYS.between(hoy, r.fechaFin());
-            
+
             double margen15 = diasTotales * 0.15;
 
             if (diasRestantes < 0) {
@@ -80,20 +94,19 @@ public class ObrasService {
 
         // Devolvemos el Record con los datos (ya sean los calculados o los de "Pausa")
         return new RObrasResponse(
-            r.id(), r.nombre(), r.cliente(), r.montoAntesIva(), 
-            r.fechaInicio(), r.fechaFin(), r.noSemanas(), 
-            r.gerente(), r.residente(), r.observaciones(), r.status(),
-            semaforo, mensaje
-        );
+                r.id(), r.nombre(), r.cliente(), r.montoAntesIva(),
+                r.fechaInicio(), r.fechaFin(), r.noSemanas(),
+                r.gerente(), r.residente(), r.observaciones(), r.status(),
+                semaforo, mensaje);
     }
 
-    //para el status a CIERRE
+    // para el status a CIERRE
     @Transactional
     public void actualizarEstatus(String id, String nuevoEstatus) {
-        
+
         // Buscamos la obra en la base de datos usando repositorio
         var obra = repository.findById(UUID.fromString(id))
-            .orElseThrow(() -> new RuntimeException("Obra no encontrada con ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Obra no encontrada con ID: " + id));
 
         // Convertimos "CIERRE" a tu Enum de Java (EStatus.CIERRE)
         // Usamos toUpperCase() por seguridad, para que coincida perfectamente
@@ -104,8 +117,18 @@ public class ObrasService {
 
         // Guardamos los cambios
         repository.save(obra);
-        
+
         log.info("Estatus de la obra {} actualizado a {}", obra.getNombre(), nuevoEstatus);
     }
-    
+
+    public void actualizarFecha(RActualizarFecha request) {
+        var obra = repository.findById(request.id()).get();
+
+        obra.setFechaInicio(request.fechaInicio());
+        obra.setFechaFin(request.fechaFin());
+        obra.setNoSemanas(request.noSemanas());
+        
+        repository.save(obra);
+    }
+
 }

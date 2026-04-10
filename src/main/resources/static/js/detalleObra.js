@@ -157,13 +157,20 @@ function pintarHistorial(revisiones) {
 
 
 function pintarObra(obra) {
+    
+    if (!obra.fechaInicio || !obra.fechaFin) {
+        const spanInicio = document.getElementById('fechaInicio');
+        const tdContenedor = spanInicio.parentElement; // Esto atrapa el <td> completo
+
+        tdContenedor.innerHTML = '<span style="color: #7f8c8d; font-style: italic;">Sin fechas asignadas</span>';
+    } else {
+        document.getElementById("fechaInicio").textContent = formatearFecha(obra.fechaInicio);
+        document.getElementById("fechaFin").textContent = formatearFecha(obra.fechaFin);
+    }
+
   document.getElementById("nombreObra").textContent = obra.nombre.toUpperCase();
-  document.getElementById("fechaInicio").textContent = formatearFecha(obra.fechaInicio);
-  document.getElementById("fechaFin").textContent = formatearFecha(obra.fechaFin);
   montoAcordadoGlobal = Number(obra.montoAntesIva);
-  document.getElementById("monto").textContent = "$" + Number(obra.montoAntesIva)
-  
-    .toLocaleString("es-MX", { minimumFractionDigits: 2 });
+  document.getElementById("monto").textContent = "$" + Number(obra.montoAntesIva).toLocaleString("es-MX", { minimumFractionDigits: 2 });
 
   document.getElementById("gerente").textContent = obra.gerente;
   document.getElementById("residente").textContent = obra.residente;

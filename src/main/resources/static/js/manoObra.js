@@ -163,7 +163,6 @@ function controlarBotonesPorRol() {
 
   switch (usuario.tipoUsuario) {
     case 'RESIDENTE':
-    case 'COMPRAS':
       if (btnAgregar) btnAgregar.style.display = "block";
       break;
     case 'GERENTE':
@@ -175,6 +174,7 @@ function controlarBotonesPorRol() {
       if (btnActualizar) btnActualizar.style.display = "block";
       break;
     case 'CONTADOR':
+    case 'COMPRAS':      
       if (btnAgregar && hayArchivoAceptado()) {
         btnAgregar.style.display = "block";
       }
@@ -223,14 +223,13 @@ function puedeSubir() {
   if (estatusObra === "CIERRE") {
     return false; 
   }
-  // RESIDENTE o COMPRAS siempre puede subir
-  if (usuario.tipoUsuario === 'RESIDENTE' || usuario.tipoUsuario === 'COMPRAS') return true;
+  // RESIDENTE, GERENTE y ADMIN mantienen permiso total
+  if (['RESIDENTE', 'GERENTE', 'ADMINISTRACION'].includes(usuario.tipoUsuario)) {
+    return true;
+  }
 
-  // GERENTE y ADMINISTRACION siempre pueden subir
-  if (usuario.tipoUsuario === 'GERENTE' || usuario.tipoUsuario === 'ADMINISTRACION') return true;
-
-  // CONTADOR solo puede subir si hay un archivo ACEPTADO
-  if (usuario.tipoUsuario === 'CONTADOR') {
+  // COMPRAS y CONTADOR ahora comparten la misma restricción
+  if (usuario.tipoUsuario === 'COMPRAS' || usuario.tipoUsuario === 'CONTADOR') {
     return hayArchivoAceptado();
   }
 
@@ -245,16 +244,13 @@ function puedeSubir() {
 function puedeDescargar(estado) {
   if (!usuario) return false;
 
-  // Residentes o Compras NO pueden descargar (solo subir)
-  if (usuario.tipoUsuario === 'RESIDENTE' || usuario.tipoUsuario === 'COMPRAS') return false;
-
-  // Compras solo puede descargar si el estado es ACEPTADO
-  if (usuario.tipoUsuario === 'CONTADOR') {
+  // Ambos roles solo descargan lo ACEPTADO
+  if (usuario.tipoUsuario === 'COMPRAS' || usuario.tipoUsuario === 'CONTADOR') {
     return estado === 'ACEPTADO';
   }
 
-  // Gerente y Administración pueden descargar siempre (para revisar)
-  if (usuario.tipoUsuario === 'GERENTE' || usuario.tipoUsuario === 'ADMINISTRACION' || usuario.tipoUsuario === 'JEFE') {
+  // Roles de revisión descargan siempre
+  if (['GERENTE', 'ADMINISTRACION', 'JEFE'].includes(usuario.tipoUsuario)) {
     return true;
   }
 

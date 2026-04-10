@@ -10,7 +10,7 @@ public record RObrasResponse(
     BigDecimal montoAntesIva,
     LocalDate fechaInicio,
     LocalDate fechaFin,
-    int noSemanas,
+    Integer noSemanas,
     String gerente,
     String residente,
     String observaciones,
