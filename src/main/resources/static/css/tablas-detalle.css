@@ -102,49 +102,58 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
 }
-/* --- AJUSTES RESPONSIVOS PARA LA TABLA --- */
 
+
+
+/* =========================================
+   DISEÑO RESPONSIVO (Móviles y Tablets)
+========================================= */
 @media (max-width: 768px) {
+    /* 1. CONTENEDOR DE TABLA: Edge-to-Edge (De lado a lado) */
     .table-container {
-        /* Reducimos el margen lateral de 30px a 10px para ganar espacio */
-        margin: 0 10px 20px 10px; 
-        padding: 10px;
-        /* IMPORTANTE: Esto permite que la tabla se deslice sin romper el resto de la web */
+        margin: 0 auto 20px auto; 
+        width: 100%; /* Toma todo el ancho del celular */
+        padding: 15px 0; /* Quitamos el padding lateral para que la tabla use toda la pantalla */
+        border-radius: 0; /* Al tocar los bordes, se ve mejor sin esquinas redondeadas */
+        
+        /* Magia del Scroll Táctil */
         overflow-x: auto; 
         -webkit-overflow-scrolling: touch;
     }
 
+    /* 2. LA TABLA: Ancho congelado para lectura */
     .custom-table {
-        /* Forzamos un ancho mínimo para que los datos no se encimen */
-        min-width: 700px; 
+        min-width: 700px; /* Obliga al scroll lateral para no aplastar el texto */
     }
 
-    /* Ajustamos el encabezado para que no ocupe tanto espacio vertical */
     .custom-table th {
-        font-size: 10px;
-        padding: 10px 5px;
+        font-size: 11px; /* Un poco más legible */
+        padding: 12px 10px;
     }
 
     .custom-table td {
-        font-size: 12px;
-        padding: 8px 5px;
+        font-size: 13px;
+        padding: 10px;
     }
 
-    /* Alineamos el botón de acción al centro en móviles */
+    /* 3. BOTÓN DE ENVÍO: Adaptado para el pulgar */
     .table-actions {
         justify-content: center;
+        padding: 0 15px; /* Le regresamos el padding lateral solo a los botones */
+        margin-top: 15px;
     }
 
     .btn-submit {
-        width: 100%; /* Botón ancho para que sea fácil de presionar */
-        padding: 15px;
+        width: 100%; /* Ocupa todo el ancho */
+        padding: 15px; /* Más alto para facilitar el toque */
+        font-size: 1.1rem;
     }
-}
 
-/* Ajustes para pantallas muy pequeñas (celulares mini) */
-@media (max-width: 480px) {
-    .table-container {
-        margin: 0 5px 15px 5px;
-        border-radius: 8px;
+    /* 4. BOTÓN DE REGRESO (Si se usa en la topbar) */
+    .btn-back {
+        width: 100%;
+        justify-content: center;
+        display: flex;
+        margin-bottom: 10px; /* Separación si se apila */
     }
 }

@@ -109,11 +109,49 @@ body {
 .error { color: #d9534f; }
 .success { color: #5cb85c; }
 
-/* Diseño responsivo para móviles */
+/* =========================================
+   DISEÑO RESPONSIVO (Login en Móviles)
+========================================= */
 @media (max-width: 768px) {
-    body { flex-direction: column; }
-    .login-image { flex: 0.4; }
-    .login-form-container { flex: 0.6; }
+    body { 
+        flex-direction: column; 
+    }
+    
+    /* En celular, la imagen pasa a ser un banner superior pequeño */
+    .login-image { 
+        flex: 0 0 25vh; /* Ocupa solo el 25% del alto de la pantalla */
+        padding: 1.5rem;
+    }
+    
+    .login-image h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .login-image p {
+        font-size: 0.9rem;
+        max-width: 95%;
+    }
+
+    /* El formulario toma el resto del espacio */
+    .login-form-container { 
+        flex: 1; 
+        align-items: flex-start; /* Sube el formulario para evitar el teclado */
+        padding-top: 2rem;
+    }
+    
+    .form-wrapper {
+        padding: 1.5rem;
+    }
+    
+    .form-wrapper h2 {
+        font-size: 2.5rem; /* Título más proporcionado */
+    }
+    
+    .form-wrapper p {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
 }
 
 /*iconos*/

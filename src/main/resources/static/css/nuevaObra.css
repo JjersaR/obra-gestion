@@ -226,25 +226,92 @@ body {
     box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
 }
 
-/* Responsivo para móviles */
+
+
+/* =========================================
+   DISEÑO RESPONSIVO (Móviles y Tablets)
+========================================= */
 @media (max-width: 900px) {
+    /* 1. TOPBAR: Apilada y centrada */
+    .topbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+        text-align: center;
+    }
+    
+    .topbar-left {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    /* Adaptación del botón Volver o Cerrar Sesión en topbar */
+    .topbar-right {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .btn-back, .btn-logout {
+        width: 100%;
+        justify-content: center;
+        display: flex;
+    }
+
+    /* 2. CONTENIDO PRINCIPAL Y ENCABEZADO */
+    .main-content {
+        padding: 15px; /* Menos margen en celular para ganar espacio */
+    }
+
     .main-header {
         flex-direction: column;
         gap: 15px;
         text-align: center;
+        padding-bottom: 15px;
     }
+    
+    .main-header-info h2 {
+        font-size: 1.8rem; /* Letra ligeramente más pequeña */
+    }
+
+    /* 3. ESTRUCTURA DEL FORMULARIO */
     .form-unificado {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* Colapsa a 1 sola columna */
+        border-radius: 8px; /* Bordes menos pronunciados en móvil */
     }
+    
     .columna-derecha {
-        border-left: none;
-        border-top: 1px solid var(--color-border);
+        border-left: none; /* Quita la línea divisoria vertical */
+        border-top: 2px solid var(--color-border); /* Agrega línea divisoria horizontal */
     }
-    .columna-izquierda, .columna-derecha {
-        padding: 25px;
+    
+    .columna-izquierda, 
+    .columna-derecha {
+        padding: 20px 15px; /* Menos padding interno para que los inputs sean más anchos */
     }
-    .campo-en-linea, .campo-archivo {
-        grid-template-columns: 1fr; /* Etiquetas arriba del input en celulares */
-        gap: 5px;
+
+    /* 4. INPUTS Y ETIQUETAS */
+    .campo-en-linea, 
+    .campo-archivo {
+        grid-template-columns: 1fr; /* La etiqueta se pone arriba de la caja de texto */
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .campo-en-linea label, 
+    .campo-archivo label {
+        font-size: 0.95rem;
+        font-weight: 600; /* Letra un poco más gruesa en móvil para leer mejor */
+    }
+    
+    .campo-en-linea input {
+        height: 45px; /* Cajas de texto más altas para que sea fácil tocarlas */
+        font-size: 1rem; /* Letra grande para evitar que iOS haga zoom automático */
+    }
+    
+    /* 5. BOTÓN PRINCIPAL (GUARDAR) */
+    .btn-action {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.1rem;
     }
 }

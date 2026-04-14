@@ -299,40 +299,78 @@ body {
     color: var(--color-primary);
 }
 
-/* Responsive */
+
+/* =========================================
+   DISEÑO RESPONSIVO (Móviles y Tablets)
+========================================= */
 @media (max-width: 768px) {
-    .main-content {
-        padding: 1rem;
-    }
-
-    .main-header {
-        flex-direction: column;
-        text-align: center;
-        gap: 15px;
-    }
-
-    .form-unificado {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    .seccion-interna {
-        padding: 20px;
-    }
-}
-
-@media (max-width: 480px) {
+    /* 1. TOPBAR: Apilada y fácil de navegar */
     .topbar {
         flex-direction: column;
-        gap: 10px;
+        gap: 15px;
+        padding: 15px;
         text-align: center;
     }
 
     .topbar-left {
         flex-direction: column;
+        gap: 10px;
     }
 
+    .btn-back {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* 2. ENCABEZADO Y CONTENIDO PRINCIPAL */
+    .main-content {
+        padding: 15px; /* Reducimos padding para aprovechar los bordes de la pantalla */
+        min-height: auto; 
+    }
+
+    .main-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+
+    .main-header-info h2 {
+        font-size: 1.8rem; /* Ajuste visual para que no rompa en dos líneas */
+    }
+
+    /* Botón de acción (Guardar) estirado para tocarlo fácil */
     .btn-action {
         width: 100%;
+        padding: 15px; 
+        font-size: 1.1rem;
+    }
+
+    /* 3. FORMULARIO: Colapso a 1 sola columna vertical */
+    .form-unificado {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .columna-izquierda,
+    .columna-derecha {
+        gap: 20px;
+    }
+
+    .seccion-interna {
+        padding: 20px 15px; /* Los inputs ganan más espacio a lo ancho */
+    }
+
+    /* 4. INPUTS: Altura táctil y prevención de Zoom en iOS */
+    .campo-en-linea input,
+    .campo-en-linea select {
+        height: 48px; /* Altura recomendada por Google/Apple para dedos */
+        font-size: 1rem; /* Exactamente 16px evita el auto-zoom en iPhone */
+        padding: 10px 15px;
+    }
+    
+    .campo-observaciones textarea {
+        font-size: 1rem;
     }
 }

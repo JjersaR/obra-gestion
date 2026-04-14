@@ -242,3 +242,82 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
 }
+
+
+/* =========================================
+   CONTENEDOR DE LA TABLA (Requerido para el scroll)
+========================================= */
+.tabla-captura-container {
+    width: 96%;
+    max-width: 1400px;
+    margin: 0 auto 30px auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid #d1d8dd;
+    overflow: hidden; /* Mantiene los bordes limpios */
+}
+
+/* =========================================
+   DISEÑO RESPONSIVO (Móviles y Tabletas)
+========================================= */
+@media (max-width: 768px) {
+    /* 1. TOPBAR Y ENCABEZADO: Apilados para pantallas táctiles */
+    .topbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+        text-align: center;
+    }
+    
+    .topbar-left {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn-back {
+        width: 100%;
+        justify-content: center;
+        display: flex;
+    }
+
+    .page-subheader {
+        padding: 15px;
+        text-align: center;
+    }
+    
+    .obra-highlight {
+        display: block; 
+        margin-top: 5px;
+        margin-left: 0;
+    }
+
+    /* 2. TABLA DE CAPTURA: Habilitar Scroll Horizontal Suave */
+    .tabla-captura-container {
+        width: 100%;
+        border-radius: 0; /* Que toque los bordes del celular */
+        border-left: none;
+        border-right: none;
+        overflow-x: auto; 
+        -webkit-overflow-scrolling: touch; /* Deslizamiento natural en iOS/Android */
+    }
+
+    .tabla-captura {
+        /* Congela el ancho de la tabla para que los inputs no se hagan miniatura.
+           El usuario deslizará hacia los lados para ver las columnas restantes. */
+        min-width: 900px; 
+    }
+
+    /* 3. BOTÓN DE ENVÍO: Más grande y ancho completo */
+    .table-actions {
+        width: 100%;
+        padding: 0 15px;
+        justify-content: center;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 15px; /* Altura ideal para el pulgar */
+        font-size: 1.1rem;
+    }
+}

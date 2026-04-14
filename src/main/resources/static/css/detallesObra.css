@@ -217,7 +217,7 @@ body {
 }
 
 .doc-name {
-    font-size: 1.1rem;
+    font-size: 0.7rem;
     font-weight: 800;
     color: #333;
     margin-bottom: 2px;
@@ -515,42 +515,41 @@ body {
     width: 100%;
 }
 
-/* --- CORRECCIONES RESPONSIVAS --- */
 
+/* =========================================
+   DISEÑO RESPONSIVO (Móviles y Tablets)
+========================================= */
 @media (max-width: 768px) {
     /* 1. TOPBAR: Apilar elementos y centrar */
     .topbar {
         flex-direction: column;
         gap: 15px;
+        padding: 15px;
         text-align: center;
-        padding: 20px 10px;
     }
-
+    
     .topbar-left {
         flex-direction: column;
-        gap: 10px;
+        gap: 5px;
     }
-
+    
     .btn-back {
         width: 100%;
-        text-align: center;
+        justify-content: center;
     }
 
-    /* 2. SUBHEADER: Ajustar título */
-    .page-subheader h2 {
-        font-size: 1rem;
-        line-height: 1.4;
+    /* 2. CONTENEDORES: Aprovechar al máximo el ancho de la pantalla */
+    .info-section, 
+    .documentos-base-container, 
+    .dashboard-grid, 
+    .historial-container, 
+    .semaforo-banner {
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 20px;
     }
 
-    .obra-highlight {
-        display: block;
-        margin-left: 0;
-        margin-top: 8px;
-        font-size: 1.3rem;
-    }
-
-    /* 3. TABLA INFORMATIVA: ¡Aquí está la solución al desborde! */
-    /* Forzamos a que la tabla se comporte como bloques, no como celdas */
+    /* 3. TABLA GENERALES (INFO): Convertir de tabla a tarjetas apiladas */
     .tabla-generales, 
     .tabla-generales tbody, 
     .tabla-generales tr, 
@@ -558,56 +557,75 @@ body {
         display: block;
         width: 100% !important;
     }
-
+    
     .tabla-generales tr {
-        border-bottom: 2px solid #eee;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        overflow: hidden;
     }
-
+    
     .etiqueta {
-        background-color: #f8f9fa;
-        padding: 8px 15px !important;
-        width: 100% !important;
-        text-align: left;
+        background-color: #f1f5f9;
+        padding: 10px 15px !important;
+        border-bottom: none;
     }
-
+    
     .valor-texto {
-        padding: 10px 15px 20px 15px !important;
-        text-align: left;
-    }
-}
-
-@media (max-width: 600px) {
-    /* 4. CONTENEDORES: Menos margen lateral */
-    .info-section, .documentos-base-container, .dashboard-grid, .historial-container, .semaforo-banner {
-        width: 95%; 
-        padding: 10px;
-        margin-bottom: 20px;
+        padding: 10px 15px 15px 15px !important;
+        border-bottom: none;
     }
 
-    /* 5. DOCUMENTOS: 2 columnas en lugar de 6 */
+    /* 4. DOCUMENTOS: Cuadrícula de 2 columnas perfectas para celular */
     .documentos-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        grid-template-columns: 1fr 1fr; /* 2 columnas exactas */
+        gap: 10px;
+    }
+    
+    .doc-item {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px 10px;
+    }
+    
+    .doc-icon {
+        margin-right: 0;
+        margin-bottom: 8px;
+        font-size: 2rem; /* Ligeramente más pequeño para móvil */
+    }
+
+    /* 5. BOTONES GRANDES INFERIORES: 1 sola columna fácil de tocar */
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-top: 15px;
+    }
+    
+    .bloque-boton, .bloque-boton-claro, .bloque-estatico-gris, .bloque-alerta, .bloque-gastos {
+        min-height: 80px;
+        font-size: 1rem;
+        justify-content: center; /* Centrar texto para que se vea balanceado */
+        text-align: center;
+    }
+
+    /* 6. BANNER SEMÁFORO: Apilar icono y texto */
+    .semaforo-banner {
+        flex-direction: column;
+        text-align: center;
         gap: 10px;
     }
 
-    .doc-item {
-        flex-direction: column; /* Icono arriba, texto abajo */
-        text-align: center;
-        padding: 15px 5px;
+    /* 7. TABLA DE HISTORIAL: Scroll horizontal suave (Swipe) */
+    .historial-body {
+        padding: 15px; /* Menos espacio muerto en los bordes */
     }
-
-    .doc-icon {
-        margin-right: 0;
-        margin-bottom: 10px;
+    
+    .historial-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; /* Deslizamiento suave en iOS/Android */
     }
-
-    /* 6. BOTONES GRANDES (DASHBOARD) */
-    .dashboard-grid {
-        grid-template-columns: 1fr; /* Uno por fila */
-    }
-
-    .bloque-boton, .bloque-boton-claro, .bloque-estatico-gris, .bloque-alerta, .bloque-gastos {
-        font-size: 0.9rem;
-        min-height: 80px;
+    
+    .table-custom {
+        min-width: 600px; /* Obliga a la tabla a mantener su forma, el usuario desliza para leer */
     }
 }

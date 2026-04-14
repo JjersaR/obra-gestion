@@ -242,3 +242,82 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
 }
+
+
+/* =========================================
+   CONTENEDOR DE LA TABLA (Requerido para scroll)
+========================================= */
+.tabla-captura-container {
+    width: 96%;
+    max-width: 1400px;
+    margin: 0 auto 30px auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid #d1d8dd;
+    overflow: hidden; /* Mantiene los bordes redondeados limpios */
+}
+
+/* =========================================
+   DISEÑO RESPONSIVO (Móviles y Tabletas)
+========================================= */
+@media (max-width: 768px) {
+    /* 1. TOPBAR Y ENCABEZADO: Apilados y centrados */
+    .topbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+        text-align: center;
+    }
+    
+    .topbar-left {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn-back {
+        width: 100%;
+        justify-content: center;
+        display: flex;
+    }
+
+    .page-subheader {
+        padding: 15px;
+        text-align: center;
+    }
+    
+    .obra-highlight {
+        display: block; 
+        margin-top: 5px;
+        margin-left: 0;
+    }
+
+    /* 2. LA TABLA DE CAPTURA (Scroll Horizontal Táctil) */
+    .tabla-captura-container {
+        width: 100%;
+        border-radius: 0; /* En móvil se ve mejor si toca los bordes de la pantalla */
+        border-left: none;
+        border-right: none;
+        overflow-x: auto; /* Activa la barra de desplazamiento horizontal */
+        -webkit-overflow-scrolling: touch; /* Deslizamiento fluido en iOS y Android */
+    }
+
+    .tabla-captura {
+        /* Obliga a la tabla a mantener un ancho mínimo para que las cajas de texto 
+           no se apachurren. El usuario deslizará lateralmente para ver el resto. */
+        min-width: 900px; 
+    }
+
+    /* 3. BOTÓN DE ENVÍO: Adaptado para pulgares */
+    .table-actions {
+        width: 100%;
+        padding: 0 15px;
+        justify-content: center;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 15px; /* Más alto para que sea fácil tocarlo */
+        font-size: 1.1rem;
+    }
+}
