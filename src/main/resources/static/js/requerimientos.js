@@ -109,7 +109,7 @@ function aplicarPermisosPorRol() {
 function ocultarElementosParaNoLogueado() {
   document.querySelectorAll(".col-admin").forEach(col => col.style.display = "none");
   const btnAgregar = document.getElementById("btnAgregar");
-  if (btnAgregar) btnAgregar.style.display = "none";
+  if (btnAgregar)   btnAgregar.style.display = "none";
   const btnActualizar = document.getElementById("btnActualizar");
   if (btnActualizar) btnActualizar.style.display = "none";
 }
@@ -143,47 +143,51 @@ function controlarBotonesPorRol() {
   const btnAgregar = document.getElementById("btnAgregar");
   const btnActualizar = document.getElementById("btnActualizar");
 
-  // --- BLOQUEO VISUAL POR OBRA CERRADA ---
-  const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
-  if (estatusObra === "CIERRE") {
-    if (btnAgregar) {
-      btnAgregar.style.display = "block";
-      btnAgregar.disabled = true;
-      btnAgregar.textContent = "OBRA CERRADA";
-      btnAgregar.style.backgroundColor = "#94a3b8"; // Un color grisaceo
-    }
-    // Si quieres que tampoco puedan actualizar estados/observaciones cuando esté cerrada:
-    // if (btnActualizar) btnActualizar.style.display = "none"; 
-    return; 
+  // 1. Resetear estados iniciales
+  if (btnAgregar) {
+    btnAgregar.style.display = "none";
+    btnAgregar.disabled = false;
+    btnAgregar.style.backgroundColor = "";
+    btnAgregar.style.cursor = "pointer";
+    // Restaurar el texto según el modo en el que esté
+    btnAgregar.textContent = modoAgregar ? "Subir requerimiento" : "Guardar";
   }
-
-  // Ocultar ambos por defecto
-  if (btnAgregar) btnAgregar.style.display = "none";
   if (btnActualizar) btnActualizar.style.display = "none";
 
   if (!usuario) return;
 
-  switch (usuario.tipoUsuario) {
-    case 'RESIDENTE':
-      if (btnAgregar) btnAgregar.style.display = "block";
-      break;
-    case 'GERENTE':
-    case 'ADMINISTRACION':
-      if (btnActualizar) btnActualizar.style.display = "block";
-      break;
-    case 'JEFE':
-      // JEFE puede ver el botón Actualizar para guardar validaciones
-      if (btnActualizar) btnActualizar.style.display = "block";
-      break;
-    case 'COMPRAS':
-      if (btnAgregar && hayArchivoAceptado()) {
-        btnAgregar.style.display = "block";
-      }
-      break;
-    // COMPRAS no tiene botones de acción en esta vista, solo puede ver y descargar (si está aceptado)
-    default:
-      // Otros roles (como COMPRAS) no ven botones
-      break;
+  const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
+  const estaCerrada = (estatusObra === "CIERRE" || estatusObra === "CERRADA");
+  const esSuperUser = ['PRESUPUESTOS'].includes(usuario.tipoUsuario);
+
+  // 2. FILTRO DE OBRA CERRADA (Solo bloquea si NO es SuperUser)
+  if (estaCerrada && !esSuperUser) {
+    if (btnAgregar) {
+      btnAgregar.style.display = "block";
+      btnAgregar.disabled = true;
+      btnAgregar.textContent = "OBRA CERRADA";
+      btnAgregar.style.backgroundColor = "#94a3b8";
+      btnAgregar.style.cursor = "not-allowed";
+    }
+    // Si está cerrada y no es admin, no mostramos actualizar y salimos
+    return; 
+  }
+
+  // 3. LÓGICA DE VISIBILIDAD (Si llegó aquí, u obra abierta o es SuperUser)
+  
+  // Botón Agregar: Aparece si el usuario tiene permiso funcional
+  if (puedeSubir()) {
+    if (btnAgregar) btnAgregar.style.display = "block";
+  }
+
+  // Botón Actualizar: Aparece para roles de gestión
+  if (['GERENTE', 'ADMINISTRACION', 'JEFE'].includes(usuario.tipoUsuario)) {
+    if (btnActualizar) btnActualizar.style.display = "block";
+  }
+  
+  // Caso especial para COMPRAS (si no está en puedeSubir)
+  if (usuario.tipoUsuario === 'COMPRAS' && hayArchivoAceptado()) {
+    if (btnAgregar) btnAgregar.style.display = "block";
   }
 }
 
@@ -217,19 +221,28 @@ function puedeEditar() {
 function puedeSubir() {
   if (!usuario) return false;
 
-  // 1. REVISAR SI LA OBRA ESTÁ CERRADA
+  // 1. Configuración de Roles
+  const rolesSuperUser = ['PRESUPUESTOS'];
+  const rolesEstandar = ['RESIDENTE' , 'ADMINISTRACION'];
+
+  const esSuperUser = rolesSuperUser.includes(usuario.tipoUsuario);
+  const esUserEstandar = rolesEstandar.includes(usuario.tipoUsuario);
+
+  // 2. Revisar estatus de la obra
   const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
-  if (estatusObra === "CIERRE") {
-    return false; // Si está cerrada, nadie sube nada.
-  }
+  const estaCerrada = (estatusObra === "CIERRE" || estatusObra === "CERRADA");
 
-  // RESIDENTE siempre puede subir
-  if (usuario.tipoUsuario === 'RESIDENTE') return true;
+  // 3. Lógica de permisos
+  // Si es Admin o Gerente, ignoramos el cierre de la obra
+  if (esSuperUser) return true;
 
-  // GERENTE y ADMINISTRACION siempre pueden subir
-  if (usuario.tipoUsuario === 'GERENTE' || usuario.tipoUsuario === 'ADMINISTRACION') return true;
+  // Si la obra está cerrada y no es superusuario, bloqueamos
+  if (estaCerrada) return false;
 
-  // COMPRAS solo puede subir si hay un archivo ACEPTADO
+  // Si la obra está abierta, el Residente puede subir
+  if (esUserEstandar) return true;
+
+  // Caso especial para Compras
   if (usuario.tipoUsuario === 'COMPRAS') {
     return hayArchivoAceptado();
   }

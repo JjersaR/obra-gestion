@@ -140,52 +140,45 @@ function controlarBotonesPorRol() {
   const btnAgregar = document.getElementById("btnAgregar");
   const btnActualizar = document.getElementById("btnActualizar");
 
-  // Ocultar ambos por defecto
-  if (btnAgregar) btnAgregar.style.display = "none";
+  // 1. Resetear estados
+  if (btnAgregar) {
+    btnAgregar.style.display = "none";
+    btnAgregar.disabled = false;
+    btnAgregar.style.backgroundColor = "";
+    btnAgregar.style.cursor = "pointer";
+    btnAgregar.textContent = modoAgregar ? "Subir requerimiento" : "Guardar";
+  }
   if (btnActualizar) btnActualizar.style.display = "none";
 
   if (!usuario) return;
 
-  // --- NUEVA LÓGICA DE BLOQUEO VISUAL ---
   const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
-  if (estatusObra === "CIERRE") {
+  const estaCerrada = (estatusObra === "CIERRE" || estatusObra === "CERRADA");
+  
+  // Incluimos a JEFE en los que ignoran el cierre visual
+  const esSuperUser = ['PRESUPUESTOS'].includes(usuario.tipoUsuario);
+
+  // 2. FILTRO VISUAL DE OBRA CERRADA
+  if (estaCerrada && !esSuperUser) {
     if (btnAgregar) {
       btnAgregar.style.display = "block";
       btnAgregar.disabled = true;
       btnAgregar.textContent = "OBRA FINALIZADA";
-      btnAgregar.style.backgroundColor = "#64748b"; // Gris oscuro
+      btnAgregar.style.backgroundColor = "#64748b";
       btnAgregar.style.cursor = "not-allowed";
     }
-    // Opcional: Si tampoco quieres que actualicen estados al cerrar, descomenta:
-    // if (btnActualizar) btnActualizar.style.display = "none";
-    return; // Salimos para no ejecutar el switch de abajo
+    return; // Los usuarios normales no pasan de aquí si está cerrada
   }
 
-  switch (usuario.tipoUsuario) {
-    case 'RESIDENTE':
-      if (btnAgregar) btnAgregar.style.display = "block";
-      break;
-    case 'GERENTE':
-    case 'ADMINISTRACION':
-      if (btnActualizar) btnActualizar.style.display = "block";
-      break;
-    case 'JEFE':
-      // JEFE puede ver el botón Actualizar para guardar validaciones
-      if (btnActualizar) btnActualizar.style.display = "block";
-      break;
-    case 'CONTADOR':
-    case 'COMPRAS':      
-      if (btnAgregar && hayArchivoAceptado()) {
-        btnAgregar.style.display = "block";
-      }
-      break;
-    // CONTADOR no tiene botones de acción en esta vista, solo puede ver y descargar (si está aceptado)
-    default:
-      // Otros roles (como CONTADOR) no ven botones
-      break;
+  // 3. MOSTRAR BOTONES (Si llegó aquí es porque está abierta o es SuperUser/Jefe/Presupuestos)
+  if (puedeSubir()) {
+    if (btnAgregar) btnAgregar.style.display = "block";
+  }
+
+  if (['GERENTE', 'ADMINISTRACION', 'JEFE'].includes(usuario.tipoUsuario)) {
+    if (btnActualizar) btnActualizar.style.display = "block";
   }
 }
-
 /**
  * Verifica si existe al menos un movimiento en estado ACEPTADO.
  * @returns {boolean} - true si hay al menos un archivo ACEPTADO.
@@ -218,17 +211,25 @@ function puedeEditar() {
  */
 function puedeSubir() {
   if (!usuario) return false;
-// --- BLOQUEO POR OBRA CERRADA ---
-  const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
-  if (estatusObra === "CIERRE") {
-    return false; 
-  }
-  // RESIDENTE, GERENTE y ADMIN mantienen permiso total
-  if (['RESIDENTE', 'GERENTE', 'ADMINISTRACION'].includes(usuario.tipoUsuario)) {
-    return true;
-  }
 
-  // COMPRAS y CONTADOR ahora comparten la misma restricción
+  // 1. Definir roles con superpoderes (pueden subir en cierre)
+  const rolesSuperUser = ['PRESUPUESTOS'];
+  const esSuperUser = rolesSuperUser.includes(usuario.tipoUsuario);
+
+  const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
+  const estaCerrada = (estatusObra === "CIERRE" || estatusObra === "CERRADA");
+
+  // 2. Lógica de permisos
+  
+  // SI ES SUPERUSER: Permiso total siempre
+  if (esSuperUser) return true;
+
+  // SI LA OBRA ESTÁ CERRADA: Bloqueo total para los demás roles
+  if (estaCerrada) return false;
+
+  // SI LA OBRA ESTÁ ABIERTA:
+  if (usuario.tipoUsuario === 'RESIDENTE' || usuario.tipoUsuario === 'ADMINISTRACION') return true;
+
   if (usuario.tipoUsuario === 'COMPRAS' || usuario.tipoUsuario === 'CONTADOR') {
     return hayArchivoAceptado();
   }

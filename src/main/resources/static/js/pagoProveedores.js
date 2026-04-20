@@ -137,29 +137,34 @@ function controlarColumnasPorRol() {
  * - GERENTE/ADMINISTRACION: Pueden ver y usar "Actualizar".
  */
 function controlarBotonesPorRol() {
-  const btnAgregar = document.getElementById("btnAgregar");
+const btnAgregar = document.getElementById("btnAgregar");
   const btnActualizar = document.getElementById("btnActualizar");
-
-  // Ocultar ambos por defecto
-  if (btnAgregar) btnAgregar.style.display = "none";
-  if (btnActualizar) btnActualizar.style.display = "none";
-
-  if (!usuario) return;
-
-
-  // --- NUEVA LÓGICA DE BLOQUEO VISUAL ---
   const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
-  if (estatusObra === "CIERRE") {
+  const estaCerrada = (estatusObra === "CIERRE" || estatusObra === "CERRADA");
+
+  // Roles que ignoran el bloqueo visual
+  const esSuperUser = usuario && ['PRESUPUESTOS'].includes(usuario.tipoUsuario);
+
+  if (estaCerrada && !esSuperUser) {
     if (btnAgregar) {
       btnAgregar.style.display = "block";
       btnAgregar.disabled = true;
       btnAgregar.textContent = "OBRA FINALIZADA";
-      btnAgregar.style.backgroundColor = "#64748b"; // Gris oscuro
+      btnAgregar.style.backgroundColor = "#64748b";
       btnAgregar.style.cursor = "not-allowed";
     }
-    // Opcional: Si tampoco quieres que actualicen estados al cerrar, descomenta:
-    // if (btnActualizar) btnActualizar.style.display = "none";
-    return; // Salimos para no ejecutar el switch de abajo
+    return;
+  }
+
+  // Si es SuperUser o la obra está abierta, seguimos con la lógica normal
+  if (puedeSubir()) {
+    if (btnAgregar) {
+      btnAgregar.style.display = "block";
+      btnAgregar.disabled = false;
+      btnAgregar.textContent = "Subir requerimiento"; // O el texto original
+      btnAgregar.style.backgroundColor = ""; // Reset al color original
+      btnAgregar.style.cursor = "pointer";
+    }
   }
 
   switch (usuario.tipoUsuario) {
@@ -213,22 +218,37 @@ function puedeEditar() {
  * Determina si un usuario puede subir archivos (agregar fila).
  * @returns {boolean}
  */
+/**
+ * Determina si un usuario puede subir archivos.
+ * Permite que roles específicos ignoren el bloqueo de obra cerrada.
+ */
 function puedeSubir() {
   if (!usuario) return false;
-// --- BLOQUEO POR OBRA CERRADA ---
-  const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
-  if (estatusObra === "CERRADA") {
-    return false; 
-  }
-  // RESIDENTE, GERENTE y ADMINISTRACION pueden subir siempre
-  if (['RESIDENTE', 'GERENTE', 'ADMINISTRACION'].includes(usuario.tipoUsuario)) {
-    return true;
-  }
 
-  // COMPRAS ahora está condicionado al estado de la tabla
-  if (usuario.tipoUsuario === 'COMPRAS') {
-    return hayArchivoAceptado();
-  }
+  // 1. Definimos los roles con "Poder Total" (pueden subir aunque esté cerrada)
+  const rolesSuperUser = ['PRESUPUESTOS'];
+  
+  // 2. Definimos roles que pueden subir PERO les afecta el cierre (ej. Residente)
+  const rolesEstandar = ['RESIDENTE', 'ADMINISTRACION'];
+
+  const esSuperUser = rolesSuperUser.includes(usuario.tipoUsuario);
+  const esUserEstandar = rolesEstandar.includes(usuario.tipoUsuario);
+
+  // 3. Lógica de validación
+  const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
+  const estaCerrada = (estatusObra === "CIERRE" || estatusObra === "CERRADA");
+
+  // Si es Admin/Gerente, sube siempre (ignoramos el estado de la obra)
+  if (esSuperUser) return true;
+
+  // Si la obra está cerrada y no es SuperUser, bloqueamos
+  if (estaCerrada) return false;
+
+  // Si no está cerrada, el Residente puede subir
+  if (esUserEstandar) return true;
+
+  // Caso especial Compras (opcional)
+  if (usuario.tipoUsuario === 'COMPRAS') return hayArchivoAceptado();
 
   return false;
 }
