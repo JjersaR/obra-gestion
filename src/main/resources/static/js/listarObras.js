@@ -95,7 +95,7 @@ function generarTarjetas(obras) {
             </a>
 
             ${puedeEditar ? `
-              <button onclick="abrirModalEdicion('${obra.id}', '${fechaInicioValida}', '${fechaFinValida}')" class="btn-editar-obra" style="flex: 1; min-width: 120px; background: #f39c12; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+              <button onclick="abrirModalEdicion('${obra.id}', '${fechaInicioValida}', '${fechaFinValida}', '${obra.nombre.replace(/'/g, "\\'")}', '${obra.montoAntesIva}')" class="btn-editar-obra" style="flex: 1; min-width: 120px; background: #f39c12; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
                 EDITAR OBRA
               </button>
             ` : ''}
@@ -209,8 +209,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-function abrirModalEdicion(idObra, fechaInicio, fechaFin) {
+function abrirModalEdicion(idObra, fechaInicio, fechaFin, nombre, monto) {
     document.getElementById("editIdObra").value = idObra;
+    document.getElementById("editNombreObra").value = nombre; // Carga el nombre
+    document.getElementById("editMontoObra").value = monto;
     document.getElementById("editFechaInicio").value = fechaInicio;
     document.getElementById("editFechaTerminacion").value = fechaFin;
     document.getElementById("editArchivoDoc").value = "";
@@ -251,7 +253,8 @@ function calcularSemanasModal() {
 async function guardarEdicionObra(e) {
     e.preventDefault();
     const idObra = document.getElementById("editIdObra").value;
-    
+    const nombreVal = document.getElementById("editNombreObra").value; // NUEVO
+    const montoVal = document.getElementById("editMontoObra").value;
     // 1. Extraemos validando que no estén vacíos para evitar el NaN
     const fechaInicioVal = document.getElementById("editFechaInicio").value;
     const fechaFinVal = document.getElementById("editFechaTerminacion").value;
@@ -259,6 +262,8 @@ async function guardarEdicionObra(e) {
 
     const dataFechas = {
         id: idObra,
+        nombre: nombreVal,
+        montoAntesIva: montoVal ? parseFloat(montoVal) : null,
         fechaInicio: fechaInicioVal ? fechaInicioVal : null,
         fechaFin: fechaFinVal ? fechaFinVal : null,
         noSemanas: semanasVal ? parseInt(semanasVal) : null

@@ -290,12 +290,17 @@ let datosReporteAceptado = null;
 
 async function cargarDatosVisualizadores(idObra) {
     try {
-        // Buscamos el reporte en tu historial de REPORTES/REPORTES
+        // Buscamos los reportes
         const res = await fetch(`/api/v1/movobra/${idObra}/REPORTES/REPORTES`);
         if (res.ok) {
             const movimientos = await res.json();
-            // Buscamos el último ACEPTADO
-            datosReporteAceptado = movimientos.reverse().find(m => m.estado === "ACEPTADO");
+            
+            // CAMBIO: Simplemente tomamos el último reporte subido (el más reciente)
+            // sin importar si está PENDIENTE, REVISADO o ACEPTADO.
+            if (movimientos && movimientos.length > 0) {
+                // .reverse() pone el último subido al principio del array [0]
+                datosReporteAceptado = movimientos.reverse()[0]; 
+            }
         }
     } catch (e) {
         console.error("Error al buscar reportes:", e);
@@ -305,11 +310,11 @@ async function cargarDatosVisualizadores(idObra) {
 async function verPdf() {
     const visor = document.getElementById('visorPrincipal');
     
-    // 1. Limpiamos el visor antes de empezar para que no se vea el viejo mientras carga
     visor.innerHTML = `<div style="text-align:center; padding-top:250px;">⏳ Cargando el reporte más reciente...</div>`;
 
     if (!datosReporteAceptado) {
-        visor.innerHTML = `<div style="text-align:center; padding-top:250px; color:#e53e3e;">⚠️ No hay reportes aceptados.</div>`;
+        // CAMBIO: Mensaje más genérico porque ya no filtramos por "Aceptado"
+        visor.innerHTML = `<div style="text-align:center; padding-top:250px; color:#e53e3e;">⚠️ No se encontró ningún reporte subido para esta obra.</div>`;
         return;
     }
 
@@ -318,9 +323,7 @@ async function verPdf() {
         const res = await fetch(urlFetch);
         const blob = await res.blob();
         
-        // 2. IMPORTANTE: Creamos una URL nueva cada vez
         const urlVistaPrevia = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
-
         visor.innerHTML = `<iframe src="${urlVistaPrevia}" width="100%" height="100%" style="border:none;"></iframe>`;
         
     } catch (err) {

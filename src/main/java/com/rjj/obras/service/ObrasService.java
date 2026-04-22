@@ -121,14 +121,31 @@ public class ObrasService {
         log.info("Estatus de la obra {} actualizado a {}", obra.getNombre(), nuevoEstatus);
     }
 
+    @Transactional // Es recomendable para asegurar que la transacción se complete
     public void actualizarFecha(RActualizarFecha request) {
-        var obra = repository.findById(request.id()).get();
+        // Buscamos la obra (usamos orElseThrow para evitar errores si el ID no existe)
+        var obra = repository.findById(request.id())
+                .orElseThrow(() -> new RuntimeException("Obra no encontrada con ID: " + request.id()));
 
+        // 1. Actualizamos fechas y semanas
         obra.setFechaInicio(request.fechaInicio());
         obra.setFechaFin(request.fechaFin());
         obra.setNoSemanas(request.noSemanas());
+
+        // 2. NUEVO: Actualizamos Nombre y Monto
+        // Validamos que no sean nulos antes de asignar para evitar sobrescribir con basura
+        if (request.nombre() != null && !request.nombre().isBlank()) {
+            obra.setNombre(request.nombre());
+        }
+
+        if (request.montoAntesIva() != null) {
+            obra.setMontoAntesIva(request.montoAntesIva());
+        }
         
+        // 3. Guardamos los cambios en la base de datos
         repository.save(obra);
+        
+        log.info("Obra {} actualizada: Nombre, Monto y Fechas guardados correctamente", obra.getId());
     }
 
 }
