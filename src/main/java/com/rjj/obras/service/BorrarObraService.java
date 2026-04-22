@@ -32,57 +32,52 @@ public class BorrarObraService {
 
   @Transactional(rollbackFor = Exception.class)
   public void eliminarObraCompleta(UUID obraId) {
-    log.info("Iniciando eliminación completa de obra con ID: {}", obraId);
+    log.info("Eliminando obra completa: {}", obraId);
 
-    List<String> errores = new ArrayList<>();
+    // Verificar que la obra existe
+    var obra = obraRepository.findById(obraId)
+        .orElseThrow(() -> new EntityNotFoundException("Obra no encontrada: " + obraId));
 
-    // Verificar existencia
-    if (!obraRepository.existsById(obraId)) {
-      throw new EntityNotFoundException("No se encontró la obra con ID: " + obraId);
-    }
+    log.info("Obra a eliminar: {}", obra.getNombre());
 
-    // Obtener todos los movimientos
-    List<Movobra> movimientos = movobraRepository.findByObraId(obraId);
+    // 1. Eliminar archivos físicos de Minio
+    List<Archivos> archivos = archivosRepository.findByMovobraId(obraId);
+    log.info("Archivos a eliminar: {}", archivos.size());
 
-    // Recolectar todos los archivos a eliminar
-    List<Archivos> todosLosArchivos = new ArrayList<>();
-    for (Movobra movimiento : movimientos) {
-      todosLosArchivos.addAll(archivosRepository.findByMovobraId(movimiento.getObraId()));
-    }
+    if (!archivos.isEmpty()) {
+      List<String> errores = new ArrayList<>();
 
-    // Intentar eliminar todos los archivos
-    for (Archivos archivo : todosLosArchivos) {
-      try {
-        storageService.eliminarArchivo(archivo.getBucket(), archivo.getUrl());
-        log.debug("Archivo eliminado: {}", archivo.getId());
-      } catch (Exception e) {
-        String error = String.format("Error eliminando archivo %s de bucket %s: %s",
-            archivo.getUrl(), archivo.getBucket(), e.getMessage());
-        errores.add(error);
-        log.error(error, e);
+      for (Archivos archivo : archivos) {
+        try {
+          storageService.eliminarArchivo(archivo.getBucket(), archivo.getUrl());
+          log.info("✓ Archivo eliminado: {}", archivo.getUrl());
+        } catch (Exception e) {
+          errores.add(String.format("%s [bucket=%s, url=%s]",
+              e.getMessage(), archivo.getBucket(), archivo.getUrl()));
+          log.error("✗ Error eliminando archivo: {}", archivo.getUrl(), e);
+        }
       }
+
+      if (!errores.isEmpty()) {
+        throw new RuntimeException("Error al eliminar archivos: " + String.join("; ", errores));
+      }
+
+      // 2. Eliminar registros de archivos
+      archivosRepository.deleteByMovobraId(obraId);
+      log.info("✓ Registros de archivos eliminados");
     }
 
-    // Si hubo errores, lanzar excepción para hacer rollback
-    if (!errores.isEmpty()) {
-      throw new RuntimeException("Error al eliminar archivos físicos: " + String.join("; ", errores));
-    }
-
-    // Si todos los archivos se eliminaron correctamente, proceder con BD
-    // Eliminar registros de archivos
-    for (Movobra movimiento : movimientos) {
-      archivosRepository.deleteByMovobraId(movimiento.getObraId());
-    }
-
-    // Eliminar movimientos
+    // 3. Eliminar movimientos
     movobraRepository.deleteByObraId(obraId);
+    log.info("✓ Movimientos eliminados");
 
-    // Eliminar visualizaciones
+    // 4. Eliminar visualizaciones
     obraVisualizacionRepository.deleteByObraId(obraId.toString());
+    log.info("✓ Visualizaciones eliminadas");
 
-    // Eliminar obra
-    obraRepository.deleteById(obraId);
-
-    log.info("Obra eliminada exitosamente con todos sus recursos");
+    // 5. Eliminar la obra
+    obraRepository.delete(obra);
+    log.info("✓ Obra eliminada exitosamente");
   }
+
 }
