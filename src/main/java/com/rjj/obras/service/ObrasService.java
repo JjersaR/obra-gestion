@@ -143,10 +143,14 @@ public class ObrasService {
       obra.setMontoAntesIva(request.montoAntesIva());
     }
 
+    if (request.residente() != null && !request.residente().isBlank()) {
+      obra.setResidente(request.residente());
+    } 
+
     // 3. Guardamos los cambios en la base de datos
     repository.save(obra);
 
-    log.info("Obra {} actualizada: Nombre, Monto y Fechas guardados correctamente", obra.getId());
+    log.info("Obra {} actualizada: Nombre, Monto, Residente y Fechas guardados correctamente", obra.getId());
   }
 
 }

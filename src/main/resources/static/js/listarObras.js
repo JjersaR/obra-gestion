@@ -92,7 +92,7 @@ function generarTarjetas(obras) {
             </a>
 
             ${puedeEditar ? `
-              <button onclick="abrirModalEdicion('${obra.id}', '${fechaInicioValida}', '${fechaFinValida}', '${obra.nombre.replace(/'/g, "\\'")}', '${obra.montoAntesIva}')" class="btn-editar-obra" style="flex: 1; min-width: 120px; background: #f39c12; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+              <button onclick="abrirModalEdicion('${obra.id}', '${obra.nombre}','${obra.montoAntesIva}','${fechaInicioValida}', '${fechaFinValida}', '${obra.residente}')" class="btn-editar-obra" style="flex: 1; min-width: 120px; background: #f39c12; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
                 EDITAR OBRA
               </button>
             ` : ''}
@@ -268,7 +268,7 @@ async function ejecutarCambioEstatus(idObra, nuevoEstatus) {
 
 
 
-// --- LÓGICA DE EDICIÓN PARA PRESUPUESTOS ---
+// --- LÓGICA DE EDICIÓN MODAL  PARA PRESUPUESTOS ---
 
 document.addEventListener("DOMContentLoaded", () => {
   // Escuchar cambios en las fechas del modal para calcular semanas
@@ -287,10 +287,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-function abrirModalEdicion(idObra, fechaInicio, fechaFin) {
+function abrirModalEdicion(idObra, nombre, monto, fechaInicio, fechaFin, residente) {
   document.getElementById("editIdObra").value = idObra;
+
+  document.getElementById("editNombreObra").value = nombre !== 'null' ? nombre : "";
+  document.getElementById("editMontoObra").value = monto !== 'null' ? monto : "";
   document.getElementById("editFechaInicio").value = fechaInicio;
   document.getElementById("editFechaTerminacion").value = fechaFin;
+  document.getElementById("editResidenteObra").value = (residente && residente !== 'null' && residente !== 'undefined') ? residente : "";
   document.getElementById("editArchivoDoc").value = "";
   document.getElementById("editCategoriaDoc").value = "";
 
@@ -308,6 +312,14 @@ function calcularSemanasModal() {
 
   if (!fechaInicioInput || !fechaFinInput) {
     document.getElementById("editNumeroSemanas").value = "";
+    return;
+  }
+  // NUEVO: Extraemos los años para saber si el usuario ya terminó de escribir
+  const añoInicio = parseInt(fechaInicioInput.split('-')[0]);
+  const añoFin = parseInt(fechaFinInput.split('-')[0]);
+
+  // Si está tecleando y el año es menor a 2000 (ej. "202"), nos detenemos y no alertamos nada aún
+  if (añoInicio < 2000 || añoFin < 2000) {
     return;
   }
 
@@ -331,12 +343,19 @@ async function guardarEdicionObra(e) {
   const idObra = document.getElementById("editIdObra").value;
 
   // 1. Extraemos validando que no estén vacíos para evitar el NaN
+  const nombreVal = document.getElementById("editNombreObra").value;
+  const montoVal = document.getElementById("editMontoObra").value;
+  const residenteVal = document.getElementById("editResidenteObra").value;
+
   const fechaInicioVal = document.getElementById("editFechaInicio").value;
   const fechaFinVal = document.getElementById("editFechaTerminacion").value;
   const semanasVal = document.getElementById("editNumeroSemanas").value;
 
   const dataFechas = {
     id: idObra,
+    nombre: nombreVal,
+    montoAntesIva: montoVal ? parseFloat(montoVal) : 0,
+    residente: residenteVal,
     fechaInicio: fechaInicioVal ? fechaInicioVal : null,
     fechaFin: fechaFinVal ? fechaFinVal : null,
     noSemanas: semanasVal ? parseInt(semanasVal) : null

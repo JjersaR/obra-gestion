@@ -10,6 +10,7 @@ public record RActualizarFecha(
         UUID id,
         String nombre, 
         BigDecimal montoAntesIva,
+        String residente,
         @JsonFormat(pattern = "yyyy-MM-dd") LocalDate fechaInicio,
         @JsonFormat(pattern = "yyyy-MM-dd") LocalDate fechaFin,
         Integer noSemanas) {
