@@ -2,24 +2,27 @@ package com.rjj.obras.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rjj.obras.controller.dto.RActualizarFecha;
 import com.rjj.obras.controller.dto.RObrasRequest;
 import com.rjj.obras.controller.dto.RObrasResponse;
+import com.rjj.obras.service.BorrarObraService;
 import com.rjj.obras.service.ObrasService;
 
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ObrasController {
 
   private final ObrasService service;
+  private final BorrarObraService borrarObraService;
 
   @PostMapping
   @PreAuthorize("hasAnyRole('ADMINISTRACION', 'PRESUPUESTOS')")
@@ -39,6 +43,13 @@ public class ObrasController {
     log.info("¡Obra recibida y guardada exitosamente!");
     // Devolvemos un 201 Created para que el JS muestre el alert
     return ResponseEntity.status(HttpStatus.CREATED).body(id.toString());
+  }
+
+  @DeleteMapping
+  @PreAuthorize("hasAnyRole('ADMINISTRACION', 'PRESUPUESTOS')")
+  public ResponseEntity<Void> eliminar(@RequestParam String id) {
+    borrarObraService.eliminarObraCompleta(UUID.fromString(id));
+    return ResponseEntity.ok().build();
   }
 
   @GetMapping
@@ -55,14 +66,14 @@ public class ObrasController {
 
   // Usamos PATCH para modificar el estatus de la obra
   @PatchMapping("/{id}/estatus")
-  @PreAuthorize("hasRole('GERENTE')") //  Solo el Gerente pasa
+  @PreAuthorize("hasRole('GERENTE')") // Solo el Gerente pasa
   public ResponseEntity<Void> cambiarEstatus(@PathVariable String id, @RequestBody Map<String, String> request) {
-      
-      String nuevoEstatus = request.get("status"); // Cierre del JSON
-      
-      service.actualizarEstatus(id, nuevoEstatus);
-      
-      return ResponseEntity.ok().build();
+
+    String nuevoEstatus = request.get("status"); // Cierre del JSON
+
+    service.actualizarEstatus(id, nuevoEstatus);
+
+    return ResponseEntity.ok().build();
   }
 
   @PatchMapping

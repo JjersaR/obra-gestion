@@ -86,7 +86,7 @@ function controlarBotonesPorRol() {
   if (btnActualizar) btnActualizar.style.display = "none";
 
   if (!usuario) return;
-// --- NUEVA LÓGICA DE BLOQUEO VISUAL ---
+  // --- NUEVA LÓGICA DE BLOQUEO VISUAL ---
   const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
   if (estatusObra === "CIERRE") {
     if (btnAgregar && usuario.tipoUsuario === 'RESIDENTE') {
@@ -97,7 +97,7 @@ function controlarBotonesPorRol() {
       btnAgregar.style.cursor = "not-allowed";
     }
     // El botón actualizar no se muestra si la obra está cerrada
-    return; 
+    return;
   }
   // ---------------------------------------
   if (usuario.tipoUsuario === 'RESIDENTE') {
@@ -123,7 +123,7 @@ function puedeSubir() {
   // --- BLOQUEO POR OBRA CERRADA ---
   const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
   if (estatusObra === "CIERRE") {
-    return false; 
+    return false;
   }
   // --------------------------------
   return usuario && usuario.tipoUsuario === 'RESIDENTE';
@@ -327,7 +327,7 @@ function agregarFila() {
     <td>-</td>
     <td>${usuario.tipoUsuario}</td>
     <td class="file-cell">
-      <input type="file" class="input-file" accept=".pdf,.csv,.xls,.xlsx">
+      <input type="file" class="input-file">
     </td>
     <td>PENDIENTE</td>
     <td></td>
@@ -347,11 +347,6 @@ async function guardarArchivo() {
   }
 
   const file = input.files[0];
-
-  if (file.size > 10 * 1024 * 1024) {
-    Swal.fire('Error', 'El archivo no puede superar los 10MB', 'error');
-    return;
-  }
 
   const formData = new FormData();
   formData.append("tipoEntidad", "REPORTES");

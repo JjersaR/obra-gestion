@@ -16,4 +16,6 @@ public interface IStorageService {
       MultipartFile file);
 
   InputStream download(String bucket, String objectKey);
+
+  void eliminarArchivo(String bucket, String url);
 }

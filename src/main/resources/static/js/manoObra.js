@@ -154,7 +154,7 @@ function controlarBotonesPorRol() {
 
   const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
   const estaCerrada = (estatusObra === "CIERRE" || estatusObra === "CERRADA");
-  
+
   // Incluimos a JEFE en los que ignoran el cierre visual
   const esSuperUser = ['PRESUPUESTOS'].includes(usuario.tipoUsuario);
 
@@ -170,13 +170,28 @@ function controlarBotonesPorRol() {
     return; // Los usuarios normales no pasan de aquí si está cerrada
   }
 
-  // 3. MOSTRAR BOTONES (Si llegó aquí es porque está abierta o es SuperUser/Jefe/Presupuestos)
-  if (puedeSubir()) {
-    if (btnAgregar) btnAgregar.style.display = "block";
-  }
-
-  if (['GERENTE', 'ADMINISTRACION', 'JEFE'].includes(usuario.tipoUsuario)) {
-    if (btnActualizar) btnActualizar.style.display = "block";
+  switch (usuario.tipoUsuario) {
+    case 'RESIDENTE':
+      if (btnAgregar) btnAgregar.style.display = "block";
+      break;
+    case 'GERENTE':
+    case 'ADMINISTRACION':
+      if (btnActualizar) btnActualizar.style.display = "block";
+      break;
+    case 'JEFE':
+      // JEFE puede ver el botón Actualizar para guardar validaciones
+      if (btnActualizar) btnActualizar.style.display = "block";
+      break;
+    case 'CONTADOR':
+    case 'COMPRAS':
+      if (btnAgregar && hayArchivoAceptado()) {
+        btnAgregar.style.display = "block";
+      }
+      break;
+    // CONTADOR no tiene botones de acción en esta vista, solo puede ver y descargar (si está aceptado)
+    default:
+      // Otros roles (como CONTADOR) no ven botones
+      break;
   }
 }
 /**
@@ -220,7 +235,7 @@ function puedeSubir() {
   const estaCerrada = (estatusObra === "CIERRE" || estatusObra === "CERRADA");
 
   // 2. Lógica de permisos
-  
+
   // SI ES SUPERUSER: Permiso total siempre
   if (esSuperUser) return true;
 
@@ -679,7 +694,7 @@ function agregarFila() {
     <td>-</td>
     <td>-</td>
     <td class="file-cell">
-      <input type="file" class="input-file" accept=".pdf,.csv,.xls,.xlsx">
+      <input type="file" class="input-file">
     </td>
     <td></td>
     <td></td>
@@ -711,16 +726,6 @@ async function guardarArchivo() {
   }
 
   const file = input.files[0];
-
-  // Validar tamaño (ejemplo: 10MB máx)
-  if (file.size > 10 * 1024 * 1024) {
-    Swal.fire({
-      title: 'Error',
-      text: 'El archivo no puede superar los 10MB',
-      icon: 'error'
-    });
-    return;
-  }
 
   const formData = new FormData();
   formData.append("tipoEntidad", "REQUERIMIENTOS");

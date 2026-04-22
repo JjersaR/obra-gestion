@@ -59,4 +59,8 @@ public interface IArchivosRepository extends JpaRepository<Archivos, UUID> {
   // Busca el archivo que esté marcado como 'actual' para una obra y categoría
   // específica
   Archivos findByMovobraIdAndCategoriaAndActualTrue(UUID movobraId, ETipo categoria);
+
+  List<Archivos> findByMovobraId(UUID movobraId);
+
+  void deleteByMovobraId(UUID movobraId);
 }

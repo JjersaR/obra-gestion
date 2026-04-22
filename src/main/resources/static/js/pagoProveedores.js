@@ -137,7 +137,7 @@ function controlarColumnasPorRol() {
  * - GERENTE/ADMINISTRACION: Pueden ver y usar "Actualizar".
  */
 function controlarBotonesPorRol() {
-const btnAgregar = document.getElementById("btnAgregar");
+  const btnAgregar = document.getElementById("btnAgregar");
   const btnActualizar = document.getElementById("btnActualizar");
   const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
   const estaCerrada = (estatusObra === "CIERRE" || estatusObra === "CERRADA");
@@ -227,7 +227,7 @@ function puedeSubir() {
 
   // 1. Definimos los roles con "Poder Total" (pueden subir aunque esté cerrada)
   const rolesSuperUser = ['PRESUPUESTOS'];
-  
+
   // 2. Definimos roles que pueden subir PERO les afecta el cierre (ej. Residente)
   const rolesEstandar = ['RESIDENTE', 'ADMINISTRACION'];
 
@@ -694,7 +694,7 @@ function agregarFila() {
     <td>-</td>
     <td>-</td>
     <td class="file-cell">
-      <input type="file" class="input-file" accept=".pdf,.csv,.xls,.xlsx">
+      <input type="file" class="input-file">
     </td>
     <td></td>
     <td></td>
@@ -726,16 +726,6 @@ async function guardarArchivo() {
   }
 
   const file = input.files[0];
-
-  // Validar tamaño (ejemplo: 10MB máx)
-  if (file.size > 10 * 1024 * 1024) {
-    Swal.fire({
-      title: 'Error',
-      text: 'El archivo no puede superar los 10MB',
-      icon: 'error'
-    });
-    return;
-  }
 
   const formData = new FormData();
   formData.append("tipoEntidad", "PAGO_PROVEEDORES");

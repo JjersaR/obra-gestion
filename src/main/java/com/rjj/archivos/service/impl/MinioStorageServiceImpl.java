@@ -10,9 +10,14 @@ import com.rjj.archivos.controller.utils.NameBuilder;
 import com.rjj.archivos.service.IStorageService;
 import com.rjj.movobra.entity.ETipo;
 
+import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.RemoveObjectArgs;
+import io.minio.StatObjectArgs;
+import io.minio.StatObjectResponse;
+import io.minio.errors.MinioException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -82,6 +87,22 @@ public class MinioStorageServiceImpl implements IStorageService {
               .build());
     } catch (Exception e) {
       throw new RuntimeException("Error descargando archivo", e);
+    }
+  }
+
+  @Override
+  public void eliminarArchivo(String bucket, String url) {
+    try {
+      minioClient.removeObject(
+          RemoveObjectArgs.builder()
+              .bucket(bucket)
+              .object(url)
+              .build());
+      log.info("Archivo eliminado de Minio: bucket={}, object={}",
+          bucket, url);
+
+    } catch (Exception e) {
+      log.error("Error inesperado eliminando archivo de Minio: bucket={}, url={}", bucket, url, e);
     }
   }
 

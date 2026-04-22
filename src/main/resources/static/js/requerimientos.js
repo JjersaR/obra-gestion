@@ -109,7 +109,7 @@ function aplicarPermisosPorRol() {
 function ocultarElementosParaNoLogueado() {
   document.querySelectorAll(".col-admin").forEach(col => col.style.display = "none");
   const btnAgregar = document.getElementById("btnAgregar");
-  if (btnAgregar)   btnAgregar.style.display = "none";
+  if (btnAgregar) btnAgregar.style.display = "none";
   const btnActualizar = document.getElementById("btnActualizar");
   if (btnActualizar) btnActualizar.style.display = "none";
 }
@@ -170,11 +170,11 @@ function controlarBotonesPorRol() {
       btnAgregar.style.cursor = "not-allowed";
     }
     // Si está cerrada y no es admin, no mostramos actualizar y salimos
-    return; 
+    return;
   }
 
   // 3. LÓGICA DE VISIBILIDAD (Si llegó aquí, u obra abierta o es SuperUser)
-  
+
   // Botón Agregar: Aparece si el usuario tiene permiso funcional
   if (puedeSubir()) {
     if (btnAgregar) btnAgregar.style.display = "block";
@@ -184,7 +184,7 @@ function controlarBotonesPorRol() {
   if (['GERENTE', 'ADMINISTRACION', 'JEFE'].includes(usuario.tipoUsuario)) {
     if (btnActualizar) btnActualizar.style.display = "block";
   }
-  
+
   // Caso especial para COMPRAS (si no está en puedeSubir)
   if (usuario.tipoUsuario === 'COMPRAS' && hayArchivoAceptado()) {
     if (btnAgregar) btnAgregar.style.display = "block";
@@ -223,7 +223,7 @@ function puedeSubir() {
 
   // 1. Configuración de Roles
   const rolesSuperUser = ['PRESUPUESTOS'];
-  const rolesEstandar = ['RESIDENTE' , 'ADMINISTRACION'];
+  const rolesEstandar = ['RESIDENTE', 'ADMINISTRACION'];
 
   const esSuperUser = rolesSuperUser.includes(usuario.tipoUsuario);
   const esUserEstandar = rolesEstandar.includes(usuario.tipoUsuario);
@@ -692,7 +692,7 @@ function agregarFila() {
     <td>-</td>
     <td>-</td>
     <td class="file-cell">
-      <input type="file" class="input-file" accept=".pdf,.csv,.xls,.xlsx">
+      <input type="file" class="input-file">
     </td>
     <td></td>
     <td></td>
@@ -724,16 +724,6 @@ async function guardarArchivo() {
   }
 
   const file = input.files[0];
-
-  // Validar tamaño (ejemplo: 10MB máx)
-  if (file.size > 10 * 1024 * 1024) {
-    Swal.fire({
-      title: 'Error',
-      text: 'El archivo no puede superar los 10MB',
-      icon: 'error'
-    });
-    return;
-  }
 
   const formData = new FormData();
   formData.append("tipoEntidad", "REQUERIMIENTOS");

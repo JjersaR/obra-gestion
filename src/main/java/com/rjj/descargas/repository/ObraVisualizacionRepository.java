@@ -8,9 +8,11 @@ import com.rjj.descargas.entity.ObraVisualizacion;
 @Repository
 public interface ObraVisualizacionRepository extends JpaRepository<ObraVisualizacion, Long> {
 
-    // Para evitar duplicados
-    boolean existsByObraIdAndRolAndUsuarioId(String obraId, String rol, String usuarioId);
+  // Para evitar duplicados
+  boolean existsByObraIdAndRolAndUsuarioId(String obraId, String rol, String usuarioId);
 
-    // Para obtener la lista de quién ha visto la obra
-    List<ObraVisualizacion> findByObraId(String obraId);
+  // Para obtener la lista de quién ha visto la obra
+  List<ObraVisualizacion> findByObraId(String obraId);
+
+  long deleteByObraId(String obraId);
 }
