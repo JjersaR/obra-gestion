@@ -62,5 +62,6 @@ public interface IArchivosRepository extends JpaRepository<Archivos, UUID> {
 
   List<Archivos> findByMovobraId(UUID movobraId);
 
+  @Modifying
   void deleteByMovobraId(UUID movobraId);
 }
