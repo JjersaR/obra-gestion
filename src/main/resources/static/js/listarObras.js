@@ -338,6 +338,103 @@ function calcularSemanasModal() {
   document.getElementById("editNumeroSemanas").value = semanas;
 }
 
+// Constantes
+const LIMITE_SUBIDA_DIRECTA = 100 * 1024 * 1024; // 100MB
+
+// Función central — decide qué flujo usar
+async function subirArchivo(tipoEntidad, movobraId, categoria, file, version = 1) {
+  const esManoObra = categoria === "MANO_OBRA";
+  const esGrande = file.size > LIMITE_SUBIDA_DIRECTA;
+
+  if (esGrande && !esManoObra) {
+    return await subirArchivoGrande(tipoEntidad, movobraId, categoria, file, version);
+  } else {
+    return await subirArchivoPequeno(tipoEntidad, movobraId, categoria, file);
+  }
+}
+
+// Flujo original — no cambia nada del backend
+async function subirArchivoPequeno(tipoEntidad, movobraId, categoria, file) {
+  const formData = new FormData();
+  formData.append("tipoEntidad", tipoEntidad);
+  formData.append("movobraId", movobraId);
+  formData.append("categoria", categoria);
+  formData.append("file", file);
+
+  const response = await fetch("/api/v1/archivos", {
+    method: "POST",
+    body: formData
+  });
+
+  if (!response.ok) throw new Error("Error subiendo archivo");
+  return await response.text();
+}
+
+// Flujo SAS — para archivos grandes
+async function subirArchivoGrande(tipoEntidad, movobraId, categoria, file, version) {
+  try {
+    // Paso 1 — pedir SAS URL
+    const params = new URLSearchParams({
+      tipoEntidad: tipoEntidad,
+      movobraId: movobraId,
+      categoria: categoria,
+      version: version,
+      filename: file.name,
+      contentType: file.type
+    });
+
+    const sasRes = await fetch(`/api/v1/archivos/sas-url?${params}`);
+    if (!sasRes.ok) {
+      const errorText = await sasRes.text();
+      throw new Error(`Error obteniendo SAS URL: ${sasRes.status} ${errorText}`);
+    }
+
+    const { sasUrl, objectKey } = await sasRes.json();
+
+    // Paso 2 — subir directo a Azure
+    const uploadRes = await fetch(sasUrl, {
+      method: "PUT",
+      headers: {
+        "x-ms-blob-type": "BlockBlob",
+        "Content-Type": file.type
+      },
+      body: file
+    });
+
+    if (!uploadRes.ok) {
+      throw new Error(`Error subiendo archivo a Azure: ${uploadRes.status}`);
+    }
+
+    // Paso 3 — confirmar al backend
+    const confirmRes = await fetch("/api/v1/archivos/confirmar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        tipoEntidad: tipoEntidad,
+        movobraId: movobraId,
+        categoria: categoria,
+        objectKey: objectKey,
+        nombre: file.name,
+        sizeBytes: file.size,
+        mimeType: file.type,
+        version: version
+      })
+    });
+
+    if (!confirmRes.ok) {
+      const errorText = await confirmRes.text();
+      throw new Error(`Error confirmando archivo: ${confirmRes.status} ${errorText}`);
+    }
+
+    return objectKey;
+
+  } catch (error) {
+    console.error("Error en subirArchivoGrande:", error);
+    throw error;
+  }
+}
+
+// Tu función guardarEdicionObra modificada
 async function guardarEdicionObra(e) {
   e.preventDefault();
   const idObra = document.getElementById("editIdObra").value;
@@ -371,6 +468,12 @@ async function guardarEdicionObra(e) {
     return;
   }
 
+  // Validar tamaño de archivo para categorías específicas si es necesario
+  if (archivo && categoria === "MANO_OBRA" && archivo.size > LIMITE_SUBIDA_DIRECTA) {
+    Swal.fire('Atención', 'Los archivos de MANO_OBRA no pueden superar los 100MB. Por favor, comprime o divide el archivo.', 'warning');
+    return;
+  }
+
   try {
     // Enviar actualización de fechas
     const responseFechas = await fetch(`/api/v1/obras`, {
@@ -379,43 +482,61 @@ async function guardarEdicionObra(e) {
       body: JSON.stringify(dataFechas)
     });
 
-    if (!responseFechas.ok) throw new Error("Error actualizando fechas");
+    if (!responseFechas.ok) {
+      const errorText = await responseFechas.text();
+      throw new Error(`Error actualizando fechas: ${responseFechas.status} ${errorText}`);
+    }
 
     // Variables para controlar qué mensaje le mostramos al usuario
     let mensajeAlerta = 'Las fechas se actualizaron correctamente.';
     let iconoAlerta = 'success';
 
-    // Si hay archivo, lo subimos en su propio bloque try/catch (Igual que en Nueva Obra)
+    // Si hay archivo, lo subimos usando la nueva lógica
     if (archivo) {
       try {
-        const formData = new FormData();
-        formData.append("tipoEntidad", "REQUERIMIENTOS");
-        formData.append("movobraId", idObra);
-        formData.append("categoria", categoria);
-        formData.append("file", archivo);
-
-        const responseArchivo = await fetch("/api/v1/archivos", {
-          method: "POST",
-          body: formData
+        // Mostrar loading para la subida del archivo
+        Swal.fire({
+          title: 'Subiendo archivo...',
+          text: 'Por favor espere, esto puede tomar unos momentos',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
         });
 
-        if (!responseArchivo.ok) throw new Error("Error subiendo archivo");
+        // Usamos la nueva función centralizada
+        const tipoEntidad = "REQUERIMIENTOS"; // o podrías hacerlo dinámico según el contexto
+        const version = 1; // Puedes manejar versiones si es necesario
+
+        await subirArchivo(tipoEntidad, idObra, categoria, archivo, version);
 
         mensajeAlerta = 'Las fechas y el documento se actualizaron correctamente.';
+
+        // Cerrar el loading
+        Swal.close();
+
       } catch (errorArchivo) {
         console.error("Error al subir documento:", errorArchivo);
         // Si falla el documento, avisamos que las fechas SÍ se guardaron
-        mensajeAlerta = 'Las fechas se guardaron, pero hubo un problema de conexión al subir el documento.';
+        mensajeAlerta = 'Las fechas se guardaron, pero hubo un problema al subir el documento: ' + errorArchivo.message;
         iconoAlerta = 'warning';
       }
     }
 
     Swal.fire('¡Proceso Terminado!', mensajeAlerta, iconoAlerta);
     cerrarModalEdicion();
-    getObras(); // Recargar la tabla sin refrescar la página
+
+    // Recargar las obras
+    if (typeof getObras === 'function') {
+      getObras(); // Recargar la tabla sin refrescar la página
+    } else if (typeof cargarObras === 'function') {
+      cargarObras();
+    } else {
+      location.reload(); // Fallback: recargar la página
+    }
 
   } catch (error) {
     console.error("Error general:", error);
-    Swal.fire('Error', 'Hubo un problema al comunicarse con el servidor.', 'error');
+    Swal.fire('Error', error.message || 'Hubo un problema al comunicarse con el servidor.', 'error');
   }
 }

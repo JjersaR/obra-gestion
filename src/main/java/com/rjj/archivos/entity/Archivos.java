@@ -65,7 +65,7 @@ public class Archivos {
   @Column(name = "size_bytes", nullable = false)
   private Long sizeBytes;
 
-  @Column(length = 64, nullable = false)
+  @Column(length = 64)
   private String checksum;
 
   @Column(nullable = false)

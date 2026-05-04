@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 //para archivos
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rjj.archivos.controller.dto.IRequerimientosActivos;
 import com.rjj.archivos.controller.dto.RArchivoRequest;
+import com.rjj.archivos.controller.dto.RConfirmarArchivoRequest;
+import com.rjj.archivos.controller.dto.RSasUrlResponse;
 import com.rjj.archivos.service.ArchivosService;
 import com.rjj.movobra.entity.ETipo;
 
@@ -40,6 +43,32 @@ public class ArchivosController {
         ETipo.valueOf(request.categoria()), request.file());
 
     return ResponseEntity.created(new URI(API_V1_ARCHIVOS)).body(archivo.toString());
+  }
+
+  @GetMapping("/sas-url")
+  public ResponseEntity<RSasUrlResponse> obtenerSasUrl(
+      @RequestParam String tipoEntidad,
+      @RequestParam String movobraId,
+      @RequestParam String categoria,
+      @RequestParam int version,
+      @RequestParam String filename,
+      @RequestParam String contentType) {
+
+    var sasResponse = service.obtenerSasUrl(
+        ETipo.valueOf(tipoEntidad),
+        UUID.fromString(movobraId),
+        ETipo.valueOf(categoria),
+        version,
+        filename,
+        contentType);
+
+    return ResponseEntity.ok(sasResponse);
+  }
+
+  @PostMapping("/confirmar")
+  public ResponseEntity<String> confirmar(@RequestBody RConfirmarArchivoRequest request) {
+    var archivo = service.confirmarArchivo(request);
+    return ResponseEntity.ok().body(archivo.toString());
   }
 
   @GetMapping("/{movobraId}")

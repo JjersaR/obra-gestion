@@ -43,6 +43,33 @@ public class NameBuilder {
         extension);
   }
 
+  public String build(
+      ETipo tipoEntidad,
+      UUID movobraId,
+      ETipo categoria,
+      int version,
+      String filename) {
+
+    String ownerType = tipoEntidad.name().toLowerCase();
+    String category = categoria.name().toLowerCase();
+
+    LocalDate now = LocalDate.now();
+    String year = String.valueOf(now.getYear());
+    String month = String.format("%02d", now.getMonthValue());
+    String uuid = UUID.randomUUID().toString().substring(0, 8);
+    String extension = getExtensionFromFilename(filename);
+
+    return String.format("%s/%s/%s/%s/%s/%s_v%d.%s",
+        ownerType,
+        movobraId,
+        category,
+        year,
+        month,
+        uuid,
+        version,
+        extension);
+  }
+
   private String getExtension(MultipartFile file) {
 
     String name = file.getOriginalFilename();
@@ -52,5 +79,12 @@ public class NameBuilder {
     }
 
     return name.substring(name.lastIndexOf(".") + 1);
+  }
+
+  private String getExtensionFromFilename(String filename) {
+    if (filename == null || !filename.contains(".")) {
+      throw new IllegalArgumentException("Archivo sin extensión válida");
+    }
+    return filename.substring(filename.lastIndexOf(".") + 1);
   }
 }

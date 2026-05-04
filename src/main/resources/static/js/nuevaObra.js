@@ -155,10 +155,57 @@ function calcularSemanas() {
   document.getElementById("numeroSemanas").value = semanas;
 }
 
-async function subirArchivo(tipoEntidad, movobraId, categoria, file) {
+async function subirArchivo(tipoEntidad, movobraId, categoria, file, version = 1) {
+  const LIMITE_SUBIDA_DIRECTA = 100 * 1024 * 1024; // 100MB
 
+  if (file.size > LIMITE_SUBIDA_DIRECTA) {
+    await subirArchivoGrande(tipoEntidad, movobraId, categoria, file, version);
+  } else {
+    await subirArchivoPequeno(tipoEntidad, movobraId, categoria, file);
+  }
+
+}
+
+async function subirArchivoGrande(tipoEntidad, movobraId, categoria, file, version) {
+  // Paso 1 — pedir SAS URL al backend
+  const params = new URLSearchParams({
+    tipoEntidad,
+    movobraId,
+    categoria,
+    version,
+    filename: file.name,
+    contentType: file.type
+  });
+
+  const sasRes = await fetch(`/api/v1/archivos/sas-url?${params}`);
+  if (!sasRes.ok) throw new Error("Error obteniendo SAS URL");
+
+  const { sasUrl, objectKey } = await sasRes.json();
+
+  // Paso 2 — subir directo a Azure
+  const uploadRes = await fetch(sasUrl, {
+    method: "PUT",
+    headers: {
+      "x-ms-blob-type": "BlockBlob",
+      "Content-Type": file.type
+    },
+    body: file
+  });
+
+  if (!uploadRes.ok) throw new Error("Error subiendo archivo a Azure");
+
+  // Paso 3 — confirmar al backend que ya subió
+  const confirmRes = await fetch("/api/v1/archivos/confirmar", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ objectKey, movobraId, categoria, tipoEntidad })
+  });
+
+  if (!confirmRes.ok) throw new Error("Error confirmando archivo");
+}
+
+async function subirArchivoPequeno(tipoEntidad, movobraId, categoria, file) {
   const formData = new FormData();
-
   formData.append("tipoEntidad", tipoEntidad);
   formData.append("movobraId", movobraId);
   formData.append("categoria", categoria);
@@ -169,10 +216,7 @@ async function subirArchivo(tipoEntidad, movobraId, categoria, file) {
     body: formData
   });
 
-  if (!response.ok) {
-    throw new Error("Error subiendo archivo");
-  }
-
+  if (!response.ok) throw new Error("Error subiendo archivo");
 }
 
 const archivosConfig = [

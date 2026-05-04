@@ -18,4 +18,6 @@ public interface IStorageService {
   InputStream download(String bucket, String objectKey);
 
   void eliminarArchivo(String bucket, String url);
+
+  String generarSasUrl(String containerName, String objectKey, String contentType);
 }

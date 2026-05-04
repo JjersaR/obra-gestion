@@ -1,6 +1,8 @@
 package com.rjj.archivos.service;
 
 import com.rjj.archivos.controller.utils.ExcelUtils;
+import com.rjj.archivos.controller.utils.NameBuilder;
+
 import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
@@ -13,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.rjj.archivos.controller.dto.IArchivoMapper;
 import com.rjj.archivos.controller.dto.IRequerimientosActivos;
 import com.rjj.archivos.controller.dto.RArchivoResponse;
+import com.rjj.archivos.controller.dto.RConfirmarArchivoRequest;
+import com.rjj.archivos.controller.dto.RSasUrlResponse;
 import com.rjj.archivos.entity.Archivos;
 import com.rjj.archivos.repository.IArchivosRepository;
 import com.rjj.movobra.entity.ETipo;
@@ -29,6 +33,7 @@ public class ArchivosService {
   private final IArchivosRepository repository;
   private final IArchivoMapper mapper;
   private final IStorageService storageService;
+  private final NameBuilder builder;
 
   @Transactional
   public UUID subirArchivo(
@@ -78,6 +83,47 @@ public class ArchivosService {
     var guardado = repository.save(archivo);
 
     return guardado.getId();
+  }
+
+  public RSasUrlResponse obtenerSasUrl(
+      ETipo tipoEntidad,
+      UUID movobraId,
+      ETipo categoria,
+      int version,
+      String filename,
+      String contentType) {
+
+    var objectKey = builder.build(tipoEntidad, movobraId, categoria, version, filename);
+    var containerName = determinarBucket(categoria);
+
+    var sasUrl = storageService.generarSasUrl(containerName, objectKey, contentType);
+
+    return new RSasUrlResponse(sasUrl, objectKey);
+  }
+
+  @Transactional
+  public UUID confirmarArchivo(RConfirmarArchivoRequest request) {
+    ETipo tipoEntidad = ETipo.valueOf(request.tipoEntidad());
+    UUID movobraId = UUID.fromString(request.movobraId());
+    ETipo categoria = ETipo.valueOf(request.categoria());
+
+    repository.desactivarVersionesAnteriores(tipoEntidad, movobraId, categoria);
+
+    Archivos archivo = new Archivos();
+    archivo.setBucket(determinarBucket(categoria));
+    archivo.setUrl(request.objectKey());
+    archivo.setNombre(request.nombre());
+    archivo.setTipoEntidad(tipoEntidad);
+    archivo.setMovobraId(movobraId);
+    archivo.setCategoria(categoria);
+    archivo.setVersion(request.version());
+    archivo.setActual(true);
+    archivo.setSizeBytes(request.sizeBytes());
+    archivo.setChecksum(null); // sin archivo no hay checksum
+    archivo.setMimeType(request.mimeType());
+    archivo.setInmutable(false);
+
+    return repository.save(archivo).getId();
   }
 
   // petición, vaya a MinIO por el archivo usando tu método download(), lo
