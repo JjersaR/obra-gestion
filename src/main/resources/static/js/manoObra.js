@@ -155,13 +155,13 @@ function controlarBotonesPorRol() {
   const esSuperUser = ['PRESUPUESTOS'].includes(usuario.tipoUsuario);
 
   // 2. Filtro de Obra Cerrada
-  if (estaCerrada && !esSuperUser) {s
+  if (estaCerrada && !esSuperUser) {
     if (btnAgregar) {
       btnAgregar.style.display = "block";
       btnAgregar.disabled = true;
       btnAgregar.textContent = "OBRA FINALIZADA";
     }
-    return; 
+    return;
   }
 
   // 3. Lógica de visibilidad por Rol (CORREGIDA)

@@ -127,6 +127,7 @@ public class ArchivosService {
           PROYECTO,
           PROGRAMA,
           MEMORIAS,
+          ALMACEN,
           COMENTARIOS_AD:
         return "requerimientos";
       case CONSTRUCCION, MANO_OBRA:
