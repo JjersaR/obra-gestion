@@ -140,12 +140,10 @@ function controlarBotonesPorRol() {
   const btnAgregar = document.getElementById("btnAgregar");
   const btnActualizar = document.getElementById("btnActualizar");
 
-  // 1. Resetear estados
+  // 1. Resetear estados iniciales
   if (btnAgregar) {
     btnAgregar.style.display = "none";
     btnAgregar.disabled = false;
-    btnAgregar.style.backgroundColor = "";
-    btnAgregar.style.cursor = "pointer";
     btnAgregar.textContent = modoAgregar ? "Subir requerimiento" : "Guardar";
   }
   if (btnActualizar) btnActualizar.style.display = "none";
@@ -154,43 +152,40 @@ function controlarBotonesPorRol() {
 
   const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
   const estaCerrada = (estatusObra === "CIERRE" || estatusObra === "CERRADA");
-
-  // Incluimos a JEFE en los que ignoran el cierre visual
   const esSuperUser = ['PRESUPUESTOS'].includes(usuario.tipoUsuario);
 
-  // 2. FILTRO VISUAL DE OBRA CERRADA
-  if (estaCerrada && !esSuperUser) {
+  // 2. Filtro de Obra Cerrada
+  if (estaCerrada && !esSuperUser) {s
     if (btnAgregar) {
       btnAgregar.style.display = "block";
       btnAgregar.disabled = true;
       btnAgregar.textContent = "OBRA FINALIZADA";
-      btnAgregar.style.backgroundColor = "#64748b";
-      btnAgregar.style.cursor = "not-allowed";
     }
-    return; // Los usuarios normales no pasan de aquí si está cerrada
+    return; 
   }
 
+  // 3. Lógica de visibilidad por Rol (CORREGIDA)
   switch (usuario.tipoUsuario) {
+    case 'GERENTE':
+      // El Gerente ve AMBOS
+      if (btnAgregar) btnAgregar.style.display = "block";
+      if (btnActualizar) btnActualizar.style.display = "block";
+      break;
+
     case 'RESIDENTE':
       if (btnAgregar) btnAgregar.style.display = "block";
       break;
-    case 'GERENTE':
+
     case 'ADMINISTRACION':
-      if (btnActualizar) btnActualizar.style.display = "block";
-      break;
     case 'JEFE':
-      // JEFE puede ver el botón Actualizar para guardar validaciones
       if (btnActualizar) btnActualizar.style.display = "block";
       break;
+
     case 'CONTADOR':
     case 'COMPRAS':
       if (btnAgregar && hayArchivoAceptado()) {
         btnAgregar.style.display = "block";
       }
-      break;
-    // CONTADOR no tiene botones de acción en esta vista, solo puede ver y descargar (si está aceptado)
-    default:
-      // Otros roles (como CONTADOR) no ven botones
       break;
   }
 }
@@ -243,7 +238,7 @@ function puedeSubir() {
   if (estaCerrada) return false;
 
   // SI LA OBRA ESTÁ ABIERTA:
-  if (usuario.tipoUsuario === 'RESIDENTE' || usuario.tipoUsuario === 'ADMINISTRACION') return true;
+  if (usuario.tipoUsuario === 'RESIDENTE' || usuario.tipoUsuario === 'ADMINISTRACION' || usuario.tipoUsuario === 'GERENTE') return true;
 
   if (usuario.tipoUsuario === 'COMPRAS' || usuario.tipoUsuario === 'CONTADOR') {
     return hayArchivoAceptado();

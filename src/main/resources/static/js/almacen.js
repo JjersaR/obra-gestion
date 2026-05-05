@@ -281,7 +281,7 @@ function puedeDescargar(estado) {
  */
 async function cargarMovimientos() {
   try {
-    const response = await fetch(`/api/v1/movobra/${idObra}/CONSTRUCCION/REQUERIMIENTOS`);
+    const response = await fetch(`/api/v1/movobra/${idObra}/ALMACEN/REQUERIMIENTOS`);
 
     if (!response.ok) {
       throw new Error("Error al obtener movimientos");
@@ -728,7 +728,7 @@ async function guardarArchivo() {
   const formData = new FormData();
   formData.append("tipoEntidad", "REQUERIMIENTOS");
   formData.append("movobraId", idObra);
-  formData.append("categoria", "CONSTRUCCION");
+  formData.append("categoria", "ALMACEN");
   formData.append("file", file);
 
   // Mostrar loading

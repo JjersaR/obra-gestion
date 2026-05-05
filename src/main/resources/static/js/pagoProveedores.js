@@ -229,7 +229,7 @@ function puedeSubir() {
   const rolesSuperUser = ['PRESUPUESTOS'];
 
   // 2. Definimos roles que pueden subir PERO les afecta el cierre (ej. Residente)
-  const rolesEstandar = ['RESIDENTE', 'ADMINISTRACION'];
+  const rolesEstandar = ['RESIDENTE', 'ADMINISTRACION', 'GERENTE'];
 
   const esSuperUser = rolesSuperUser.includes(usuario.tipoUsuario);
   const esUserEstandar = rolesEstandar.includes(usuario.tipoUsuario);

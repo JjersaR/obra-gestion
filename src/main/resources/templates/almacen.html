@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requerimientos Construcción - OM Diseño y Construcción</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/tablas-detalle.css">
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="logo-container">
+                <img src="/img/logo.png" alt="Logo OM" class="topbar-logo">
+            </div>
+            <div class="brand-info">
+                <h1 class="topbar-title">OM Diseño y Construcción</h1>
+                <span class="view-subtitle">Gestión de Proyectos</span>
+            </div>
+        </div>
+        <a id="btnVolver" class="btn-back">
+            <span class="icon">←</span> Volver a Detalles
+        </a>
+    </header>
+
+    <main class="main-content">
+        <div class="page-subheader">
+            <div class="title-container">
+                <h2>REQUERIMIENTOS DE ALMACÉN: 
+                    <span class="obra-highlight">(MATERIAL, HERRAMIENTA, EQUIPO, SEGURIDAD)</span>
+                </h2>
+            </div>
+        </div>
+
+        <section class="section-container">
+            
+            <div class="table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>no</th>
+                            <th>Fecha de subida</th>
+                            <th>rol</th>
+                            <th>Archivo</th>
+                            <th>Estado</th>
+                            <th>observaciones</th>
+                            <th class="col-admin">Pagado</th>
+                            <th class="col-jefe">Validación</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaBody">
+                        </tbody>
+                </table>
+            </div>
+
+            <div class="table-actions">
+                <button id="btnAgregar" type="button" class="btn-submit">Subir requerimiento</button>
+                <button id="btnActualizar" type="button" class="btn-submit" style="display: none;">Actualizar</button>
+            </div>
+            
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ <script src="/js/almacen.js"></script> 
+</body>
+</html>
