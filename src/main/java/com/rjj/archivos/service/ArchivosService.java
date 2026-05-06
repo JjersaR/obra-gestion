@@ -130,14 +130,8 @@ public class ArchivosService {
   // convierta en un InputStreamResource
   // y se lo inyecte directamente al navegador para que comience la descarga.
   public InputStream descargarArchivo(String categoriaStr, String url) {
-    // Convertimos el texto a tu Enum
-    ETipo categoria = ETipo.valueOf(categoriaStr.toUpperCase());
-
-    // Usamos la lógica existente para saber si es "financieros" o "documentos"
-    String bucket = determinarBucket(categoria);
-
     // Vamos a MinIO por los bytes
-    return storageService.download(bucket, url);
+    return storageService.download(categoriaStr, url);
   }
 
   private void validarInmutable(ETipo tipoEntidad,
