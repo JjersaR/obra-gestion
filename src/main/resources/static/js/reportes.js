@@ -89,7 +89,7 @@ function controlarBotonesPorRol() {
   // --- NUEVA LÓGICA DE BLOQUEO VISUAL ---
   const estatusObra = localStorage.getItem(`estatus_obra_${idObra}`);
   if (estatusObra === "CIERRE") {
-    if (btnAgregar && usuario.tipoUsuario === 'RESIDENTE') {
+    if (btnAgregar && usuario.tipoUsuario === 'RESIDENTE' || usuario.tipoUsuario === 'PRESUPUESTOS') {
       btnAgregar.style.display = "block";
       btnAgregar.disabled = true;
       btnAgregar.textContent = "REPORTES BLOQUEADOS (OBRA CERRADA)";
@@ -100,7 +100,7 @@ function controlarBotonesPorRol() {
     return;
   }
   // ---------------------------------------
-  if (usuario.tipoUsuario === 'RESIDENTE') {
+  if (usuario.tipoUsuario === 'RESIDENTE' || usuario.tipoUsuario === 'PRESUPUESTOS') {
     if (btnAgregar) btnAgregar.style.display = "block";
   } else if (usuario.tipoUsuario === 'GERENTE') {
     if (btnActualizar) btnActualizar.style.display = "block";
@@ -126,12 +126,12 @@ function puedeSubir() {
     return false;
   }
   // --------------------------------
-  return usuario && usuario.tipoUsuario === 'RESIDENTE';
+  return usuario && usuario.tipoUsuario === 'RESIDENTE'|| usuario.tipoUsuario === 'PRESUPUESTOS';
 }
 
 function puedeDescargar() {
   if (!usuario) return false;
-  return ['GERENTE', 'ADMINISTRACION', 'RESIDENTE'].includes(usuario.tipoUsuario);
+  return ['GERENTE', 'ADMINISTRACION', 'RESIDENTE', 'PRESUPUESTOS'].includes(usuario.tipoUsuario);
 }
 
 // --- Lógica de Carga y Pintado de Tabla ---
@@ -231,7 +231,7 @@ function configurarListenersDescarga() {
       const movimientoId = this.dataset.id;
       const estadoActual = this.dataset.estado;
 
-      if (usuario && usuario.tipoUsuario === 'GERENTE' && estadoActual !== 'ACEPTADO' && estadoActual !== 'RECHAZADO') {
+      if (usuario && usuario.tipoUsuario === 'GERENTE' || usuario.tipoUsuario === 'PRESUPUESTOS' && estadoActual !== 'ACEPTADO' && estadoActual !== 'RECHAZADO') {
         try {
           await actualizarCampo(movimientoId, { estado: "REVISADO" });
           this.dataset.estado = "REVISADO";
