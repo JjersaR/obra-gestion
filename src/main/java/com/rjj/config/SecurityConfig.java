@@ -23,8 +23,13 @@ public class SecurityConfig {
         .httpBasic(Customizer.withDefaults())
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/", "/img/**", "/css/**", "/js/**", "/logout").permitAll()
-            .requestMatchers("/api/v1/usuarios/login", "/api/v1/usuarios/olvidado", "/api/v1/usuarios/cambio",
-                "/api/v1/usuarios")
+            .requestMatchers(
+                "/api/v1/usuarios/login",
+                "/api/v1/usuarios/olvidado",
+                "/api/v1/usuarios/cambio",
+                "/api/v1/usuarios",
+                "/api/v1/usuarios/validar-codigo"
+              )
             .permitAll()
             // .requestMatchers(HttpMethod.POST, "/api/v1/usuarios").hasAnyRole("JEFE",
             // "ADMINISTRACION")

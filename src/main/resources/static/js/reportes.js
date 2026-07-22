@@ -126,7 +126,7 @@ function puedeSubir() {
     return false;
   }
   // --------------------------------
-  return usuario && usuario.tipoUsuario === 'RESIDENTE'|| usuario.tipoUsuario === 'PRESUPUESTOS';
+  return usuario && usuario.tipoUsuario === 'RESIDENTE'|| usuario.tipoUsuario === 'GERENTE';
 }
 
 function puedeDescargar() {

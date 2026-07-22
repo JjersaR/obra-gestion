@@ -27,6 +27,10 @@ import com.rjj.usuarios.service.UsuariosService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.rjj.usuarios.service.EmailService;
+
+import com.rjj.usuarios.controller.dto.RCodigoRecuperacion;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -36,7 +40,7 @@ public class UsuariosController {
   private static final String API_V1_USUARIOS = "/api/v1/usuarios";
 
   private final UsuariosService service;
-
+  private final EmailService emailService;
   // Instanciamos el repositorio oficial de Spring para guardar sesiones
   private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
 
@@ -79,4 +83,15 @@ public ResponseEntity<String> contraOlvidada(@RequestBody @Valid RContraOlvidada
   public ResponseEntity<Boolean> cambiarPassword(@RequestBody @Valid RCambioPassword request) {
     return ResponseEntity.ok(service.cambiarPassword(request));
   }
+
+  @PostMapping("/validar-codigo")
+  public ResponseEntity<Boolean> validarCodigo(
+        @RequestBody @Valid RCodigoRecuperacion request) {
+
+    return ResponseEntity.ok(service.validarCodigo(request));
+
 }
+
+
+}
+

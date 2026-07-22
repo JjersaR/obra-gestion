@@ -5,22 +5,39 @@ server:
 spring:
   application:
     name: obra-gestion
+
   servlet:
     multipart:
       max-file-size: 2GB
-      max-request-size: 2GB  
+      max-request-size: 2GB
+
   datasource:
     url: ${DATABASE_URL}
     username: ${DATABASE_USER}
     password: ${DATABASE_PASSWORD}
     driver-class-name: ${DATABASE_DRIVER}
+
   jpa:
     hibernate:
       ddl-auto: update
     database-platform: ${DATABASE_PLATFORM}
+
   docker:
     compose:
       enabled: false
+
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
 
 external-server:
   minio:
