@@ -13,7 +13,7 @@ COPY ./pom.xml /app
 COPY ./.mvn /app/.mvn
 # MAVEN EXEC
 COPY ./mvnw /app
-
+RUN sed -i 's/\r$//' /app/mvnw && chmod +x /app/mvnw
 # DOWNLOAD DEPENDENCY
 RUN ./mvnw dependency:go-offline
 
