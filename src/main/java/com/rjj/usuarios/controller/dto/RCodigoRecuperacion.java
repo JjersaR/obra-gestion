@@ -3,9 +3,8 @@ package com.rjj.usuarios.controller.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
-public record RCambioPassword(
+public record RCodigoRecuperacion(
 
     @Email
     @NotBlank
@@ -13,11 +12,7 @@ public record RCambioPassword(
 
     @NotBlank
     @Pattern(regexp = "\\d{6}", message = "El código debe tener 6 dígitos")
-    String codigo,
-
-    @NotBlank(message = "La contraseña es obligatoria")
-    @Size(min = 6, max = 100, message = "La contraseña debe tener al menos 6 caracteres")
-    String password
+    String codigo
 
 ) {
 }
